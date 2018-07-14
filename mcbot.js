@@ -26,7 +26,7 @@ function update() {
       var status = 'Server offline';
       console.log(body.motd);
       if(body.online) {
-          if(body.motd=="§c§oWe are under maintenance."){
+          if((body.motd=="&cWe are under maintenance.")||(body.players.now>=body.players.max)){
             client.user.setStatus('idle')
             //.then(console.log)
             .catch(console.error);
