@@ -1,0 +1,23 @@
+{
+  "name": "minecraft-server-bot",
+  "version": "1.1.0",
+  "description": "minecraft server status bot",
+  "main": "mcbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lerokko/mcstatusbot.git"
+  },
+  "author": "lerokko adapted by Huskydog9988",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lerokko/mcstatusbot/issues"
+  },
+  "homepage": "https://github.com/lerokko/mcstatusbot#readme",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "request": "^2.88.0"
+  }
+}
