@@ -2,33 +2,16 @@
 discrod bot for server status
 const settings = require('./config.json');
 
-# Setup
+# Setup For Heroku
 
-Step 1: Dowload and extract the zip file into the folder of your choice
-Step 2: Go to https://nodejs.org/en/download/
-Step 3: Dowload and install node.js
-Step 4: Open the folder you extracted the files too earlier
-Step 5: Click in the bar above the files like in https://imgur.com/a/ykc0BWL and make sure all text in the box is highlighted as show in the photo
-Step 6: Type "cmd" and press enter
-Step 7: Paste in the command prompt "npm install"
-Step 8: Head over to the discord applicatons page (here https://discordapp.com/developers/applications/)
-Step 9: Click “new application”. Give it a name, picture and description.
-Step 10: Press Bot on the left hand side of the screen then press “Add bot” and click “Yes, Do It!” when the dialog pops up
-Step 11: Copy down the bot token This is what is used to login to your bot later
-Step 12: Open "config.json" with code editing software like Notepad++ or Visual Studio Code
-Step 13: Where it says "YOUR BOT TOKEN HERE" replace that text with your bot token you copied earlier
-Step 14: Where it says "YOUR SERVER IP HERE" replace that text with your server ip
-Step 15: Where it says "YOUR SERVER PORT HERE" replace that text with your server port
-Step 16: Save the "config.json file and close it
-Step 17: Close File Explorer then reopen the program to the folder where you have the bot's files (You must do this step. Trust me orelse the next step will be messed up)
-Step 18: Click in the bar above the files like in https://imgur.com/a/ykc0BWL and make sure all text in the box is highlighted as show in the photo and copy it
-Step 19: Open "run.bat" with code editing software like Notepad++ or Visual Studio Code
-Step 20: Replace the text "YOUR FOLDER ADRESS HERE" with what you just copied in step 18
-Step 21: Save and close "run.bat"
-
-#Running your bot
-
-Way 1: Run the file "run.bat" like you would run a .exe
-
-Way 2: Click in the bar above the files like in https://imgur.com/a/ykc0BWL and make sure all text in the box is highlighted as show in the photo and replace it all with cmd
-		In cmd paste in "node mcbot.js", then press the enter key
+Step 1: (sign into your github then) Fork this repository
+Step 2: Go to https://signup.heroku.com/login and sign up for Heroku (if you havn't already)
+Step 3: Login to your Heroku account at as show in > https://id.heroku.com/login
+Step 4: Press "new" in the upper right hand corner, then press "Create new app"
+Step 5: Name your "app" something original and chose a server region if you want
+Step 6: In the deploy tab, press "GitHub" as show in > https://imgur.com/a/QR30Fk4
+Step 7: Sign into your GitHub if you havn't already and let Heroku do what it wants
+Step 8: Enter the name of the repository you save the bot to in the area show in > https://imgur.com/a/cyeqST0
+	An exsample of this is > https://imgur.com/a/vir5jUw
+Step 9: Press connect butoon next to the repository that has the bot
+Step 10: 
