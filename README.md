@@ -26,7 +26,7 @@ Step 19: Open "run.bat" with code editing software like Notepad++ or Visual Stud
 Step 20: Replace the text "YOUR FOLDER ADRESS HERE" with what you just copied in step 18
 Step 21: Save and close "run.bat"
 
-#Running your bot
+# Running your bot
 
 Way 1: Run the file "run.bat" like you would run a .exe
 
