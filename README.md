@@ -1,8 +1,10 @@
 # mcstatusbot
 discrod bot for server status
-const settings = require('./config.json');
 
-# Setup
+# Self Host
+Info for slef hosting can be found here -> https://github.com/lerokko/mcstatusbot
+
+# Setup for Heroku
 
 Step 1: Dowload and extract the zip file into the folder of your choice
 Step 2: Go to https://nodejs.org/en/download/
