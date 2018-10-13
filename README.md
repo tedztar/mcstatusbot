@@ -13,20 +13,19 @@ Step 4: Now that you have signed in press "New" in the upper Rigt hand corner th
 Step 5: Enter in any name you wish for you app to be but make it original so it can not be guessed (Just trust me on this) also chose a server region if you so wish. ALSO, DO NOT add a "pipeline". Now press "Create app"<br/>
 Step 6: Now go to the deploy tab and press "GitHub" like shown in -> https://imgur.com/gallery/QR30Fk4 and follow the directions<br/>
 Step 7: When done in text box that says "repo-name" type in "mcstatusbot" (or what you renamed the repo you forked earlier) then press search adn press "connect" next to the correct repo that the bot is in like in -> https://imgur.com/gallery/vir5jUw<br/>
-Step 8: Scroll down the page and <br/>
-Step 9: <br/>
-Step 10: <br/>
-Step 11: <br/>
-Step 12: <br/>
-Step 13: <br/>
-Step 14: <br/>
+Step 8: Scroll down the page to "Automatic deploys" and under chose branch, chose the branch "heroku" like in -> https://imgur.com/a/KREzcrr then press "Enable Automatic Deploys"<br/>
+Step 9: Now scroll to the top and go to the settings tab, and in there press "Reveal Config Vars"<br/>
+Step 10: Make your Config Vars look like mine in -> https://imgur.com/a/LRkEW4o but replace "YOUR IP HERE" with your servers ip, then replace "YOUR PORT HERE" with the port of your server<br/>
+Step 11: Open a new tab and head over to the discord applicatons page (here https://discordapp.com/developers/applications/)<br/>
+Step 12: Click “new application”. Give it a name, picture and description<br/>
+Step 13: Press Bot on the left hand side of the screen then press “Add bot” and click “Yes, Do It!” when the dialog pops up<br/>
+Step 14: Copy down the bot token This is what is used to login to your bot later<br/>
 Step 15: <br/>
 Step 16: <br/>
 Step 17: <br/>
-
-Step 8: Open a new tab and head over to the discord applicatons page (here https://discordapp.com/developers/applications/)<br/>
-Step 9: Click “new application”. Give it a name, picture and description<br/>
-Step 10: Press Bot on the left hand side of the screen then press “Add bot” and click “Yes, Do It!” when the dialog pops up<br/>
-Step 11: Copy down the bot token This is what is used to login to your bot later<br/>
+Step 18: <br/>
+Step 19: <br/>
+Step 20: <br/>
+Step 21: <br/>
 
 # Running your bot
