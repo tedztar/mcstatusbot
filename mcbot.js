@@ -1,6 +1,6 @@
 //credit to vegeta897 for the request URL part from his 'Simple Minecraft server status bot'
 const Discord = require("discord.js");
-const settings = require('./config.json');
+const settings = require(mcIp, mcPort);
 var statustring = "No signal";
 
 var request = require('request');
