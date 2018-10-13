@@ -35,18 +35,10 @@ Step 13: Press Bot on the left hand side of the screen then press “Add bot” 
 <br/>
 Step 14: Copy down the bot token This is what is used to login to your bot later<br/>
 <br/>
-Step 15: <br/>
+Step 15: Go back to the Heroku Dashboard for your bot and go to the settings tab, then go to the Config Vars again<br/>
 <br/>
-Step 16: <br/>
+Step 16: Press the pencil on the line with the "key" "token" like in -> https://imgur.com/a/bmSMJTb<br/>
 <br/>
-Step 17: <br/>
+Step 17: Replace "YOUR BOT TOKEN HERE" with your bot token you copied down earier like in -> https://imgur.com/a/7G3R1lP (Inactive Token BTW) then press save changes<br/>
 <br/>
-Step 18: <br/>
-<br/>
-Step 19: <br/>
-<br/>
-Step 20: <br/>
-<br/>
-Step 21: <br/>
-
 # Running your bot
