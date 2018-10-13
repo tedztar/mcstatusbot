@@ -1,36 +1,31 @@
 # mcstatusbot
-discrod bot for server status
+discrod bot for server status<br/>
 
 # Self Host
-Info for slef hosting can be found here -> https://github.com/lerokko/mcstatusbot
+Info for slef hosting can be found here -> https://github.com/lerokko/mcstatusbot<br/>
 
 # Setup for Heroku
 
-Step 1: Dowload and extract the zip file into the folder of your choice
-Step 2: Go to https://nodejs.org/en/download/
-Step 3: Dowload and install node.js
-Step 4: Open the folder you extracted the files too earlier
-Step 5: Click in the bar above the files like in https://imgur.com/a/ykc0BWL and make sure all text in the box is highlighted as show in the photo
-Step 6: Type "cmd" and press enter
-Step 7: Paste in the command prompt "npm install"
-Step 8: Head over to the discord applicatons page (here https://discordapp.com/developers/applications/)
-Step 9: Click “new application”. Give it a name, picture and description.
-Step 10: Press Bot on the left hand side of the screen then press “Add bot” and click “Yes, Do It!” when the dialog pops up
-Step 11: Copy down the bot token This is what is used to login to your bot later
-Step 12: Open "config.json" with code editing software like Notepad++ or Visual Studio Code
-Step 13: Where it says "YOUR BOT TOKEN HERE" replace that text with your bot token you copied earlier
-Step 14: Where it says "YOUR SERVER IP HERE" replace that text with your server ip
-Step 15: Where it says "YOUR SERVER PORT HERE" replace that text with your server port
-Step 16: Save the "config.json file and close it
-Step 17: Close File Explorer then reopen the program to the folder where you have the bot's files (You must do this step. Trust me orelse the next step will be messed up)
-Step 18: Click in the bar above the files like in https://imgur.com/a/ykc0BWL and make sure all text in the box is highlighted as show in the photo and copy it
-Step 19: Open "run.bat" with code editing software like Notepad++ or Visual Studio Code
-Step 20: Replace the text "YOUR FOLDER ADRESS HERE" with what you just copied in step 18
-Step 21: Save and close "run.bat"
+Step 1: Sign into Github (if you already haven't already) and fork this repository<br/>
+Step 2: Go to https://signup.heroku.com/login to sign up for Heroku (if you don't have an account)<br/>
+Step 3: Now go to https://id.heroku.com/login (if you where not redirected there)  and sign in<br/>
+Step 4: Now that you have signed in press "New" in the upper Rigt hand corner then press "Create new app" (Should be done at https://dashboard.heroku.com/apps)<br/>
+Step 5: Enter in any name you wish for you app to be but make it original so it can not be guessed (Just trust me on this) also chose a server region if you so wish<br/>
+Step 6: 
+Step 7: 
+Step 8: Head over to the discord applicatons page (here https://discordapp.com/developers/applications/)<br/>
+Step 9: Click “new application”. Give it a name, picture and description<br/>
+Step 10: Press Bot on the left hand side of the screen then press “Add bot” and click “Yes, Do It!” when the dialog pops up<br/>
+Step 11: Copy down the bot token This is what is used to login to your bot later<br/>
+Step 12: 
+Step 13: 
+Step 14: 
+Step 15: 
+Step 16: 
+Step 17: 
+Step 18: 
+Step 19: 
+Step 20: 
+Step 21: 
 
 # Running your bot
-
-Way 1: Run the file "run.bat" like you would run a .exe
-
-Way 2: Click in the bar above the files like in https://imgur.com/a/ykc0BWL and make sure all text in the box is highlighted as show in the photo and replace it all with cmd
-		In cmd paste in "node mcbot.js", then press the enter key
