@@ -41,4 +41,9 @@ Step 16: Press the pencil on the line with the "key" "token" like in -> https://
 <br/>
 Step 17: Replace "YOUR BOT TOKEN HERE" with your bot token you copied down earier like in -> https://imgur.com/a/7G3R1lP (Inactive Token BTW) then press save changes<br/>
 <br/>
+# Inviting your bot
+Use the link https://discordapp.com/developers/applications/ and select the app you made for the bot then press "Copy" under "Client ID" and paste it into the "Client ID" feild on the website -> https://discordapi.com/permissions.html like in -> https://imgur.com/a/PXU3y03
+
 # Running your bot
+
+Under the deploy tab scroll to the bottom and make sure "Manual Deploy" looks like this -> https://imgur.com/a/rVrRw3z. If so, then press "Deploy Branch"
