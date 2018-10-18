@@ -1,6 +1,7 @@
 # mcstatusbot
-discrod bot for server status
-const settings = require('./config.json');
+### Discord bot for server status
+
+:warning: For settings, please edit `config.json`. 
 
 # Setup
 
@@ -26,7 +27,7 @@ const settings = require('./config.json');
 - Step 20: Replace the text `"YOUR FOLDER ADRESS HERE"` with what you just copied in step 18
 - Step 21: Save and close `run.bat`
 
-#Running your bot
+# Running your bot
 
 Way 1: Run the file `run.bat` like you would run a `.exe`
 
