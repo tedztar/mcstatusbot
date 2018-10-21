@@ -41,6 +41,10 @@ Step 16: Press the pencil on the line with the "key" "token" like in -> https://
 <br/>
 Step 17: Replace "YOUR BOT TOKEN HERE" with your bot token you copied down earier like in -> https://imgur.com/a/7G3R1lP (Inactive Token BTW) then press save changes<br/>
 <br/>
+Step 18: Go to the overview tab, and under "Dyno formation" press "Configure Dynos". Under "Free Dynos" press the pencil for editing "web" press the button so it turns blue, then press confirm like in -> https://imgur.com/a/38Hqle8<br/>
+<br/>
+Step 19: Press the pencil for editing "worker" press the button so it turns blue, then press confirm like in -> https://imgur.com/a/jt1AJkb<br/>
+<br/>
 # Inviting your bot
 Use the link https://discordapp.com/developers/applications/ and select the app you made for the bot then press "Copy" under "Client ID" and paste it into the "Client ID" feild on the website -> https://discordapi.com/permissions.html like in -> https://imgur.com/a/PXU3y03
 
