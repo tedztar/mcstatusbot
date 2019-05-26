@@ -1,13 +1,21 @@
 //credit to vegeta897 for the request URL part from his 'Simple Minecraft server status bot'
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const settings = require('./config.json');
+
+//const settings = require('./config.json');
+try {
+  settings = require('./config.json');
+} catch (e) {
+  //handleErr(e);
+  settings = require('./config.example.json');
+}
+
 var statustring = "No signal";
 
 var request = require('request');
 var mcCommand = '/minecraft'; // Command for triggering
-var mcIP = settings.ip; // Your MC server IP
-var mcPort = settings.port; // Your MC server port
+var mcIP = process.env.ip || settings.ip; // Your MC server IP
+var mcPort = process.env.port || settings.port; // Your MC server port
 
 var url = 'http://mcapi.us/server/status?ip=' + mcIP + '&port=' + mcPort;
 
@@ -67,4 +75,4 @@ client.on("ready", () => {
 }
 );*/
 
-client.login(settings.token);
+client.login(process.env.token || settings.token);

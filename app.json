@@ -1,0 +1,24 @@
+
+{
+    "name": "mcstatusbot",
+    "description": "discrod bot for server status",
+    "repository": "https://github.com/lerokko/mcstatusbot/",
+    "env": {
+      "ip": {
+        "description": "Main mc server's ip.",
+        "required": true
+      },
+      "port": {
+        "description": "Main mc server's port.",
+        "required": true
+      },
+      "token": {
+        "description": "Your discord bot's token.",
+        "required": true
+      },
+      "prefix": {
+        "description": "Your discord bot's prefix, if none then defaults to '!'.",
+        "required": false
+      }
+    }
+}

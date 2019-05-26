@@ -1,2 +1,6 @@
+@echo on
+echo Bot starting..
+:main
 node mcbot.js
-YOUR FOLDER ADRESS HERE
+echo Uh oh... Looks like the bot crashed, rebooting it now
+goto main
