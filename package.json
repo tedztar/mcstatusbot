@@ -4,6 +4,7 @@
   "description": "minecraft server status bot",
   "main": "mcbot.js",
   "scripts": {
+    "start": "node mcbot.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
