@@ -20,8 +20,8 @@ Heroku setup further down.
 - Step 12: Rename `config.example.json` to `config.json` if not already done so.
 - Step 13: Open "config.json" with code editing software like Notepad++ or Visual Studio Code.
 - Step 14: Where it says `YOUR BOT TOKEN HERE` replace that text with your bot token you copied earlier.
-- Step 15: Where it says `YOUR SERVER IP HERE` replace that text with your server ip.
-- Step 16: Where it says `YOUR SERVER PORT HERE` replace that text with your server port.
+- Step 15: Where it says `YOUR MC SERVER IP HERE` replace that text with your server ip.
+- Step 16: Where it says `YOUR MC SERVER PORT HERE` replace that text with your server port.
 - Step 17: Save the "config.json file and close it.
 - Step 19: Double click `run.bat` to start the bot.
 
