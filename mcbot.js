@@ -1,6 +1,7 @@
 //credit to vegeta897 for the request URL part from his 'Simple Minecraft server status bot'
 const Discord = require("discord.js");
 const client = new Discord.Client();
+const http = require('http');
 
 //const settings = require('./config.json');
 try {
@@ -18,6 +19,7 @@ var mcIP = process.env.ip || settings.ip; // Your MC server IP
 var mcPort = process.env.port || settings.port; // Your MC server port
 
 var url = 'http://mcapi.us/server/status?ip=' + mcIP + '&port=' + mcPort;
+var PORT = process.env.PORT || 80;
 
 
 function update() {
@@ -76,3 +78,8 @@ client.on("ready", () => {
 );*/
 
 client.login(process.env.token || settings.token);
+
+http.createServer(function (req, res) {
+  res.write('Hello World!');
+  res.end();
+}).listen(PORT);
