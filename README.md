@@ -42,7 +42,7 @@ then press the enter key.
 - Step 2: Click “**new application**”. Give it a name, picture and description.
 - Step 3: Press Bot on the left hand side of the screen then press “**Add bot**” and click “**Yes, Do It!**” when the dialog pops up.
 - Step 4: Copy down the bot token This is what is used to login to your bot later.
-- Step 5: Press this button: [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/lerokko/mcstatusbot).
+- Step 5: Press this button: [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Huskydog9988/mcstatusbot).
 - Step 6: Name your app and choose a region that you prefer.
 - Step 7: Fill in each `Config Var` with the requested information.
 - Step 8: Press `Deploy app` to start your bot.
