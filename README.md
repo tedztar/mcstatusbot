@@ -32,7 +32,7 @@ Way 1: Run the file `run.bat` like you would run a `.exe`
 Way 2: Click in the bar above the files like in https://imgur.com/a/ykc0BWL and make sure all text in the box is highlighted as show in the photo and replace it all with cmd
 In cmd paste in 
 ```js 
-node mcbot.js
+npm start
 ```
 then press the enter key.
 
