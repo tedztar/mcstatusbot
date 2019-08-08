@@ -4,7 +4,7 @@ const client = new Discord.Client();
 const http = require('http');
 var request = require('request');
 let ejs = require('ejs');
-//const settings = require('./config.json');
+//const settings = require('./config.json'); FILLER
 try {
   settings = require('./config.json');
 } catch (e) {
