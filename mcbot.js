@@ -2,6 +2,9 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
+//const url = require('url');
 var request = require('request');
 let ejs = require('ejs');
 //const settings = require('./config.json'); FILLER
@@ -19,6 +22,13 @@ var PORT = process.env.PORT || 80;
 var statustring = "No signal";
 var mcCommand = '/minecraft'; // Command for triggering
 var url = 'http://mcapi.us/server/status?ip=' + mcIP + '&port=' + mcPort;
+
+var staticServe = function(req, res) {
+    res.statusCode = 200;
+    res.write('ok');
+    return res.end();
+};
+var webServer = http.createServer(staticServe);
 
 function update() {
   /*seconds = seconds + 1;
@@ -61,11 +71,11 @@ function update() {
   });
 
 }
+
 client.on("ready", () => {
   console.log("I am ready!");
-  client.setInterval(update,30000);
+  client.setInterval(update, 30000);
 });
-
 /*client.on("message", (message) => {
   if (message.content.startsWith("ping")) {
     message.channel.send("pong!");
@@ -76,9 +86,4 @@ client.on("ready", () => {
 );*/
 
 client.login(process.env.token || settings.token);
-
-http.createServer(function (req, res) {
-  res.setHeader('Content-Type', 'text/html; charset=UTF-8');
-  //res.write(`<img src="https://mcapi.us/server/image?ip=${mcIP}&port=${mcPort}" alt="${mcIP} Server Info"`);
-  res.end(`<img src="https://mcapi.us/server/image?ip=${mcIP}&port=${mcPort}" alt="${mcIP} Server Info"`);
-}).listen(PORT);
+webServer.listen(PORT);
