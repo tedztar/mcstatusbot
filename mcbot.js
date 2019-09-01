@@ -10,7 +10,7 @@ const http = require('http');
 const utils = require('./utils.js');
 //const settings = require('./config.json');
 
-const settings = require('./config.json');
+const settings = require('./config.json') || require('./config.exsample.json');
 /*
 try {
   
