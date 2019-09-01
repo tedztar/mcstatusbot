@@ -1,8 +1,11 @@
 # mcstatusbot
 ### Discord bot for server status
 
-:warning: For settings, please rename `config.example.json` to `config.json`.
-Heroku setup further down.
+⚠ For settings, please copy and rename `config.example.json` to `config.json`.
+
+⚠ Heroku setup further down.
+
+⚠ Error Code key can be found in `ERRORCODES.md`
 
 # Setup: Self-Hosting
 
