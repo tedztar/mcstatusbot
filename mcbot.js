@@ -1,5 +1,7 @@
 //credit to vegeta897 for the request URL part from his 'Simple Minecraft server status bot'
 const Discord = require("discord.js");
+const request = require("request");
+
 const client = new Discord.Client();
 const http = require('http');
 //const fs = require('fs');
