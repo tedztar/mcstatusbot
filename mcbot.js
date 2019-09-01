@@ -121,8 +121,8 @@ function pIng (host, port, pong) {
 
 client.on("ready", () => {
   console.log("I am ready!");
-  client.setInterval(mcUPdate(client, url), 30000);
-  client.setInterval(pIng("http://localhost/", 80), 30000);
+  setInterval(mcUPdate(client, url), 30000);
+  setInterval(pIng("http://localhost/", 80), 30000);
 });
 /*client.on("message", (message) => {
   if (message.content.startsWith("ping")) {
@@ -132,7 +132,7 @@ client.on("ready", () => {
   }
 }
 );*/
-
+//setInterval(callback, delay[, ...args])
 client.login(process.env.token || settings.token).catch(function(){
   utils.kill(2, 'Please put a valid bot token in the config file.');
 });
