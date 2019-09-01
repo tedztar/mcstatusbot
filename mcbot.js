@@ -13,21 +13,24 @@ try {
   settings = require('./config.json');
 } catch (e) {
   //handleErr(e);
-  utils.kill(1, 'Please create a config.json file by following the directions in README.md');
+  //utils.kill(1, 'Please create a config.json file by following the directions in README.md');
 }
 
-var defaultMcIP = settings.port;
+var defaultMcIP = settings.port || process.env.ip;
+/*
 if (settings.ip == 'YOUR SERVER IP HERE') {
   defaultMcIP = 'http://2b2t.org/';
-}
-var defaultMcPort = settings.port;
+}*/
+var defaultMcPort = settings.port || process.env.PORT;
+/*
 if (settings.port == 'YOUR SERVER PORT HERE') {
   defaultMcPort = 25566;
-}
+}*/
 var defaultPrefix = '!';
+/*
 if (settings.prefix !== 'YOUR BOT PREFIX') {
   defaultPrefix = settings.prefix;
-}
+}*/
 
 var mcIP = process.env.ip || defaultMcIP; // Your MC server IP
 var mcPort = process.env.port || defaultMcPort; // Your MC server port

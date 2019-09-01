@@ -13,12 +13,12 @@
         "required": true
       },
       "port": {
-        "description": "Main mc server's port, if none is set it defaults to '25566'.",
-        "required": false
+        "description": "Main mc server's port, if your not sure set it to '25566'.",
+        "required": true
       },
       "prefix": {
-        "description": "Your discord bot's prefix, if none then defaults to '!'.",
-        "required": false
+        "description": "Your discord bot's prefix, if your not sure then set it to '!'.",
+        "required": true
       }
     }
 }
