@@ -9,12 +9,15 @@ const http = require('http');
 
 const utils = require('./utils.js');
 //const settings = require('./config.json');
+
+const settings = require('./config.json');
+/*
 try {
-  settings = require('./config.json');
+  
 } catch (e) {
   //handleErr(e);
   //utils.kill(1, 'Please create a config.json file by following the directions in README.md');
-}
+}*/
 
 var defaultMcIP = settings.port || process.env.ip;
 /*
