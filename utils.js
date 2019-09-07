@@ -1,4 +1,6 @@
-var request = require('request');
+const request = require('request');
+const fs = require('fs');
+const path = require('path');
 
 module.exports.mcUpdate = function (client, url) { 
     /*seconds = seconds + 1;
@@ -74,4 +76,15 @@ module.exports.ping = async function (host, port, pong) {
     } catch(exception) {
       // this is expected
     }
+}
+
+module.exports.findConfig = function () {
+    let requiredModule = null; // or a default object {}
+
+    let pathToModule = path.join(__dirname, 'config.json');
+    if (fs.existsSync(pathToModule)) {
+        requiredModule = require(pathToModule);
+    }
+
+    return requiredModule;
 }

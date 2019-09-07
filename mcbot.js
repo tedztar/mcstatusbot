@@ -1,26 +1,16 @@
 //credit to vegeta897 for the request URL part from his 'Simple Minecraft server status bot'
 const Discord = require("discord.js");
 const request = require("request");
-
-const client = new Discord.Client();
+const fs = require('fs');
+const path = require('path');
 const http = require('http');
-//const fs = require('fs');
-//const path = require('path');
 //const url = require('url');
 //let ejs = require('ejs');
 
+const client = new Discord.Client();
+
 const utils = require('./utils.js');
-//const settings = require('./config.json');
-
-//const settings = require('./config.json') || require('./config.exsample.json');
-
-try {
-  settings = require('./config.json');
-} catch (e) {
-  settings = process.env;
-  //handleErr(e);
-  //utils.kill(1, 'Please create a config.json file by following the directions in README.md');
-}
+var settings = utils.findConfig;
 
 var defaultMcIP = settings.port || process.env.ip;
 /*
