@@ -1,5 +1,8 @@
 {
-	"token":"YOUR BOT TOKEN HERE",
-	"ip":"YOUR SERVER IP HERE",
-	"port":"YOUR SERVER PORT HERE"
+	"token":"YOUR_BOT_TOKEN_HERE",
+    "commandPrefix":"/",
+    "ip":"YOUR_SERVER_IP_HERE",
+    "port":"25565",
+    "pingInterval":"30",
+    "embedColor":"7289DA"
 }

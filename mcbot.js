@@ -1,70 +1,127 @@
-//credit to vegeta897 for the request URL part from his 'Simple Minecraft server status bot'
-const Discord = require("discord.js");
-const client = new Discord.Client();
+const Discord = require("discord.js")
+const mcping = require('mc-ping-updated')
+const chalk = require('chalk')
+const escape = require('markdown-escape')
+
+const client = new Discord.Client()
 const settings = require('./config.json');
-var statustring = "No signal";
+var hasIcon = 'n/a'
+pingFrequency = (settings.pingInterval * 1000)
+embedColor = ("0x" + settings.embedColor)
 
-var request = require('request');
-var mcCommand = '/minecraft'; // Command for triggering
-var mcIP = settings.ip; // Your MC server IP
-var mcPort = settings.port; // Your MC server port
-
-var url = 'http://mcapi.us/server/status?ip=' + mcIP + '&port=' + mcPort;
-
-
-function update() {
-  /*seconds = seconds + 1;
-  secondsString = seconds.toString();
-  client.user.setActivity(secondsString, { type: 'Playing' })
-  .then(presence => console.log(`Activity set to ${presence.game ? presence.game.name : 'none'}`))
-  .catch(console.error);*/
-  request(url, function(err, response, body) {
-      if(err) {
-          console.log(err);
-          //return message.reply('Error getting Minecraft server status...');
-      }
-      body = JSON.parse(body);
-      var status = 'Server offline';
-      console.log(body.motd);
-      if(body.online) {
-          if((body.motd=="&cWe are under maintenance.")||(body.players.now>=body.players.max)){
-            client.user.setStatus('idle')
-            //.then(console.log)
-            .catch(console.error);
-          }else{
-            client.user.setStatus('online')
-            //.then(console.log)
-            .catch(console.error);
-          }
-            if(body.players.now) {
-                status = ' ' + body.players.now + '  of  ' + body.players.max;
-              } else {
-                status = ' 0  of  ' + body.players.max;
-        }
-      } else {
-        client.user.setStatus('dnd')
-        //.then(console.log)
-        .catch(console.error);
-
-      }
-      client.user.setActivity(status, { type: 'PLAYING' })
-      .then(presence => console.log(status))
-      .catch(console.error);
-  });
-
+function getDate() {
+    date = new Date();
+    cleanDate = date.toLocaleTimeString();
 }
+
+function getServerStatus() {
+    mcping(settings.ip, settings.port, function(err, res) {
+        if (!(typeof err === 'undefined' || err === null)) {
+            client.user.setStatus('dnd');
+            serverStatus = 'Server offline';
+            client.user.setActivity(serverStatus, { type: 'PLAYING' });
+            getDate()
+            console.log((chalk.yellow('\[' + cleanDate + '\]:') + chalk.white(' Ping: ' +
+                'Error getting server status')));
+            console.error(err);
+            return;
+        }
+        if (typeof res.players.sample === 'undefined') { client.user.setStatus('idle') }
+        if (!(typeof res.players.sample === 'undefined')) { client.user.setStatus('online') }
+        serverStatus = res.players.online + ' / ' + res.players.max;
+        getDate()
+        client.user.setActivity(serverStatus, { type: 'PLAYING' }).then(presence => console.log(
+            chalk.cyan('\[' + cleanDate + '\]:') + chalk.white(' Ping: ' + serverStatus)
+        )).catch(console.error);
+    })
+}
+
+//Startup:
 client.on("ready", () => {
-  console.log("I am ready!");
-  client.setInterval(update,30000);
+    console.log("Ready!");
+    getServerStatus()
+    client.setInterval(getServerStatus, pingFrequency);
 });
 
-/*client.on("message", (message) => {
-  if (message.content.startsWith("ping")) {
-    message.channel.send("pong!");
-    update();
+//Command Handling
+client.on('message', message => {
+    if (!message.content.startsWith(settings.commandPrefix)) return;
+    if (message.author.bot) return; {
+        const args = message.content.slice(settings.commandPrefix.length).trim().split(
+            / +/g);
+        const command = args.shift().toLowerCase();
+        console.log('Command \'' + message.content + '\' issued by ' + message.member.user.tag);
 
-  }
-}
-);*/
 
+
+        //Help command handling
+        if (command === "help" || command === "commands" || command === "list" | command ===
+            "bot") {
+
+            console.log('Issuing help message.');
+            const helpEmbed = new Discord.RichEmbed()
+                            .setTitle('Commands:')
+                            .setColor(embedColor)
+                            .setDescription('**/status** - The current status and player count of your server \n**/crash** - Restart the bot')
+                        message.channel.send(helpEmbed);
+            return;
+
+            
+        }
+        //Status command handling
+        else if (command === "status" || command === "server" || command === "online") {
+            mcping(settings.ip, settings.port, function(err, res) {
+                if (err) {
+                    console.log(err);
+                    message.channel.send('Error getting server status.');
+                    return;
+                } else {
+                    console.log('RES:', res)
+                    //console.log('players:', res.players)
+                    //console.log('sample:', res.players.sample)
+                    
+                    //console.log('DESC:', res.description)
+                    //console.log('EXTRA:', res.description.extra)
+                    try {
+                        favicon = res.favicon.slice(22)
+                        hasIcon = 'yes'
+                    } catch (error) {
+                        hasIcon = 'no'
+                    }
+                    let onlinePlayers = [];
+                    if (typeof res.players.sample == 'undefined') {
+                        serverStatus = '*No one is playing!*';
+                    } else {
+                        for (var i = 0; i < res.players.sample.length; i++) {
+                            onlinePlayers.push(res.players.sample[i].name);
+                        };
+                        onlinePlayers = escape(onlinePlayers.sort().join(', ')).replace(/\u00A7[0-9A-FK-OR]|\\n/ig,'');
+                        serverStatus = '**' + res.players.online + '/' + res.players.max +
+                            '**' + ' player(s) online.\n\n' + onlinePlayers;
+                        
+                        console.log('Server Status', serverStatus);
+                    };
+                    if (hasIcon === 'yes') {
+                        const buffer = Buffer.from(favicon, 'base64')
+                        const serverEmbedicon = new Discord.RichEmbed().attachFile({ attachment: buffer,
+                            name: 'icon.png' }).setTitle('Status for ' +
+                            settings.ip + ':').setColor(embedColor).setDescription(
+                            serverStatus).setThumbnail('attachment://icon.png').addField(
+                            "Server version:", res.version.name)
+                        message.channel.send(serverEmbedicon);
+                    } else if (hasIcon === 'no') {
+                        const serverEmbedNoIcon = new Discord.RichEmbed().setTitle(
+                                'Status for ' + settings.ip + ':').setColor(embedColor)
+                            .setDescription(serverStatus).addField("Server version:",
+                                res.version.name)
+                        message.channel.send(serverEmbedNoIcon);
+                    }
+                }
+            }, 3000);
+            return;
+        } else if (command === "crash") {client.user.setActivity("Reloading...");
+    process.exit(1);} else return;
+    }
+})
 client.login(settings.token);
+
