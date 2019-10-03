@@ -1,0 +1,4 @@
+exports.run = async (client, message, args) => {
+	//code to run when command is sent
+	
+}
