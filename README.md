@@ -4,8 +4,8 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that pings [
 This bot is currently compatible with post-1.8 vanilla, Spigot, Waterfall, and Bungeecord servers. Other types of servers are partially supported with varying degrees of comaptbility.
 
 # Setup & Configuration
-- Follow a Discord.js bot quickstart guide ([An Idiot's Guide](https://anidiots.guide/getting-started/getting-started-long-version), [DevDungeon](https://www.devdungeon.com/content/javascript-discord-bot-tutorial), etc.) up to the step where you have a functioning bot and bot user, then replace your `mybot.js` file with `mcbot.js` (or just copy and paste the code from the latter into the former)
-- Install any Node dependencies you're missing ([mc-ping-updated](https://www.npmjs.com/package/mc-ping-updated), [chalk](https://www.npmjs.com/package/chalk), [markdown-escape](https://www.npmjs.com/package/markdown-escape)) by opening the command line, navigating to the bot's directory, and running `npm install [name]` for each package you need to install.
+- First install Node.js from [here](https://nodejs.org/en/download/) if not already installed.
+- Then open CMD in the folder in which the bot is in and run `npm i`
 
 Edit the `config.json` file to provide your bot token, preferred command prefix, Minecraft server IP address & port, and ping interval:
 - Replace `"YOUR BOT TOKEN HERE"` with your bot token.
