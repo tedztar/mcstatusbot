@@ -4,7 +4,8 @@
   "description": "A simple Discord.js bot that pings Minecraft servers using the \"mc-ping-updated\" node module.",
   "main": "mcbot.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node mcbot.js"
   },
   "repository": {
     "type": "git",

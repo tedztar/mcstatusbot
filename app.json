@@ -1,23 +1,30 @@
-
 {
     "name": "mcstatusbot",
     "description": "discrod bot for server status",
-    "repository": "https://github.com/Huskydog9988/mcstatusbot/",
+    "repository": "https://github.com/Huskydog9988/mcstatusbot/tree/V0.2",
     "env": {
       "token": {
         "description": "Your discord bot's token.",
         "required": true
       },
+      "commandPrefix": {
+        "description": "Your discord bot's prefix, if your not sure then set it to '/'.",
+        "required": true
+      },
       "ip": {
-        "description": "Main mc server's ip.",
+        "description": "IP address of the Minecraft server you want to poll. Domains that redirect to IP addresses ('play.exampleserver.net') will also work.",
         "required": true
       },
       "port": {
-        "description": "Main mc server's port, if your not sure set it to '25566'.",
+        "description": "Port number of the Minecraft server you want to poll, if your not sure set it to '25566'.",
         "required": true
       },
-      "prefix": {
-        "description": "Your discord bot's prefix, if your not sure then set it to '!'.",
+      "pingInterval": {
+        "description": "Frequency, in seconds, at which you want the bot to ping the server. If your not sure set it to '25566'.",
+        "required": true
+      },
+      "embedColor": {
+        "description": "The hex color code you prefer the bot's richEmbed messages to use. If your not sure set it to '7289DA'.",
         "required": true
       }
     }
