@@ -12,10 +12,10 @@ const ip = process.env.ip || settings.ip;
 const port = process.env.port || settings.port;
 const token = process.env.token || settings.token;
 const pingInterval = process.env.pingInterval || settings.pingInterval;
-const embedColor = process.env.embedColor || settings.embedColor
+const embedColorConfig = process.env.embedColor || settings.embedColor
 
 pingFrequency = (pingInterval * 1000);
-embedColor = ("0x" + embedColor);
+embedColor = ("0x" + embedColorConfig);
 
 function getDate() {
     date = new Date();
