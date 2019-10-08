@@ -20,7 +20,7 @@
         "required": true
       },
       "pingInterval": {
-        "description": "Frequency, in seconds, at which you want the bot to ping the server. If your not sure set it to '25566'.",
+        "description": "Frequency, in seconds, at which you want the bot to ping the server. If your not sure set it to '30'.",
         "required": true
       },
       "embedColor": {
