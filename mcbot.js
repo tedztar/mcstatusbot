@@ -15,7 +15,7 @@ const token = process.env.token || settings.token;
 const pingInterval = process.env.pingInterval || settings.pingInterval;
 const embedColorConfig = process.env.embedColor || settings.embedColor;
 
-const webPort = process.env.PORT || 8080;
+const webPort = process.env.PORT || 3000;
 
 pingFrequency = (pingInterval * 1000);
 embedColor = ("0x" + embedColorConfig);
