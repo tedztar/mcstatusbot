@@ -3,6 +3,7 @@ const mcping = require('mc-ping-updated');
 const chalk = require('chalk');
 const escape = require('markdown-escape');
 const fs = require('fs');
+var http = require('http');
 
 const client = new Discord.Client();
 const settings = require('./config.json');
@@ -12,7 +13,9 @@ const ip = process.env.ip || settings.ip;
 const port = process.env.port || settings.port;
 const token = process.env.token || settings.token;
 const pingInterval = process.env.pingInterval || settings.pingInterval;
-const embedColorConfig = process.env.embedColor || settings.embedColor
+const embedColorConfig = process.env.embedColor || settings.embedColor;
+
+const webPort = process.env.PORT || 8080;
 
 pingFrequency = (pingInterval * 1000);
 embedColor = ("0x" + embedColorConfig);
@@ -78,3 +81,9 @@ client.on("ready", () => {
     client.setInterval(getServerStatus, pingFrequency);
 });
 client.login(token);
+
+//Heroku Compatibility 
+http.createServer(function (req, res) {
+    res.write('Hello World!');
+    res.end();
+}).listen(webPort);
