@@ -7,7 +7,7 @@ exports.run = async (client, settings, message) => {
 
         let messageArray = message.content.split(" ");
 		let cmd = messageArray[0];
-		cmd = cmd.shift().toLowerCase();
+		cmd = cmd.toLowerCase();
         let args = messageArray.slice(1);
 
         let commandfile = client.commands.get(cmd.slice(settings.commandPrefix.length));
