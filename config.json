@@ -1,9 +1,8 @@
 {
-	"token":"Njc4MDczNTcwMTczMjU1Njgz.Xkdiww.mOAa5TcpzIYihCcEOCAVrSKyb6E",
+	"token":"YOUR_BOT_TOKEN_HERE",
     "commandPrefix":"/",
-    "ip":"100.11.56.150",
-    "port":"65535",
+    "ip":"YOUR_SERVER_IP_HERE",
+    "port":"25565",
     "pingInterval":"30",
     "embedColor":"7289DA"
-    
 }
