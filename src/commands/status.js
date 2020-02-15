@@ -1,3 +1,4 @@
+const mcping = require('mc-ping-updated');
 module.exports.run = async (client, message, args) => {
 	//code to run when command is sent
 	mcping(settings.ip, settings.port, function (err, res) {

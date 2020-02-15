@@ -3,7 +3,7 @@ const fs = require("fs");
 module.exports.run = async (client, message, args) => {
     //code to run when command is sent
     
-    fs.readdir('./src/commands/', (err, file) => {
+    /*fs.readdir('./src/commands/', (err, file) => {
     });
 
     if (args[0]){
@@ -13,7 +13,7 @@ module.exports.run = async (client, message, args) => {
         }
     } else {
         
-    }
+    }*/
 
     const helpEmbed = new Discord.RichEmbed()
         .setTitle('Commands:')
