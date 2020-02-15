@@ -27,17 +27,18 @@ pingFrequency = (pingInterval * 1000);
 embedColor = ("0x" + embedColorConfig);
 
 function getDate() {
-    date = new Date();
-    cleanDate = date.toLocaleTimeString();
+    const date = new Date();
+    const cleanDate = date.toLocaleTimeString();
+    return cleanDate;
 }
 
 function getServerStatus() {
     mcping(ip, port, function(err, res) {
+        const cleanDate = getDate();
         if (!(typeof err === 'undefined' || err === null)) {
             client.user.setStatus('dnd');
             serverStatus = 'Server offline';
             client.user.setActivity(serverStatus, { type: 'PLAYING' });
-            getDate()
             console.log((chalk.yellow('\[' + cleanDate + '\]:') + chalk.white(' Ping: ' +
                 'Error getting server status')));
             console.error(err);
@@ -112,7 +113,7 @@ http.createServer(function (req, res) {
         res.send("Bot still getting ready");
         res.end();
     } else {
-        res.writeHead(301,{Location: `https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot`});
+        res.writeHead(301, {Location: `https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot`});
         res.end();
     }
     
