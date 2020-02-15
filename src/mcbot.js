@@ -96,7 +96,7 @@ async function load () {
 	});
 }
 
-//Startup:
+//Startup
 client.on("ready", () => {
     ready = true;
     console.log("Ready!");
