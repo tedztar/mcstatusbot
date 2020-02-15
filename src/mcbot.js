@@ -1,11 +1,17 @@
+//require('dotenv').config(); 
+// Create a .env file or include your own config file
+// USED FOR TESTING ONLY COMMENT WHEN DONE TESTING
+
 const Discord = require("discord.js");
 const mcping = require('mc-ping-updated');
 const chalk = require('chalk');
+const ping = require("web-pingjs");
 //const escape = require('markdown-escape');
 //const fs = require('fs');
-const http = require('http');
-const url = require("url");
 const { promisify } = require("util");
+
+//Webserver app
+const app = require('express')()
 
 const client = new Discord.Client();
 const settings = require('../config.js');
@@ -13,7 +19,6 @@ const readdir = promisify(require("fs").readdir);
 
 var hasIcon = 'n/a';
 var ready = false;
-const apiURL = "https://api.mcsrvstat.us/2/<address>";
 
 /*
 const ip = process.env.ip || settings.ip;
@@ -24,6 +29,7 @@ const embedColorConfig = process.env.embedColor || settings.embedColor;
 const webPort = process.env.PORT || 3000;
 */
 
+webServerPing = (20 * 60000) // Set to every 20 min multiply minutes by 60000 to get milliseconds
 pingFrequency = (settings.pingInterval * 1000);
 embedColor = ("0x" + settings.embedColor);
 
@@ -52,6 +58,17 @@ function getServerStatus() {
         client.user.setActivity(serverStatus, { type: 'PLAYING' }).then(presence => console.log(
             chalk.cyan('\[' + cleanDate + '\]:') + chalk.white(' Ping: ' + serverStatus)
         )).catch(console.error);
+    });
+}
+
+function serverPing () {
+    const cleanDate = getDate();
+    ping('localhost:' + settings.webPort).then(function(delta) {
+        console.log(chalk.blue('\[' + cleanDate + '\]:') + chalk.white(' Pinged Webserver: ' + String(delta)));
+        //console.log('Ping time was ' + String(delta) + ' ms');
+    }).catch(function(err) {
+        console.error(chalk.red('\[' + cleanDate + '\]:') + chalk.white(err));
+        //console.error('Could not ping remote URL', err);
     });
 }
 
@@ -103,13 +120,20 @@ client.on("ready", () => {
     ready = true;
     console.log("Ready!");
     getServerStatus()
+    serverPing()
+
     load()
     client.setInterval(getServerStatus, pingFrequency);
+    client.setInterval(serverPing, webServerPing);
 });
 client.login(settings.token);
 
 //Heroku Compatibility 
-http.createServer(function (req, res) {
+app.get('/', (req, res) => {
+    //This is also the link used to ping the server
+    res.send('To invite the bot go to <a href="/invite">here</a>');
+});
+app.get('/invite', (req, res) => {
     if (!ready) {
         res.send("Bot still getting ready");
         res.end();
@@ -117,5 +141,7 @@ http.createServer(function (req, res) {
         res.writeHead(301, {Location: `https://discordapp.com/oauth2/authorize?client_id=${client.user.id}&scope=bot`});
         res.end();
     }
-    
-}).listen(settings.webPort);
+});
+app.listen(settings.webPort, () => {
+    console.log(`Webserver bound to port ${settings.webPort}`);
+});

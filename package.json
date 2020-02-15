@@ -29,7 +29,10 @@
   "dependencies": {
     "chalk": "^2.4.2",
     "discord.js": "^11.5.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "markdown-escape": "^1.0.2",
-    "mc-ping-updated": "^0.1.0"
+    "mc-ping-updated": "^0.1.0",
+    "web-pingjs": "^1.0.1"
   }
 }
