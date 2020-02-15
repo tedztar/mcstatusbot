@@ -5,7 +5,7 @@
   "main": "mcbot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node mcbot.js"
+    "start": "node src/mcbot.js"
   },
   "repository": {
     "type": "git",

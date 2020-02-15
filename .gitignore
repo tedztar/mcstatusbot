@@ -1,3 +1,4 @@
 node_modules/
-.idea/jsLibraryMappings.xml
+.idea/
 .vs/
+config.json

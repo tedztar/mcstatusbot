@@ -1,5 +1,5 @@
 @echo off
 :loop
-node mcbot.js
+npm start
 echo Restarting bot...
 goto loop
