@@ -1,6 +1,6 @@
 const fs = require("fs");
 
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, settings, args) => {
     //code to run when command is sent
     
     /*fs.readdir('./src/commands/', (err, file) => {

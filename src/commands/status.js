@@ -1,5 +1,5 @@
 const mcping = require('mc-ping-updated');
-module.exports.run = async (client, message, args) => {
+module.exports.run = async (client, message, settings, args) => {
 	//code to run when command is sent
 	mcping(settings.ip, settings.port, function (err, res) {
         if (err) {
@@ -7,7 +7,7 @@ module.exports.run = async (client, message, args) => {
             message.channel.send('Error getting server status.');
             return;
         } else {
-            console.log('RES:', res)
+            //console.log('RES:', res)
             //console.log('players:', res.players)
             //console.log('sample:', res.players.sample)
 

@@ -8,23 +8,24 @@ const url = require("url");
 const { promisify } = require("util");
 
 const client = new Discord.Client();
-const settings = require('../config.json');
+const settings = require('../config.js');
 const readdir = promisify(require("fs").readdir);
 
 var hasIcon = 'n/a';
 var ready = false;
 const apiURL = "https://api.mcsrvstat.us/2/<address>";
 
+/*
 const ip = process.env.ip || settings.ip;
 const port = parseInt(process.env.port || settings.port); //need to parse int as mcping requires int for the port value
 const token = process.env.token || settings.token;
 const pingInterval = process.env.pingInterval || settings.pingInterval;
 const embedColorConfig = process.env.embedColor || settings.embedColor;
-
 const webPort = process.env.PORT || 3000;
+*/
 
-pingFrequency = (pingInterval * 1000);
-embedColor = ("0x" + embedColorConfig);
+pingFrequency = (settings.pingInterval * 1000);
+embedColor = ("0x" + settings.embedColor);
 
 function getDate() {
     const date = new Date();
@@ -33,7 +34,7 @@ function getDate() {
 }
 
 function getServerStatus() {
-    mcping(ip, port, function(err, res) {
+    mcping(settings.ip, settings.port, function(err, res) {
         const cleanDate = getDate();
         if (!(typeof err === 'undefined' || err === null)) {
             client.user.setStatus('dnd');
@@ -105,7 +106,7 @@ client.on("ready", () => {
     load()
     client.setInterval(getServerStatus, pingFrequency);
 });
-client.login(token);
+client.login(settings.token);
 
 //Heroku Compatibility 
 http.createServer(function (req, res) {
@@ -117,4 +118,4 @@ http.createServer(function (req, res) {
         res.end();
     }
     
-}).listen(webPort);
+}).listen(settings.webPort);
