@@ -91,7 +91,7 @@ async function load () {
 		const event = require(`./events/${file}`);
 		const eventName = file.split(".")[0];
 
-		client.on(eventName, event.bind(null, client));
+		client.on(eventName, (...args) => event(client, settings, ...args)); //event.bind(null, client));
 		delete require.cache[require.resolve(`./events/${file}`)];
 	});
 }
