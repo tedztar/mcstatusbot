@@ -1,4 +1,5 @@
 const mcping = require('mc-ping-updated');
+const {RichEmbed} = require("discord.js");
 module.exports.run = async (client, message, settings, args) => {
 	//code to run when command is sent
 	mcping(settings.ip, settings.port, function (err, res) {
@@ -34,14 +35,14 @@ module.exports.run = async (client, message, settings, args) => {
             };
             if (hasIcon === 'yes') {
                 const buffer = Buffer.from(favicon, 'base64')
-                const serverEmbedicon = new Discord.RichEmbed().attachFile({ attachment: buffer,
+                const serverEmbedicon = new RichEmbed().attachFile({ attachment: buffer,
                     name: 'icon.png' }).setTitle('Status for ' +
                     settings.ip + ':').setColor(embedColor).setDescription(
                     serverStatus).setThumbnail('attachment://icon.png').addField(
                     "Server version:", res.version.name)
                 message.channel.send(serverEmbedicon);
             } else if (hasIcon === 'no') {
-                const serverEmbedNoIcon = new Discord.RichEmbed().setTitle(
+                const serverEmbedNoIcon = new RichEmbed().setTitle(
                         'Status for ' + settings.ip + ':').setColor(embedColor)
                     .setDescription(serverStatus).addField("Server version:",
                         res.version.name)
