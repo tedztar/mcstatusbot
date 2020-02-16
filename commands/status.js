@@ -1,4 +1,7 @@
-exports.run = async (client, message, args) => {
+const mcping = require('mc-ping-updated');
+const Discord = require("discord.js");
+
+exports.run = async (settings, client, message, args) => {
 	//code to run when command is sent
 	mcping(settings.ip, settings.port, function (err, res) {
                  if (err) {
