@@ -11,7 +11,8 @@ const ping = require("web-pingjs");
 const { promisify } = require("util");
 
 //Webserver app
-const app = require('express')()
+const express = require('express');
+const app = express();
 
 const client = new Discord.Client();
 const settings = require('../config.js');
@@ -128,7 +129,8 @@ client.on("ready", () => {
 });
 client.login(settings.token);
 
-//Heroku Compatibility 
+//Heroku Compatibility
+app.use(express.static('public')); // need for http://wakemydyno.com/
 app.get('/', (req, res) => {
     //This is also the link used to ping the server
     res.send('To invite the bot go to <a href="/invite">here</a>');
