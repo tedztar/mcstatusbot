@@ -1,4 +1,4 @@
-exports.run = async (client, message, args) => {
+exports.run = async (settings, client, message, args) => {
     message.channel.send("Pong :) ")
 
 }
