@@ -1,5 +1,4 @@
 //let prefix = settings.commandPrefix;
-
 exports.run = async (client, settings, message) => {
     if (message.author.bot) return;
 
@@ -12,11 +11,13 @@ exports.run = async (client, settings, message) => {
 
         let commandfile = client.commands.get(cmd.slice(settings.commandPrefix.length));
 		if (!commandfile) {
-			console.log(message.member.user.tag + "  tried to run command: " + cmd + ". However Command does not exist!");
+            console.log(message.member.user.tag + "  tried to run command: " + cmd + ". However Command does not exist!");
+            message.delete().catch(console.error);
 			return;
 		}
 		console.log(message.member.user.tag + " ran command: " + cmd);
-		commandfile.run(client, message, args);
+        commandfile.run(settings, client, message, args);
+        message.delete().catch(console.error);
     }
 
 };
