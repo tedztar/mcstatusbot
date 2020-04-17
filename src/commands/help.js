@@ -1,4 +1,4 @@
-const fs = require("fs");
+const { MessageEmbed } = require("discord.js");
 
 module.exports.run = async (client, message, settings, args) => {
     //code to run when command is sent
@@ -15,10 +15,11 @@ module.exports.run = async (client, message, settings, args) => {
         
     }*/
 
-    const helpEmbed = new Discord.RichEmbed()
+    const helpEmbed = new MessageEmbed()
         .setTitle('Commands:')
         .setColor(embedColor)
         .setDescription('**/status** - The current status and player count of your server \n**/crash** - Restart the bot')
-    message.channel.send(helpEmbed);
+    message.channel.send(helpEmbed)
+        .catch();
     return;
 }

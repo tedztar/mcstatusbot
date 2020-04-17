@@ -1,8 +1,8 @@
-//require('dotenv').config(); 
+require('dotenv').config(); 
 // Create a .env file or include your own config file
 // USED FOR TESTING ONLY COMMENT WHEN DONE TESTING
 
-const Discord = require("discord.js");
+const { Client, Collection } = require("discord.js");
 const mcping = require('mc-ping-updated');
 const chalk = require('chalk');
 const ping = require("web-pingjs");
@@ -11,10 +11,10 @@ const ping = require("web-pingjs");
 const { promisify } = require("util");
 
 //Webserver app
-const express = require('express');
-const app = express();
+// const express = require('express');
+const app = require('express')(); //express();
 
-const client = new Discord.Client();
+const client = new Client();
 const settings = require('../config.js');
 const readdir = promisify(require("fs").readdir);
 
@@ -74,9 +74,9 @@ function serverPing () {
 }
 
 //Command Handler
-client.commands = new Discord.Collection();
-client.aliases = new Discord.Collection();
-client.events = new Discord.Collection();
+client.commands = new Collection();
+client.aliases = new Collection();
+client.events = new Collection();
 
 //Loads the commands and events
 async function load () {
@@ -130,7 +130,7 @@ client.on("ready", () => {
 client.login(settings.token);
 
 //Heroku Compatibility
-app.use(express.static('public')); // need for http://wakemydyno.com/
+// app.use(express.static('public')); // need for http://wakemydyno.com/
 app.get('/', (req, res) => {
     //This is also the link used to ping the server
     res.send('To invite the bot go to <a href="/invite">here</a>');

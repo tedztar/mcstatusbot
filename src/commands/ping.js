@@ -1,8 +1,8 @@
-const {RichEmbed} = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const ping = require("web-pingjs");
 
 module.exports.run = async (client, message, settings, args) => {
-    const Embed = new RichEmbed();
+    const Embed = new MessageEmbed();
     //console.log(settings.ip + ":" + settings.port);
     Embed.setTitle("Pong!");
     Embed.addField("Bot's ping:", `${client.ping} ms`, true);
