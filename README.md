@@ -5,7 +5,7 @@ This bot is currently compatible with post-1.8 vanilla, Spigot, Waterfall, and B
 
 # Setup & Configuration
 - First install Node.js from [here](https://nodejs.org/en/download/) if not already installed.
-- Then open CMD in the folder in which the bot is in and run `npm i`
+- Then open your OS's terminal emulator in the folder in which the bot is in and run `npm i`
 
 Edit the `config.json` file to provide your bot token, preferred command prefix, Minecraft server IP address & port, and ping interval:
 - Replace `"YOUR BOT TOKEN HERE"` with your bot token.
