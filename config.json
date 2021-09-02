@@ -3,6 +3,7 @@
     "commandPrefix":"/",
     "ip":"YOUR_SERVER_IP_HERE",
     "port":25565,
+    "protocolVersion": "YOUR_PROTOCOL_VERSION_HERE",
     "pingInterval":"30",
     "embedColor":"7289DA"
 }

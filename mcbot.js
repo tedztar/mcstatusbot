@@ -1,11 +1,12 @@
 const Discord = require("discord.js");
-const mcping = require('mc-ping-updated');
+const mcping = require('mcping-js');
 const chalk = require('chalk');
 const escape = require('markdown-escape');
 const fs = require('fs');
 
 const client = new Discord.Client();
 const settings = require('./config.json');
+const server = new mcping.MinecraftServer(settings.ip, setting.port);
 var hasIcon = 'n/a';
 pingFrequency = (settings.pingInterval * 1000);
 embedColor = ("0x" + settings.embedColor);
@@ -16,7 +17,7 @@ embedColor = ("0x" + settings.embedColor);
  }
 
  function getServerStatus() {
-     mcping(settings.ip, settings.port, function(err, res) {
+     server(settings.protocolVersion, function(err, res) {
          if (!(typeof err === 'undefined' || err === null)) {
              client.user.setStatus('dnd');
              serverStatus = 'Server offline';
