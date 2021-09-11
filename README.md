@@ -1,23 +1,24 @@
 # mcstatusbot
 A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that pings [Minecraft](https://minecraft.gamepedia.com) servers using the [mcping-js](https://www.npmjs.com/package/mcping-js) node module.
 
-This bot is currently compatible with post-1.8 vanilla, Spigot, Waterfall, and Bungeecord servers. Other types of servers are partially supported with varying degrees of comaptbility.
+This bot is currently compatible with post-1.8 vanilla servers. Other types of servers may be partially supported with varying degrees of compatibility.
 
 # Setup & Configuration
-- First install Node.js from [here](https://nodejs.org/en/download/) if not already installed.
-- Then open your OS's terminal emulator in the folder in which the bot is in and run `npm i`
+- Install NodeJS from [here](https://nodejs.org/en/download/)
+- Follow [this](https://discordjs.guide/preparations/setting-up-a-bot-application.html) guide and [this](https://discordjs.guide/preparations/adding-your-bot-to-servers.html) guide to set up and invite the bot to your server
+- Download and unzip this repository, open a terminal window in the repository folder and run `npm i`
+- Edit the `config.json` file to provide your guild ID (found using [this](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) method) and bot token (found in the "Bot" section of your bot application in the Discord Developer Portal)
+- Optional: change the other settings in the file (these can also be changed with the `/settings` bot command)
+- Go back to the terminal window and run `node deploy-commands.js`
+- Start the bot by running `start.sh` (Linux) or `start.bat` (Windows)
 
-Edit the `config.json` file to provide your bot token, preferred command prefix, Minecraft server IP address & port, and ping interval:
-- Replace `"YOUR BOT TOKEN HERE"` with your bot token.
-- Replace `"/"` with your preferred command prefix. Defaults to `/`.
-- Replace `"YOUR SERVER IP HERE"` with the IP address of the Minecraft server you want to poll. Domains that redirect to IP addresses ("play.exampleserver.net") will also work.
-- Replace `"25565"` with the port number of the Minecraft server you want to poll. Defaults to port 25565.
-- Replace `"YOUR PROTOCOL VERSION HERE"` with the protocol version for your minecraft server from [here](https://wiki.vg/Protocol_version_numbers).
-- Replace `"30"` with the frequency, in seconds, at which you want the bot to ping the server. Defaults to pinging every 30 seconds.
-- Replace `"7289DA"` with the hex color code you prefer the bot's richEmbed messages to use.
-- Start the bot by running `start.sh` (Linux) or `start.bat` (Windows). The bot should connect and begin polling the server.
-
-# Default Commands
-- `/help` (aliases: `/commands`, `/list`, `/bot`) - List the other commands
-- `/status` (aliases: `/server`, `/online`) - Manually poll the Minecraft server whose IP address and port are listed in `config.json`, returning the server's version and a list of any online players
-- `/crash` - Stop the bot. If you're using a looping `start.sh` script like the one provided, this effectively restarts the bot.
+# Commands
+- `/help` - List the other commands
+- `/status` - Displays the current status and active players for your server
+- `/settings` - Change the settings of the bot
+    - `/settings ip` - Change the IP address of the server being monitored
+    - `/settings port` - Change the port of the server being monitored
+    - `/settings protocolversion` - Change the protocol version of the server being monitored. The values are based on the server version and are listed [here](https://wiki.vg/Protocol_version_numbers)
+    - `/settings pinginterval` - Change how often the bot checks the server's status (in seconds)
+    - `/settings maxplayers` - Change the displayed max number of players online. 'default' sets this number to the Minecraft server's maximum capacity, 'memberCount' sets this number to the Discord server's member count, and an integer will display a static number
+- `/restart` - Restart the bot if it's not working correctly

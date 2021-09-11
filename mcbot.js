@@ -1,75 +1,66 @@
 const Discord = require("discord.js");
 const mcping = require('mcping-js');
-const chalk = require('chalk');
-const escape = require('markdown-escape');
 const fs = require('fs');
-
-const client = new Discord.Client();
 const settings = require('./config.json');
-const server = new mcping.MinecraftServer(settings.ip, setting.port);
-var hasIcon = 'n/a';
-pingFrequency = (settings.pingInterval * 1000);
-embedColor = ("0x" + settings.embedColor);
 
- function getDate() {
-     date = new Date();
-     cleanDate = date.toLocaleTimeString();
- }
+const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MEMBERS] });
+const server = new mcping.MinecraftServer(settings.ip, settings.port);
 
- function getServerStatus() {
-     server(settings.protocolVersion, function(err, res) {
-         if (!(typeof err === 'undefined' || err === null)) {
-             client.user.setStatus('dnd');
-             serverStatus = 'Server offline';
-             client.user.setActivity(serverStatus, { type: 'PLAYING' });
-             getDate()
-             console.log((chalk.yellow('\[' + cleanDate + '\]:') + chalk.white(' Ping: ' +
-                 'Error getting server status')));
-             console.error(err);
-             return;
-         }
-         if (typeof res.players.sample === 'undefined') { client.user.setStatus('idle') }
-         if (!(typeof res.players.sample === 'undefined')) { client.user.setStatus('online') }
-         serverStatus = res.players.online + ' / ' + res.players.max;
-         getDate()
-         client.user.setActivity(serverStatus, { type: 'PLAYING' }).then(presence => console.log(
-             chalk.cyan('\[' + cleanDate + '\]:') + chalk.white(' Ping: ' + serverStatus)
-         )).catch(console.error);
-     })
- }
+async function getServerStatus() {
+	server.ping(10000, settings.protocolversion, async function (err, res) {
+		if (!(typeof err === 'undefined' || err === null)) {
+			client.user.setStatus('dnd');
+			serverStatus = 'Server offline';
+			client.user.setActivity(serverStatus, { type: 'PLAYING' });
+			return;
+		}
+		if (typeof res.players.sample === 'undefined') { client.user.setStatus('idle'); }
+		if (!(typeof res.players.sample === 'undefined')) { client.user.setStatus('online'); }
+		let maxPlayers;
+		if (settings.maxplayers == 'default') { maxPlayers = res.players.max }
+		else if (settings.maxplayers == 'memberCount') {
+			const guild = client.guilds.cache.get(settings.guildid);
+			const fetchedMembers = await guild.members.fetch();
+			maxPlayers = String(fetchedMembers.filter(member => !member.user.bot).size);
+		}
+		else { maxPlayers = settings.maxplayers }
+		serverStatus = res.players.online + ' / ' + maxPlayers;
+		client.user.setActivity(serverStatus, { type: 'PLAYING' });
+	})
+}
 
-//Command Handler
 client.commands = new Discord.Collection();
-client.aliases = new Discord.Collection();
 client.events = new Discord.Collection();
 
-fs.readdir("./commands/", (err, files) => {
+//Command Handler
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
-    if (err) return console.log(err);
-    files.forEach(file => {
-        if (!file.endsWith(".js")) return;
-        let props = require(`./commands/${file}`);
-        console.log("Successfully loaded " + file)
-        let commandName = file.split(".")[0];
-        client.commands.set(commandName, props);
-    });
-});
-//Events "handler"
-fs.readdir('./events/', (err, files) => {
-    if (err) console.log(err);
-    files.forEach(file => {
-        let eventFunc = require(`./events/${file}`);
-        console.log("Successfully loaded " + file);
-        let eventName = file.split(".")[0];
-        client.on(eventName, (...args) => eventFunc.run(client, settings, ...args));
-    });
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.data.name, command);
+}
+
+//Event Handler
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return;
+
+	const command = client.commands.get(interaction.commandName);
+
+	if (!command) return;
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
 });
 
-//Startup:
-client.on("ready", () => {
-    console.log("Ready!");
-    getServerStatus()
-    client.setInterval(getServerStatus, pingFrequency);
+//Startup Handler
+client.once('ready', () => {
+	console.log('Ready!');
+	getServerStatus();
+	setInterval(getServerStatus, settings.pinginterval * 1000);
 });
+
 client.login(settings.token);
-

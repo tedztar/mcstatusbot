@@ -1,9 +1,11 @@
 {
-    "token":"YOUR_BOT_TOKEN_HERE",
-    "commandPrefix":"/",
-    "ip":"YOUR_SERVER_IP_HERE",
-    "port":25565,
-    "protocolVersion": "YOUR_PROTOCOL_VERSION_HERE",
-    "pingInterval":"30",
-    "embedColor":"7289DA"
+    "clientid": "788083161296273517",
+    "guildid": "786717886735319050",
+    "token": "Nzg4MDgzMTYxMjk2MjczNTE3.X9eVow.HTGCy-H2GwGjP9mWnBWXPHNLwyQ",
+    "ip": "raonas.duckdns.org",
+    "port": "25569",
+    "protocolversion": "756",
+    "pinginterval": "30",
+    "embedcolor": "#7289DA",
+    "maxplayers": "memberCount"
 }
