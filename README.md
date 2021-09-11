@@ -7,7 +7,7 @@ This bot is currently compatible with post-1.8 vanilla servers. Other types of s
 - Install NodeJS from [here](https://nodejs.org/en/download/)
 - Follow [this](https://discordjs.guide/preparations/setting-up-a-bot-application.html) guide and [this](https://discordjs.guide/preparations/adding-your-bot-to-servers.html) guide to set up and invite the bot to your server
 - Download and unzip this repository, open a terminal window in the repository folder and run `npm i`
-- Edit the `config.json` file to provide your guild ID (found using [this](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) method) and bot token (found in the "Bot" section of your bot application in the Discord Developer Portal)
+- Edit the `config.json` file to provide your guild ID (found using [this](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) method), client ID (found in the "OAuth2" section of the Discord Developer Portal), and bot token (found in the "Bot" section of the Discord Developer Portal)
 - Optional: change the other settings in the file (these can also be changed with the `/settings` bot command)
 - Go back to the terminal window and run `node deploy-commands.js`
 - Start the bot by running `start.sh` (Linux) or `start.bat` (Windows)

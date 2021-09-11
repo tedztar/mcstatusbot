@@ -1,11 +1,11 @@
 {
-    "clientid": "788083161296273517",
-    "guildid": "786717886735319050",
-    "token": "Nzg4MDgzMTYxMjk2MjczNTE3.X9eVow.HTGCy-H2GwGjP9mWnBWXPHNLwyQ",
-    "ip": "raonas.duckdns.org",
-    "port": "25569",
+    "clientid": "xxxxxxxxxxxxxxxxxx",
+    "guildid": "xxxxxxxxxxxxxxxxxx",
+    "token": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "ip": "xxxxxxxxxxxx",
+    "port": "25565",
     "protocolversion": "756",
     "pinginterval": "30",
     "embedcolor": "#7289DA",
-    "maxplayers": "memberCount"
+    "maxplayers": "default"
 }
