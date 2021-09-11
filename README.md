@@ -22,3 +22,9 @@ This bot is currently compatible with post-1.8 vanilla servers. Other types of s
     - `/settings pinginterval` - Change how often the bot checks the server's status (in seconds)
     - `/settings maxplayers` - Change the displayed max number of players online. 'default' sets this number to the Minecraft server's maximum capacity, 'memberCount' sets this number to the Discord server's member count, and an integer will display a static number
 - `/restart` - Restart the bot if it's not working correctly
+
+# To-Do
+- Switch from activity status to voice channel update for server status
+- Allow status command to accept parameter for any IP address
+- Allow for self-host, Heroku deployment, and invite link
+- Remove restart command
