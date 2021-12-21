@@ -10,7 +10,7 @@ This bot is currently compatible with post-1.8 vanilla servers. Other types of s
 - Edit the `config.json` file to provide your guild ID (found using [this](https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-) method), client ID (found in the "OAuth2" section of the Discord Developer Portal), and bot token (found in the "Bot" section of the Discord Developer Portal)
 - Optional: change the other settings in the file (these can also be changed with the `/settings` bot command)
 - Go back to the terminal window and run `node deploy-commands.js`
-- Start the bot by running `start.sh` (Linux) or `start.bat` (Windows)
+- Start the bot by running `start.bat` (Windows)
 
 # Commands
 - `/help` - List the other commands
@@ -25,6 +25,7 @@ This bot is currently compatible with post-1.8 vanilla servers. Other types of s
 
 # To-Do
 - Switch from activity status to voice channel update for server status
-- Allow status command to accept parameter for any IP address
-- Allow for self-host, Heroku deployment, and invite link
-- Remove restart command
+- Support for monitoring multiple Minecraft servers with voice channels
+- Switch fields in server status embed to code snippets
+- Switch from self-host to global-host for bot
+- Per-server settings using Keyv or Enmap
