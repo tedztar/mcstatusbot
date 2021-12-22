@@ -4,7 +4,7 @@ const updateChannels = require('../functions/updateChannels');
 module.exports = {
 	name: 'ready',
 	once: true,
-	execute(client) {
+	async execute(client) {
 		await deployCommands.execute();
 		console.log('Ready!');
 		client.user.setActivity('/help', { type: 'WATCHING' });
