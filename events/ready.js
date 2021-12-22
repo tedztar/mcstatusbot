@@ -1,5 +1,6 @@
 const deployCommands = require('../functions/deployCommands');
 const updateChannels = require('../functions/updateChannels');
+const ping = require('web-pingjs');
 
 module.exports = {
 	name: 'ready',
@@ -9,7 +10,9 @@ module.exports = {
 		console.log('Ready!');
 		client.user.setActivity('/help', { type: 'WATCHING' });
 		updateServers(client);
-		setInterval(updateServers, 6 * 60 * 1000, client);
+		wakeDyno();
+		setInterval(updateServers, 5 * 60 * 1000, client);
+		setInterval(wakeDyno, 20 * 60 * 1000);
 	}
 }
 
@@ -20,5 +23,12 @@ async function updateServers(client) {
 			for (const server of serverList) {
 				await updateChannels.execute(server);
 			};
+		});
+}
+
+async function wakeDyno() {
+	ping('https://mcstatus-discordbot.herokuapp.com/')
+		.catch(err => {
+			console.error('Could not ping remote URL', err);
 		});
 }

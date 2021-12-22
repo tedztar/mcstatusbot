@@ -1,5 +1,15 @@
 {
     "name": "mcstatus-discordbot",
-    "description": "A simple Discord.js bot that pings Minecraft servers using the \"mcping-js\" node module.",
-    "repository": "https://github.com/RahulR100/mcstatusbot/"
+    "description": "A simple Discord.js bot that displays the status of Minecraft servers using the \"mcping-js\" node module.",
+    "repository": "https://github.com/RahulR100/mcstatusbot/",
+    "env": {
+        "TOKEN": {
+            "description": "Your Discord bot's token.",
+            "required": true
+        },
+        "CLIENT_ID": {
+            "description":"Your Discord bot's client ID.",
+            "required": true
+        }
+    }
 }
