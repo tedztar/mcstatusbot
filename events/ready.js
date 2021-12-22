@@ -7,10 +7,10 @@ module.exports = {
 	once: true,
 	async execute(client) {
 		await deployCommands.execute();
+		await client.user.setActivity('/help', { type: 'WATCHING' });
 		console.log('Ready!');
-		client.user.setActivity('/help', { type: 'WATCHING' });
-		updateServers(client);
-		wakeDyno();
+		await updateServers(client);
+		await wakeDyno();
 		setInterval(updateServers, 5 * 60 * 1000, client);
 		setInterval(wakeDyno, 20 * 60 * 1000);
 	}
@@ -24,11 +24,15 @@ async function updateServers(client) {
 				await updateChannels.execute(server);
 			};
 		});
+		console.log('Servers updated.')
 }
 
 async function wakeDyno() {
-	ping('https://mcstatus-discordbot.herokuapp.com/')
+	await ping('https://mcstatus-discordbot.herokuapp.com/')
+		.then(() => {
+			console.log('Pinged Heroku server.',)
+		})
 		.catch(err => {
-			console.error('Could not ping remote URL', err);
+			console.error('Could not ping Heroku server. ', err);
 		});
 }
