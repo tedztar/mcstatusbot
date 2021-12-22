@@ -7,8 +7,7 @@ client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
 embedColor = "#7289DA";
 
 // Heroku
-express().listen(5000, () => console.log(`Heroku deployed to localhost:5000`));
-
+express().listen(process.env.PORT || 5000);
 // Database
 serverDB = new Keyv();
 serverDB.on('error', err => console.error('Keyv connection error:', err));
