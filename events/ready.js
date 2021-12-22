@@ -5,7 +5,7 @@ module.exports = {
 	name: 'ready',
 	once: true,
 	execute(client) {
-		deployCommands.execute();
+		await deployCommands.execute();
 		console.log('Ready!');
 		client.user.setActivity('/help', { type: 'WATCHING' });
 		updateServers(client);
