@@ -1,5 +1,6 @@
+const Discord = require("discord.js");
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const updateChannels = require('../functions/updateChannels')
+const updateChannels = require('../functions/updateChannels');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -12,13 +13,20 @@ module.exports = {
 				.setRequired(true)
 		),
 	async execute(interaction) {
-		if (!interaction.memberPermissions.has(Permissions.FLAGS.ADMINISTRATOR)) {
-			interaction.reply('You must have the administrator permission to use this command!');
+		// Check if the member has the administrator permission
+		if (!interaction.memberPermissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
+			const responseEmbed = new Discord.MessageEmbed()
+				.setDescription('You must have the administrator permission to use this command!')
+				.setColor(embedColor)
+			await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
 			return;
 		}
 
-		// Create category
-		let serverCategory;
+		let newServer = {
+			ip: interaction.options.getString('ip')
+		};
+
+		// Create the server category
 		await interaction.guild.channels.create(interaction.options.getString('ip'), {
 			type: 'GUILD_CATEGORY',
 			permissionOverwrites: [
@@ -31,40 +39,32 @@ module.exports = {
 					deny: ['CONNECT']
 				}
 			]
-		}).then(channel => { serverCategory = channel })
+		}).then(channel => { newServer.categoryId = channel.id });
 
 		// Crate channels and add to category
-		let statusChannel;
-		await interaction.guild.channels.create('Updating status. . .', {
+		await interaction.guild.channels.create('Status: Updating...', {
 			type: 'GUILD_VOICE'
 		}).then(async function (channel) {
-			await channel.setParent(categoryId);
-			statusId = channel.id;
-		})
+			await channel.setParent(newServer.categoryId);
+			newServer.statusId = channel.id;
+		});
 
-		let playersChannel;
-		await interaction.guild.channels.create('Updating players . . .', {
+		await interaction.guild.channels.create('Players: Updating...', {
 			type: 'GUILD_VOICE'
 		}).then(async function (channel) {
-			await channel.setParent(categoryId);
-			playersChannel = channel;
-		})
+			await channel.setParent(newServer.categoryId);
+			newServer.playersId = channel.id;
+		});
 
-		// Add the Minecraft server to the list of monitored servers
-		const newServer = {
-			ip: interaction.options.getString('ip'),
-			categoryId: serverCategory.id,
-			statusId: statusChannel.id,
-			playersId: playersChannel.id
-		}
-		monitoredServers = mcServers.get(interaction.guildId).push(newServer);
-		mcServers.set(interaction.guildId, monitoredServers);
+		let monitoredServers = await serverDB.get(interaction.guildId) ? await serverDB.get(interaction.guildId) : [];
+		monitoredServers.push(newServer);
+		await serverDB.set(interaction.guildId, monitoredServers);
+
+		updateChannels.execute(newServer);
 
 		const responseEmbed = new Discord.MessageEmbed()
 			.setDescription('The channels have been created successfully and are currently being updated.')
 			.setColor(embedColor)
 		await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
-
-		updateChannels.execute(server);
 	}
 };

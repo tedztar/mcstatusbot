@@ -4,20 +4,19 @@ module.exports = {
 	name: 'ready',
 	once: true,
 	execute(client) {
-		const pingInterval = 30;
 		console.log('Ready!');
 		client.user.setActivity('/help', { type: 'WATCHING' });
-		updateServers.execute(client);
-		setInterval(updateServers.execute, pingInterval * 1000, client);
+		updateServers(client);
+		setInterval(updateServers, 5 * 60 * 1000, client);
 	}
 }
 
 async function updateServers(client) {
 	client.guilds.cache
-		.forEach(guild => {
-			mcServers.get(guild.id)
-				.forEach(server => {
-					updateChannels(server);
-				});
+		.forEach(async guild => {
+			let serverList = await serverDB.get(guild.id) ? await serverDB.get(guild.id) : [];
+			for (const server of serverList) {
+				await updateChannels.execute(server);
+			};
 		});
 }

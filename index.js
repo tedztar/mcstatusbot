@@ -3,16 +3,15 @@ const express = require('express');
 const fs = require('fs');
 const Keyv = require('keyv');
 
-// Heroku
-express().listen(5000, () => console.log(`Listening on port 5000`));
+client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
+embedColor = "#7289DA";
 
-// Global Variables
-var client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MEMBERS] });
-var embedColor = "#7289DA";
+// Heroku
+express().listen(5000, () => console.log(`Heroku deployed to localhost:5000`));
 
 // Database
-var server = new Keyv(process.env.DATABASE_URL, {namespace: 'server'} );
-server.on('error', err => console.error('Keyv connection error:', err));
+serverDB = new Keyv(process.env.DATABASE_URL)
+serverDB.on('error', err => console.error('Keyv connection error:', err));
 
 // Command Handler
 client.commands = new Discord.Collection();
