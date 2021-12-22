@@ -8,8 +8,9 @@ embedColor = "#7289DA";
 
 // Heroku
 express().listen(process.env.PORT || 5000);
+
 // Database
-serverDB = new Keyv(`${process.env.DATABASE_URL}?sslmode=require`);
+serverDB = new Keyv(`${process.env.DATABASE_URL}?sslmode=no-verify`);
 serverDB.on('error', err => console.error('Keyv connection error:', err));
 
 // Command Handler
