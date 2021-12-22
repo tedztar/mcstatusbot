@@ -10,11 +10,11 @@ embedColor = "#7289DA";
 express().listen(process.env.PORT || 5000);
 
 express().get('/', async (req, res) => {
-	res.send(
-		client.guilds.cache
-			.forEach(async guild => {
-				await serverDB.get(guild.id);
-			})
+	res.send('test'
+		// client.guilds.cache
+		// 	.forEach(async guild => {
+		// 		await serverDB.get(guild.id);
+		// 	})
 	);
 });
 
