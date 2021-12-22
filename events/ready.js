@@ -1,9 +1,11 @@
-const updateChannels = require('../functions/updateChannels')
+const deployCommands = require('../functions/deployCommands');
+const updateChannels = require('../functions/updateChannels');
 
 module.exports = {
 	name: 'ready',
 	once: true,
 	execute(client) {
+		deployCommands.execute();
 		console.log('Ready!');
 		client.user.setActivity('/help', { type: 'WATCHING' });
 		updateServers(client);

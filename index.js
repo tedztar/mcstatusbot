@@ -10,7 +10,7 @@ embedColor = "#7289DA";
 express().listen(5000, () => console.log(`Heroku deployed to localhost:5000`));
 
 // Database
-serverDB = new Keyv(process.env.DATABASE_URL)
+serverDB = new Keyv(process.env.DATABASE_URL);
 serverDB.on('error', err => console.error('Keyv connection error:', err));
 
 // Command Handler

@@ -14,7 +14,8 @@
     "discord.js": ">=11.5.1",
     "express": "^4.17.2",
     "keyv": "^4.0.4",
-    "mcping-js": "^1.5.0"
+    "mcping-js": "^1.5.0",
+    "pg": "^8.7.1"
   },
   "repository": {
     "type": "git",
