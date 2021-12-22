@@ -1,3 +1,5 @@
+const removeServer = require('../functions/removeServer');
+
 module.exports = {
     name: 'guildDelete',
     once: false,
