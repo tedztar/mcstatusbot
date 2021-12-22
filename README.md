@@ -16,12 +16,12 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - [Invite](https://discord.com/api/oauth2/authorize?client_id=888202509552861224&permissions=268435472&scope=bot%20applications.commands) the bot to your server
 
 ### Method 2: Heroku Deployment
+*Note: self-hosting through Heroku deployment is still being worked on*
 - Follow [this](https://discordjs.guide/preparations/setting-up-a-bot-application.html) guide and [this](https://discordjs.guide/preparations/adding-your-bot-to-servers.html) guide to set up and invite the bot to your server. When creating the invite link, make sure to check the boxes for **Manage Roles** and **Manage Channels**
 - Use the **Deploy to Heroku** button to create an instance of the bot
 - Fill out the configuration variables using your client ID (found in the "OAuth2" section of the Discord Developer Portal) and bot token (found in the "Bot" section of the Discord Developer Portal)
 
 ## Usage
-
 - Use `/monitor ip` (replace `ip` with the IP address of the server you would like to monitor) to create two self-updating voice channels that display the server's status and the number of players online
 - Use `/status` to get a detailed report of the default server's status (the first server that was monitored that hasn't been unmonitored). This detailed report includes the server's status, the number of players online, a list of usernames corresponding to the players online, and the server's version
 - Use `/status ip` to get a detailed report of the specified server's status
@@ -35,5 +35,6 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - `/unmonitor ip|all` - Unmonitor the server with the specified IP address or all servers
 
 ## To-Do
-- Allow users to manage default server for `/status` command (`/default ip` command and `monitor ip [default]` option, add new key-value pair to server object and use findIndex to get default server)
+- Allow users to manage default server for `/status` command (`/default ip` command and `/monitor ip [default]` option, add new key-value pair to server object and use findIndex to get default server)
 - Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
+- Self-hosting via Heroku deployment
