@@ -5,10 +5,10 @@ const { Routes } = require('discord-api-types/v9');
 module.exports = {
     execute() {
         const commands = [];
-        const commandFiles = fs.readdirSync('app/commands').filter(file => file.endsWith('.js'));
+        const commandFiles = fs.readdirSync(`${__dirname}/commands`).filter(file => file.endsWith('.js'));
 
         for (const file of commandFiles) {
-            const command = require(`app/commands/${file}`);
+            const command = require(`${__dirname}/commands/${file}`);
             commands.push(command.data.toJSON());
         }
 
