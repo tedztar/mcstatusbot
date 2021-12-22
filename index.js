@@ -19,7 +19,8 @@ express().get('/', async (req, res) => {
 });
 
 // Database
-serverDB = new Keyv(`${process.env.DATABASE_URL}?sslmode=no-verify`);
+serverDB = new Keyv();
+// serverDB = new Keyv(`${process.env.DATABASE_URL}?sslmode=no-verify`);
 serverDB.on('error', err => console.error('Keyv connection error:', err));
 
 // Command Handler
