@@ -63,7 +63,7 @@ module.exports = {
 		updateChannels.execute(newServer);
 
 		const responseEmbed = new Discord.MessageEmbed()
-			.setDescription('The channels have been created successfully and are currently being updated.')
+			.setDescription('The channels have been created successfully.')
 			.setColor(embedColor)
 		await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
 	}

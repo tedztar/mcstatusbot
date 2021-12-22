@@ -36,5 +36,4 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## To-Do
 - Allow users to manage default server for `/status` command (`/default ip` command and `monitor ip [default]` option, add new key-value pair to server object and use findIndex to get default server)
-- Rework `/monitor ip` interaction reply (edit when channels have been updated)
 - Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)

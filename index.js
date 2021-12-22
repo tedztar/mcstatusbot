@@ -10,8 +10,6 @@ embedColor = "#7289DA";
 express().listen(process.env.PORT || 5000);
 
 // Database
-// serverDB = new Keyv(`${process.env.DATABASE_URL}?sslmode=no-verify`);
-console.log(process.env.NODE_ENV);
 serverDB = process.env.NODE_ENV == 'production' ? new Keyv(`${process.env.DATABASE_URL}?sslmode=no-verify`) : new Keyv();
 serverDB.on('error', err => console.error('Keyv connection error:', err));
 
