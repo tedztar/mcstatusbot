@@ -9,7 +9,7 @@ module.exports = {
 		console.log('Ready!');
 		client.user.setActivity('/help', { type: 'WATCHING' });
 		updateServers(client);
-		setInterval(updateServers, 5 * 60 * 1000, client);
+		setInterval(updateServers, 6 * 60 * 1000, client);
 	}
 }
 
