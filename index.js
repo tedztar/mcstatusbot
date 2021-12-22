@@ -9,18 +9,8 @@ embedColor = "#7289DA";
 // Heroku
 express().listen(process.env.PORT || 5000);
 
-express().get('/', async (req, res) => {
-	res.send('test'
-		// client.guilds.cache
-		// 	.forEach(async guild => {
-		// 		await serverDB.get(guild.id);
-		// 	})
-	);
-});
-
 // Database
-serverDB = new Keyv();
-// serverDB = new Keyv(`${process.env.DATABASE_URL}?sslmode=no-verify`);
+serverDB = new Keyv(`${process.env.DATABASE_URL}?sslmode=no-verify`);
 serverDB.on('error', err => console.error('Keyv connection error:', err));
 
 // Command Handler
