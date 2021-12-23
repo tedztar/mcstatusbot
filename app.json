@@ -1,31 +1,15 @@
 {
-    "name": "mcstatusbot",
-    "description": "discord bot for server status",
+    "name": "mcstatus-discordbot",
+    "description": "A simple Discord.js bot that displays the status of Minecraft servers using the \"mcping-js\" node module.",
     "repository": "https://github.com/RahulR100/mcstatusbot/",
     "env": {
-      "token": {
-        "description": "Your discord bot's token.",
-        "required": true
-      },
-      "ip": {
-        "description": "Your Minecraft server's IP address",
-        "required": false
-      },
-      "port": {
-        "description": "Your Minecraft server's port number (default: 25565)",
-        "required": false
-      },
-      "protocolversion": {
-        "description": "Your Minecraft server's protocol version number (more info: https://wiki.vg/Protocol_version_numbers)",
-        "required": false
-      },
-      "pinginterval": {
-        "description": "How often you want the Discord bot to retrieve your Minecraft server's status, in seconds (default: 30)",
-        "required": false
-      },
-      "maxplayers": {
-        "description": "The displayed max number of players online. 'default' sets this number to the Minecraft server's maximum capacity, 'memberCount' sets this number to the Discord server's member count, and an integer will display a static number",
-        "required": false
-      }
+        "TOKEN": {
+            "description": "Your Discord bot's token.",
+            "required": true
+        },
+        "CLIENT_ID": {
+            "description":"Your Discord bot's client ID.",
+            "required": true
+        }
     }
 }
