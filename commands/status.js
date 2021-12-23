@@ -1,56 +1,60 @@
-const mcping = require('mc-ping-updated');
+const { SlashCommandBuilder } = require('@discordjs/builders');
+const mcping = require('mcping-js');
 const Discord = require("discord.js");
-const escape = require('markdown-escape');
 
-exports.run = async (settings, client, message, args) => {
-	//code to run when command is sent
-	mcping(settings.ip, settings.port, function (err, res) {
-                 if (err) {
-                     console.log(err);
-                     message.channel.send('Error getting server status.');
-                     return;
-                 } else {
-                     console.log('RES:', res)
-                     //console.log('players:', res.players)
-                     //console.log('sample:', res.players.sample)
-
-                     //console.log('DESC:', res.description)
-                     //console.log('EXTRA:', res.description.extra)
-                     try {
-                         favicon = res.favicon.slice(22)
-                         hasIcon = 'yes'
-                     } catch (error) {
-                         hasIcon = 'no'
-                     }
-                     let onlinePlayers = [];
-                     if (typeof res.players.sample == 'undefined') {
-                         serverStatus = '*No one is playing!*';
-                     } else {
-                         for (var i = 0; i < res.players.sample.length; i++) {
-                             onlinePlayers.push(res.players.sample[i].name);
-                         };
-                         onlinePlayers = escape(onlinePlayers.sort().join(', ')).replace(/\u00A7[0-9A-FK-OR]|\\n/ig,'');
-                         serverStatus = '**' + res.players.online + '/' + res.players.max +
-                             '**' + ' player(s) online.\n\n' + onlinePlayers;
-
-                         console.log('Server Status', serverStatus);
-                     };
-                     if (hasIcon === 'yes') {
-                         const buffer = Buffer.from(favicon, 'base64')
-                         const serverEmbedicon = new Discord.RichEmbed().attachFile({ attachment: buffer,
-                             name: 'icon.png' }).setTitle('Status for ' +
-                             settings.ip + ':').setColor(embedColor).setDescription(
-                             serverStatus).setThumbnail('attachment://icon.png').addField(
-                             "Server version:", res.version.name)
-                         message.channel.send(serverEmbedicon);
-                     } else if (hasIcon === 'no') {
-                         const serverEmbedNoIcon = new Discord.RichEmbed().setTitle(
-                                 'Status for ' + settings.ip + ':').setColor(embedColor)
-                             .setDescription(serverStatus).addField("Server version:",
-                                 res.version.name)
-                         message.channel.send(serverEmbedNoIcon);
-                     }
-                 }
-             }, 3000);
-             return;
-}
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('status')
+        .setDescription('Displays the current status and active players for your server')
+        .addStringOption(option =>
+            option
+                .setName('ip')
+                .setDescription('IP Address')
+                .setRequired(false)
+        ),
+    async execute(interaction) {
+        const monitoredServers = await serverDB.get(interaction.guildId) ? await serverDB.get(interaction.guildId) : [];
+        defaultIp = monitoredServers[0] ? monitoredServers[0].ip : null;
+        ipFull = interaction.options.getString('ip') ? interaction.options.getString('ip') : defaultIp;
+        if (!ipFull) {
+            const responseEmbed = new Discord.MessageEmbed()
+                .setDescription('You must monitor a server or specify an IP address to use this command!')
+                .setColor(embedColor)
+            await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+            return;
+        }
+        ip = ipFull.split(":")[0];
+        port = ipFull.split(":")[1] ? ipFull.split(":")[1] : 25565;
+        const server = new mcping.MinecraftServer(ip, port);
+        server.ping(2500, 47, async function (err, res) {
+            if (err) {
+                const responseEmbed = new Discord.MessageEmbed()
+                    .setTitle(`Status for ${ipFull}:`)
+                    .setDescription(`*The server is offline!*`)
+                    .setColor(embedColor)
+                await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+                return;
+            }
+            else {
+                if (typeof res.players.sample == 'undefined') {
+                    serverStatus = `*No one is playing!*`;
+                }
+                else {
+                    let onlinePlayers = [];
+                    for (var i = 0; i < res.players.sample.length; i++) {
+                        onlinePlayers.push(res.players.sample[i].name);
+                    };
+                    onlinePlayers = onlinePlayers.sort().join(', ').replace(/\u00A7[0-9A-FK-OR]|\\n/ig, '');
+                    serverStatus = `**${res.players.online}/${res.players.max}** player(s) online.\n\n${onlinePlayers}`;
+                };
+                const responseEmbed = new Discord.MessageEmbed()
+                    .setTitle(`Status for ${ipFull}:`)
+                    .setColor(embedColor)
+                    .setDescription(serverStatus)
+                    .addField('Server version:', res.version.name)
+                    .setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`)
+                interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+            }
+        });
+    },
+};

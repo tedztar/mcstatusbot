@@ -1,12 +1,19 @@
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require("discord.js");
 
-exports.run = async (settings, client, message, args) => {
-	//code to run when command is sent
-	console.log('Issuing help message.');
-             const helpEmbed = new Discord.RichEmbed()
-                             .setTitle('Commands:')
-                             .setColor(embedColor)
-                             .setDescription('**/status** - The current status and player count of your server \n**/crash** - Restart the bot')
-                         message.channel.send(helpEmbed);
-             return;
-}
+module.exports = {
+	data: new SlashCommandBuilder()
+		.setName('help')
+		.setDescription("List the other commands"),
+	async execute(interaction) {
+		const helpEmbed = new Discord.MessageEmbed()
+			.setTitle('Commands:')
+			.setColor(embedColor)
+			.addFields(
+				{ name: '/status [ip]', value: 'Displays the current status and active players for your server' },
+				{ name: '/monitor ip', value: 'Monitor the server with the specified IP address' },
+				{ name: '/unmonitor ip|all', value: 'Unmonitor the server with the specified IP address or all servers' },
+			);
+		await interaction.reply({ embeds: [helpEmbed], ephemeral: true });
+	},
+};

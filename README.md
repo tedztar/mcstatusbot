@@ -1,22 +1,40 @@
-# mcstatusbot
-A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that pings [Minecraft](https://minecraft.gamepedia.com) servers using the [mc-ping-updated](https://www.npmjs.com/package/mc-ping-updated) node module.
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
-This bot is currently compatible with post-1.8 vanilla, Spigot, Waterfall, and Bungeecord servers. Other types of servers are partially supported with varying degrees of comaptbility.
+# Minecraft Server Status - Discord Bot
+A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that displays the status of [Minecraft](https://minecraft.gamepedia.com) servers using the [mcping-js](https://www.npmjs.com/package/mcping-js) node module.
 
-# Setup & Configuration
-- First install Node.js from [here](https://nodejs.org/en/download/) if not already installed.
-- Then open your OS's terminal emulator in the folder in which the bot is in and run `npm i`
+## Features
+- Self-updating voice channels to display the server's status and the number of players online
+- Support for monitoring multiple Minecraft servers at once
+- See the usernames of the players on the server
+- Check the status of non-monitored servers
+- Slash command support with ephemeral responses to prevent channels from being cluttered with commands
 
-Edit the `config.json` file to provide your bot token, preferred command prefix, Minecraft server IP address & port, and ping interval:
-- Replace `"YOUR BOT TOKEN HERE"` with your bot token.
-- Replace `"/"` with your preferred command prefix. Defaults to `/`.
-- Replace `"YOUR SERVER IP HERE"` with the IP address of the Minecraft server you want to poll. Domains that redirect to IP addresses ("play.exampleserver.net") will also work.
-- Replace `"25565"` with the port number of the Minecraft server you want to poll. Defaults to port 25565.
-- Replace `"30"` with the frequency, in seconds, at which you want the bot to ping the server. Defaults to pinging every 30 seconds.
-- Replace `"7289DA"` with the hex color code you prefer the bot's richEmbed messages to use.
-- Start the bot by running `start.sh` (Linux) or `start.bat` (Windows). The bot should connect and begin polling the server.
+## Setup
 
-# Default Commands
-- `/help` (aliases: `/commands`, `/list`, `/bot`) - List the other commands
-- `/status` (aliases: `/server`, `/online`) - Manually poll the Minecraft server whose IP address and port are listed in `config.json`, returning the server's version and a list of any online players
-- `/crash` - Stop the bot. If you're using a looping `start.sh` script like the one provided, this effectively restarts the bot.
+### Method 1: Invite the Bot
+- [Invite](https://discord.com/api/oauth2/authorize?client_id=888202509552861224&permissions=268435472&scope=bot%20applications.commands) the bot to your server
+
+### Method 2: Heroku Deployment
+*Note: self-hosting through Heroku deployment is still being worked on*
+- Follow [this](https://discordjs.guide/preparations/setting-up-a-bot-application.html) guide and [this](https://discordjs.guide/preparations/adding-your-bot-to-servers.html) guide to set up and invite the bot to your server. When creating the invite link, make sure to check the boxes for **Manage Roles** and **Manage Channels**
+- Use the **Deploy to Heroku** button to create an instance of the bot
+- Fill out the configuration variables using your client ID (found in the "OAuth2" section of the Discord Developer Portal) and bot token (found in the "Bot" section of the Discord Developer Portal)
+
+## Usage
+- Use `/monitor ip` (replace `ip` with the IP address of the server you would like to monitor) to create two self-updating voice channels that display the server's status and the number of players online
+- Use `/status` to get a detailed report of the default server's status (the first server that was monitored that hasn't been unmonitored). This detailed report includes the server's status, the number of players online, a list of usernames corresponding to the players online, and the server's version
+- Use `/status ip` to get a detailed report of the specified server's status
+- Use `/unmonitor ip` to delete the self-updating channels corresponding to the specified server
+- Use `/unmonitor all` to delete all of the self-updating channels. This should be done prior to removing the bot from the server
+
+## Commands
+- `/help` - List the other commands
+- `/status [ip]` - Displays the current status and active players for the default server or the specified IP address
+- `/monitor ip` - Monitor the server with the specified IP address
+- `/unmonitor ip|all` - Unmonitor the server with the specified IP address or all servers
+
+## To-Do
+- Allow users to manage default server for `/status` command (`/default ip` command and `/monitor ip [default]` option, add new key-value pair to server object and use findIndex to get default server)
+- Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
+- Self-hosting via Heroku deployment
