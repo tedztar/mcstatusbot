@@ -13,7 +13,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 ## Setup
 
 ### Method 1: Invite the Bot
-- [Invite](https://discord.com/api/oauth2/authorize?client_id=888202509552861224&permissions=268435472&scope=bot%20applications.commands) the bot to your server
+- [Invite](https://discord.com/api/oauth2/authorize?client_id=788083161296273517&permissions=268435472&scope=bot%20applications.commands) the bot to your server
 
 ### Method 2: Heroku Deployment
 *Note: self-hosting through Heroku deployment is still being worked on*
