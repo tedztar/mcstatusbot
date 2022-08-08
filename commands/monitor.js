@@ -14,8 +14,8 @@ module.exports = {
 		),
 	async execute(interaction) {
 		// Check if the member has the administrator permission
-		if (!interaction.memberPermissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
-			const responseEmbed = new Discord.MessageEmbed()
+		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
+			const responseEmbed = new Discord.EmbedBuilder()
 				.setDescription('You must have the administrator permission to use this command!')
 				.setColor(embedColor)
 			await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
@@ -27,30 +27,35 @@ module.exports = {
 		};
 
 		// Create the server category
-		await interaction.guild.channels.create(interaction.options.getString('ip'), {
-			type: 'GUILD_CATEGORY',
+		await interaction.guild.channels.create({
+			name: interaction.options.getString('ip'),
+			type: Discord.ChannelType.GuildCategory,
 			permissionOverwrites: [
 				{
-					id: interaction.guild.me.roles.botRole,
-					allow: ['VIEW_CHANNEL', 'MANAGE_CHANNELS', 'CONNECT']
+					id: interaction.guild.roles.botRoleFor(interaction.client.user),
+					allow: [Discord.PermissionsBitField.Flags.ViewChannel,
+							Discord.PermissionsBitField.Flags.ManageChannels,
+							Discord.PermissionsBitField.Flags.Connect]
 				},
 				{
 					id: interaction.guild.roles.everyone,
-					deny: ['CONNECT']
+					deny: [Discord.PermissionsBitField.Flags.Connect]
 				}
 			]
 		}).then(channel => { newServer.categoryId = channel.id });
 
 		// Crate channels and add to category
-		await interaction.guild.channels.create('Status: Updating...', {
-			type: 'GUILD_VOICE'
+		await interaction.guild.channels.create({
+			name: 'Status: Updating...',
+			type: Discord.ChannelType.GuildVoice
 		}).then(async function (channel) {
 			await channel.setParent(newServer.categoryId);
 			newServer.statusId = channel.id;
 		});
 
-		await interaction.guild.channels.create('Players: Updating...', {
-			type: 'GUILD_VOICE'
+		await interaction.guild.channels.create({
+			name: 'Players: Updating...',
+			type: Discord.ChannelType.GuildVoice
 		}).then(async function (channel) {
 			await channel.setParent(newServer.categoryId);
 			newServer.playersId = channel.id;
@@ -62,7 +67,7 @@ module.exports = {
 
 		updateChannels.execute(newServer);
 
-		const responseEmbed = new Discord.MessageEmbed()
+		const responseEmbed = new Discord.EmbedBuilder()
 			.setDescription('The channels have been created successfully.')
 			.setColor(embedColor)
 		await interaction.reply({ embeds: [responseEmbed], ephemeral: true });

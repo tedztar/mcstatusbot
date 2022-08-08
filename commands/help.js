@@ -6,7 +6,7 @@ module.exports = {
 		.setName('help')
 		.setDescription("List the other commands"),
 	async execute(interaction) {
-		const helpEmbed = new Discord.MessageEmbed()
+		const helpEmbed = new Discord.EmbedBuilder()
 			.setTitle('Commands:')
 			.setColor(embedColor)
 			.addFields(

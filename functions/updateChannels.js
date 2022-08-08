@@ -9,14 +9,14 @@ module.exports = {
             if (!(typeof err === 'undefined' || err === null)) {
                 statusChannel ? await statusChannel.setName('Status: Offline') : null;
                 playersChannel ? await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
-                    VIEW_CHANNEL: false
+                    ViewChannel: false
                 }) : null;
                 playersChannel ? await playersChannel.setName('Players: 0') : null;
             }
             else {
                 statusChannel ? await statusChannel.setName('Status: Online') : null;
                 playersChannel ? await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
-                    VIEW_CHANNEL: true
+                    ViewChannel: true
                 }) : null;
                 playersChannel ? await playersChannel.setName(`Players: ${res.players.online} / ${res.players.max}`) : null;
             }
