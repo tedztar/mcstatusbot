@@ -20,7 +20,7 @@ module.exports = {
 			const responseEmbed = new Discord.EmbedBuilder()
 				.setDescription('You must have the administrator permission to use this command!')
 				.setColor(embedColor)
-			await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+			await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 			return;
 		}
 
@@ -33,7 +33,7 @@ module.exports = {
 			const responseEmbed = new Discord.EmbedBuilder()
 				.setDescription('This bot needs the "manage roles" permission in order to create channels!')
 				.setColor(embedColor)
-			await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+			await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 			return;
 		}
 		await interaction.guild.channels.create({

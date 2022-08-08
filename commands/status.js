@@ -22,7 +22,7 @@ module.exports = {
             const responseEmbed = new Discord.EmbedBuilder()
                 .setDescription('You must monitor a server or specify an IP address to use this command!')
                 .setColor(embedColor)
-            await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+            await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
             return;
         }
         ip = ipFull.split(":")[0];
@@ -34,7 +34,7 @@ module.exports = {
                     .setTitle(`Status for ${ipFull}:`)
                     .setDescription(`*The server is offline!*`)
                     .setColor(embedColor)
-                await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+                await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
                 return;
             }
             else {

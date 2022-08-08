@@ -20,7 +20,7 @@ module.exports = {
 			const responseEmbed = new Discord.EmbedBuilder()
 				.setDescription('You must have the administrator permission to use this command!')
 				.setColor(embedColor)
-			await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+			await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 			return;
 		}
 
@@ -37,7 +37,7 @@ module.exports = {
 				const responseEmbed = new Discord.EmbedBuilder()
 					.setDescription('The IP address you have specified was not already being monitored.')
 					.setColor(embedColor)
-				await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+				await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 				return;
 			}
 			server = monitoredServers[serverIndex];
