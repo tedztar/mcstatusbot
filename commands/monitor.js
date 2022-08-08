@@ -13,6 +13,8 @@ module.exports = {
 				.setRequired(true)
 		),
 	async execute(interaction) {
+		await interaction.deferReply({ ephemeral: true });
+
 		// Check if the member has the administrator permission
 		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
 			const responseEmbed = new Discord.EmbedBuilder()
@@ -27,6 +29,13 @@ module.exports = {
 		};
 
 		// Create the server category
+		if (!interaction.guild.roles.botRoleFor(interaction.client.user).permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
+			const responseEmbed = new Discord.EmbedBuilder()
+				.setDescription('This bot needs the "manage roles" permission in order to create channels!')
+				.setColor(embedColor)
+			await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+			return;
+		}
 		await interaction.guild.channels.create({
 			name: interaction.options.getString('ip'),
 			type: Discord.ChannelType.GuildCategory,
@@ -70,6 +79,6 @@ module.exports = {
 		const responseEmbed = new Discord.EmbedBuilder()
 			.setDescription('The channels have been created successfully.')
 			.setColor(embedColor)
-		await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+		await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 	}
 };

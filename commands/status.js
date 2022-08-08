@@ -13,6 +13,8 @@ module.exports = {
                 .setRequired(false)
         ),
     async execute(interaction) {
+        await interaction.deferReply({ ephemeral: true });
+        
         const monitoredServers = await serverDB.get(interaction.guildId) ? await serverDB.get(interaction.guildId) : [];
         defaultIp = monitoredServers[0] ? monitoredServers[0].ip : null;
         ipFull = interaction.options.getString('ip') ? interaction.options.getString('ip') : defaultIp;
@@ -53,7 +55,7 @@ module.exports = {
                     .setDescription(serverStatus)
                     .addFields({name: 'Server version:', value: res.version.name})
                     .setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`)
-                interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+                interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
             }
         });
     },

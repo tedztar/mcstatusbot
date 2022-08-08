@@ -13,6 +13,8 @@ module.exports = {
 				.setRequired(true)
 		),
 	async execute(interaction) {
+		await interaction.deferReply({ ephemeral: true });
+		
 		// Check if member has administrator permission
 		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
 			const responseEmbed = new Discord.EmbedBuilder()
@@ -45,6 +47,6 @@ module.exports = {
 		const responseEmbed = new Discord.EmbedBuilder()
 			.setDescription('The channels have been removed successfully.')
 			.setColor(embedColor)
-		await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+		await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 	}
 }
