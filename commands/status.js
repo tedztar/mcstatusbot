@@ -13,14 +13,16 @@ module.exports = {
                 .setRequired(false)
         ),
     async execute(interaction) {
+        await interaction.deferReply({ ephemeral: true });
+        
         const monitoredServers = await serverDB.get(interaction.guildId) ? await serverDB.get(interaction.guildId) : [];
         defaultIp = monitoredServers[0] ? monitoredServers[0].ip : null;
         ipFull = interaction.options.getString('ip') ? interaction.options.getString('ip') : defaultIp;
         if (!ipFull) {
-            const responseEmbed = new Discord.MessageEmbed()
+            const responseEmbed = new Discord.EmbedBuilder()
                 .setDescription('You must monitor a server or specify an IP address to use this command!')
                 .setColor(embedColor)
-            await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+            await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
             return;
         }
         ip = ipFull.split(":")[0];
@@ -28,11 +30,11 @@ module.exports = {
         const server = new mcping.MinecraftServer(ip, port);
         server.ping(2500, 47, async function (err, res) {
             if (err) {
-                const responseEmbed = new Discord.MessageEmbed()
+                const responseEmbed = new Discord.EmbedBuilder()
                     .setTitle(`Status for ${ipFull}:`)
                     .setDescription(`*The server is offline!*`)
                     .setColor(embedColor)
-                await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+                await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
                 return;
             }
             else {
@@ -47,13 +49,13 @@ module.exports = {
                     onlinePlayers = onlinePlayers.sort().join(', ').replace(/\u00A7[0-9A-FK-OR]|\\n/ig, '');
                     serverStatus = `**${res.players.online}/${res.players.max}** player(s) online.\n\n${onlinePlayers}`;
                 };
-                const responseEmbed = new Discord.MessageEmbed()
+                const responseEmbed = new Discord.EmbedBuilder()
                     .setTitle(`Status for ${ipFull}:`)
                     .setColor(embedColor)
                     .setDescription(serverStatus)
-                    .addField('Server version:', res.version.name)
+                    .addFields({name: 'Server version:', value: res.version.name})
                     .setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`)
-                interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+                interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
             }
         });
     },

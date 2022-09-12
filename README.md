@@ -1,4 +1,5 @@
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+[![Discord Bots](https://top.gg/api/widget/servers/788083161296273517.svg)](https://top.gg/bot/788083161296273517)
 
 # Minecraft Server Status - Discord Bot
 A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that displays the status of [Minecraft](https://minecraft.gamepedia.com) servers using the [mcping-js](https://www.npmjs.com/package/mcping-js) node module.
@@ -36,5 +37,6 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## To-Do
 - Allow users to manage default server for `/status` command (`/default ip` command and `/monitor ip [default]` option, add new key-value pair to server object and use findIndex to get default server)
+- Allow users to set a nickname for the server (`/nickname` command and `/monitor ip nickname`)
 - Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
 - Self-hosting via Heroku deployment

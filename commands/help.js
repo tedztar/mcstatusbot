@@ -6,7 +6,9 @@ module.exports = {
 		.setName('help')
 		.setDescription("List the other commands"),
 	async execute(interaction) {
-		const helpEmbed = new Discord.MessageEmbed()
+		await interaction.deferReply({ ephemeral: true });
+		
+		const helpEmbed = new Discord.EmbedBuilder()
 			.setTitle('Commands:')
 			.setColor(embedColor)
 			.addFields(
@@ -14,6 +16,6 @@ module.exports = {
 				{ name: '/monitor ip', value: 'Monitor the server with the specified IP address' },
 				{ name: '/unmonitor ip|all', value: 'Unmonitor the server with the specified IP address or all servers' },
 			);
-		await interaction.reply({ embeds: [helpEmbed], ephemeral: true });
+		await interaction.editReply({ embeds: [helpEmbed], ephemeral: true });
 	},
 };

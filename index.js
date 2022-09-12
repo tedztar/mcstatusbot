@@ -1,9 +1,9 @@
-const Discord = require("discord.js");
+const {Client, GatewayIntentBits, Collection} = require("discord.js");
 const express = require('express');
 const fs = require('fs');
 const Keyv = require('keyv');
 
-client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
+client = new Client({ intents: [GatewayIntentBits.Guilds] });
 embedColor = "#7289DA";
 
 // Heroku
@@ -14,7 +14,7 @@ serverDB = process.env.NODE_ENV == 'production' ? new Keyv(`${process.env.DATABA
 serverDB.on('error', err => console.error('Keyv connection error:', err));
 
 // Command Handler
-client.commands = new Discord.Collection();
+client.commands = new Collection();
 const commandFiles = fs.readdirSync(`${__dirname}/commands`).filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
 	const command = require(`${__dirname}/commands/${file}`);

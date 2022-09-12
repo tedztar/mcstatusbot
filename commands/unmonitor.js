@@ -13,12 +13,14 @@ module.exports = {
 				.setRequired(true)
 		),
 	async execute(interaction) {
+		await interaction.deferReply({ ephemeral: true });
+		
 		// Check if member has administrator permission
-		if (!interaction.memberPermissions.has(Discord.Permissions.FLAGS.ADMINISTRATOR)) {
-			const responseEmbed = new Discord.MessageEmbed()
+		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
+			const responseEmbed = new Discord.EmbedBuilder()
 				.setDescription('You must have the administrator permission to use this command!')
 				.setColor(embedColor)
-			await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+			await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 			return;
 		}
 
@@ -32,19 +34,19 @@ module.exports = {
 		else {
 			const serverIndex = monitoredServers ? monitoredServers.findIndex(server => server.ip == interaction.options.getString('ip')) : -1;
 			if (serverIndex == -1) {
-				const responseEmbed = new Discord.MessageEmbed()
+				const responseEmbed = new Discord.EmbedBuilder()
 					.setDescription('The IP address you have specified was not already being monitored.')
 					.setColor(embedColor)
-				await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+				await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 				return;
 			}
 			server = monitoredServers[serverIndex];
 			removeServer.execute(interaction.guild, server);
 		}
 
-		const responseEmbed = new Discord.MessageEmbed()
+		const responseEmbed = new Discord.EmbedBuilder()
 			.setDescription('The channels have been removed successfully.')
 			.setColor(embedColor)
-		await interaction.reply({ embeds: [responseEmbed], ephemeral: true });
+		await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 	}
 }
