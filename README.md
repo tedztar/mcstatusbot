@@ -1,7 +1,8 @@
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 [![Discord Bots](https://top.gg/api/widget/servers/788083161296273517.svg)](https://top.gg/bot/788083161296273517)
 
 # Minecraft Server Status - Discord Bot
+
+## Now Updated!!
 
 A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that displays the status of [Minecraft](https://minecraft.gamepedia.com) servers using the [mcping-js](https://www.npmjs.com/package/mcping-js) node module.
 
