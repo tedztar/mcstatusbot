@@ -6,6 +6,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## Now Updated!!
 
+- Updated Jan 2023
 - New hosting provider
 - Bot will be hosted centrally from now on
 - Fixing bugs from now till Feb and then focusing on new features
