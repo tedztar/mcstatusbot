@@ -2,9 +2,13 @@
 
 # Minecraft Server Status - Discord Bot
 
+A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that displays the status of [Minecraft](https://minecraft.gamepedia.com) servers using the [mcping-js](https://www.npmjs.com/package/mcping-js) node module.
+
 ## Now Updated!!
 
-A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that displays the status of [Minecraft](https://minecraft.gamepedia.com) servers using the [mcping-js](https://www.npmjs.com/package/mcping-js) node module.
+- New hosting provider
+- Bot will be hosted centrally from now on
+- Fixing bugs from now till Feb and then focusing on new features
 
 ## Features
 
@@ -38,4 +42,3 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - Allow users to manage default server for `/status` command (`/default ip` command and `/monitor ip [default]` option, add new key-value pair to server object and use findIndex to get default server)
 - Allow users to set a nickname for the server (`/nickname` command and `/monitor ip nickname`)
 - Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
-- Self-hosting via Heroku deployment
