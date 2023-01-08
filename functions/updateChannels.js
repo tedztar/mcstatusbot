@@ -1,30 +1,52 @@
 const mcping = require('mcping-js');
 
 module.exports = {
-    async execute(server) {
-        const mcserver = new mcping.MinecraftServer(server.ip.split(':')[0], Number(server.ip.split(':')[1]));
-        const statusChannel = await client.channels.cache.get(server.statusId);
-        const playersChannel = await client.channels.cache.get(server.playersId);
-        mcserver.ping(2500, 47, async function (err, res) {
-            try {
-                if (!(typeof err === 'undefined' || err === null)) {
-                    statusChannel ? await statusChannel.setName('Status: Offline') : null;
-                    playersChannel ? await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
-                        ViewChannel: false
-                    }) : null;
-                    playersChannel ? await playersChannel.setName('Players: 0') : null;
-                }
-                else {
-                    statusChannel ? await statusChannel.setName('Status: Online') : null;
-                    playersChannel ? await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
-                        ViewChannel: true
-                    }) : null;
-                    playersChannel ? await playersChannel.setName(`Players: ${res.players.online} / ${res.players.max}`) : null;
-                }
-            }
-            catch(e) {
-                console.log(e);
-            }
-        })
-    }
+	async execute(server) {
+		const mcserver = new mcping.MinecraftServer(
+			server.ip.split(':')[0],
+			Number(server.ip.split(':')[1])
+		);
+		const statusChannel = await client.channels.cache.get(server.statusId);
+		const playersChannel = await client.channels.cache.get(server.playersId);
+
+		mcserver.ping(2500, 47, async (err, res) => {
+			try {
+				if (err) {
+					await setOffline(statusChannel, playersChannel);
+				} else {
+					await setOnline(statusChannel, playersChannel);
+				}
+			} catch (e) {
+				console.log(e);
+			}
+		});
+	}
+};
+
+async function setOffline(statusChannel, playersChannel) {
+	if (statusChannel) await statusChannel.setName('Status: Offline');
+	if (playersChannel) {
+		await playersChannel.permissionOverwrites.edit(
+			playersChannel.guild.roles.everyone,
+			{
+				ViewChannel: false
+			}
+		);
+		await playersChannel.setName('Players: 0');
+	}
+}
+
+async function setOnline(statusChannel, playersChannel) {
+	if (statusChannel) await statusChannel.setName('Status: Online');
+	if (playersChannel) {
+		await playersChannel.permissionOverwrites.edit(
+			playersChannel.guild.roles.everyone,
+			{
+				ViewChannel: true
+			}
+		);
+		await playersChannel.setName(
+			`Players: ${res.players.online} / ${res.players.max}`
+		);
+	}
 }
