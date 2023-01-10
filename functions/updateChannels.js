@@ -46,7 +46,7 @@ async function setOnline(statusChannel, playersChannel) {
 			}
 		);
 		await playersChannel.setName(
-			`Players: ${res.players.online} / ${res.players.max}`
+			`Players: ${res.players.online || 0} / ${res.players.max}`
 		);
 	}
 }
