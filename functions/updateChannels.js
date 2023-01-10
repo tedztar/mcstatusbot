@@ -14,7 +14,7 @@ module.exports = {
 				if (err) {
 					await setOffline(statusChannel, playersChannel);
 				} else {
-					await setOnline(statusChannel, playersChannel);
+					await setOnline(statusChannel, playersChannel, res);
 				}
 			} catch (e) {
 				console.log(e);
@@ -36,7 +36,7 @@ async function setOffline(statusChannel, playersChannel) {
 	}
 }
 
-async function setOnline(statusChannel, playersChannel) {
+async function setOnline(statusChannel, playersChannel, res) {
 	if (statusChannel) await statusChannel.setName('Status: Online');
 	if (playersChannel) {
 		await playersChannel.permissionOverwrites.edit(
