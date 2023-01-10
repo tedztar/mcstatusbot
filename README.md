@@ -43,4 +43,5 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
 - [ ] Rectify backend caching
 - [ ] Fix DDNS support issues
-- [ ] Add bug reporting command
+- [x] Add bug reporting command
+- [ ] Support compatibility with bedrock servers

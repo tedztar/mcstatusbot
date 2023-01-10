@@ -7,6 +7,7 @@
   },
   "main": "index.js",
   "dependencies": {
+    "@2toad/profanity": "^2.2.0",
     "@discordjs/builders": "^0.6.0",
     "@discordjs/rest": "^0.1.0-canary.0",
     "@keyv/postgres": "^1.0.17",
@@ -16,6 +17,7 @@
     "express": "^4.17.2",
     "keyv": "^4.0.4",
     "mcping-js": "^1.5.0",
+    "nodemailer": "^6.8.0",
     "pg": "^8.7.1"
   },
   "repository": {
