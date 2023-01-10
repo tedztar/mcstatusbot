@@ -34,7 +34,7 @@ module.exports = {
 			} else {
 				await transporter.sendMail({
 					from: `"MCStatusBot" <${process.env.EM_USER}>`,
-					to: `${process.env.EM_R1}`,
+					to: `${process.env.EM_R1}, ${process.env.EM_R2}`,
 					subject: `Bug Report - ${interaction.user.username}, ${interaction.guildId}`,
 					text: `${bug}`
 				});
