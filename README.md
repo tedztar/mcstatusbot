@@ -23,19 +23,11 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## Usage
 
-- `/monitor ip` - (replace `ip` with the IP address of the server you would like to monitor) creates two self-updating voice channels that display the server's status and the number of players online
-- `/status` prints a detailed report of the default server's status (the first server that was monitored that hasn't been unmonitored). This detailed report includes the server's status, the number of players online, a list of usernames corresponding to the players online, and the server's version
-- `/status ip` prints a detailed report of the specified server's status
-- `/unmonitor ip` deletes the self-updating channels corresponding to the specified server
-- `/unmonitor all` deletes all of the self-updating channels. This should be done prior to removing the bot from the server
-- `/bug desc` sends a bug report to the maintainers
-
-## Commands
-
 - `/help` - List the other commands
-- `/status [ip]` - Displays the current status and active players for the default server or the specified IP address
+- `/status ip?` - Displays the current status and active players for the default server (the first server that was monitored that hasn't been unmonitored) or the specified IP address if provided
 - `/monitor ip` - Monitor the server with the specified IP address
 - `/unmonitor ip|all` - Unmonitor the server with the specified IP address or all servers
+- `/bug desc` - Send a bug report to the maintainers
 
 ## To-Do
 
