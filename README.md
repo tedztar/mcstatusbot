@@ -23,18 +23,11 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## Usage
 
-- Use `/monitor ip` (replace `ip` with the IP address of the server you would like to monitor) to create two self-updating voice channels that display the server's status and the number of players online
-- Use `/status` to get a detailed report of the default server's status (the first server that was monitored that hasn't been unmonitored). This detailed report includes the server's status, the number of players online, a list of usernames corresponding to the players online, and the server's version
-- Use `/status ip` to get a detailed report of the specified server's status
-- Use `/unmonitor ip` to delete the self-updating channels corresponding to the specified server
-- Use `/unmonitor all` to delete all of the self-updating channels. This should be done prior to removing the bot from the server
-
-## Commands
-
 - `/help` - List the other commands
-- `/status [ip]` - Displays the current status and active players for the default server or the specified IP address
+- `/status ip?` - Displays the current status and active players for the default server (the first server that was monitored that hasn't been unmonitored) or the specified IP address if provided
 - `/monitor ip` - Monitor the server with the specified IP address
 - `/unmonitor ip|all` - Unmonitor the server with the specified IP address or all servers
+- `/bug desc` - Send a bug report to the maintainers
 
 ## To-Do
 
@@ -43,4 +36,5 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
 - [ ] Rectify backend caching
 - [ ] Fix DDNS support issues
-- [ ] Add bug reporting command
+- [x] Add bug reporting command
+- [ ] Support compatibility with bedrock servers
