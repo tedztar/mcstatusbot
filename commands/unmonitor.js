@@ -24,8 +24,8 @@ module.exports = {
 				await removeServer.execute(interaction.guild, server);
 			}
 		} else {
-			const serverIndex = monitoredServers ? monitoredServers.findIndex((server) => server.ip == interaction.options.getString('ip')) : -1;
-			if (serverIndex == -1) {
+			const serverIndex = monitoredServers ? monitoredServers.findIndex((server) => server.ip == interaction.options.getString('ip')) : null;
+			if (!serverIndex) {
 				await sendMessage.newBasicMessage(interaction, 'The IP address you have specified was not already being monitored.');
 				return;
 			}

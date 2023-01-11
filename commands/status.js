@@ -11,8 +11,8 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });
 
-		const monitoredServers = (await serverDB.get(interaction.guildId)) || null;
-		defaultIp = monitoredServers ? monitoredServers[0].ip : null;
+		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
+		defaultIp = monitoredServers[0] ? monitoredServers[0].ip : null;
 		ipFull = interaction.options.getString('ip') || defaultIp;
 
 		if (!ipFull) {
