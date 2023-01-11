@@ -1,4 +1,4 @@
-[![Discord Bots](https://top.gg/api/widget/servers/788083161296273517.svg)](https://top.gg/bot/788083161296273517)
+![Discord Bots](https://badgen.net/https/achiommino.npkn.net/mcstatus-discordbot/)
 
 # Minecraft Server Status - Discord Bot
 
