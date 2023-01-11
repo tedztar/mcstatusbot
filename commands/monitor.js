@@ -1,31 +1,19 @@
 const Discord = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const updateChannels = require('../functions/updateChannels');
+const sendMessage = require('../functions/sendMessage');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('monitor')
-		.setDescription(
-			'Create a channel category and 2 voice channels that display the status of a Minecraft server'
-		)
-		.addStringOption((option) =>
-			option.setName('ip').setDescription('IP address').setRequired(true)
-		),
+		.setDescription('Create a channel category and 2 voice channels that display the status of a Minecraft server')
+		.addStringOption((option) => option.setName('ip').setDescription('IP address').setRequired(true)),
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });
 
 		// Check if the member has the administrator permission
-		if (
-			!interaction.memberPermissions.has(
-				Discord.PermissionsBitField.Flags.Administrator
-			)
-		) {
-			const responseEmbed = new Discord.EmbedBuilder()
-				.setDescription(
-					'You must have the administrator permission to use this command!'
-				)
-				.setColor(embedColor);
-			await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
+		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
+			await sendMessage.newBasicMessage(interaction, 'You must have the administrator permission to use this command!');
 			return;
 		}
 
@@ -34,17 +22,8 @@ module.exports = {
 		};
 
 		// Create the server category
-		if (
-			!interaction.guild.roles
-				.botRoleFor(interaction.client.user)
-				.permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)
-		) {
-			const responseEmbed = new Discord.EmbedBuilder()
-				.setDescription(
-					'This bot needs the "manage roles" permission in order to create channels!'
-				)
-				.setColor(embedColor);
-			await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
+		if (!interaction.guild.roles.botRoleFor(interaction.client.user).permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
+			await sendMessage.newBasicMessage(interaction, 'This bot needs the "manage roles" permission in order to create channels!');
 			return;
 		}
 		await interaction.guild.channels
@@ -54,11 +33,7 @@ module.exports = {
 				permissionOverwrites: [
 					{
 						id: interaction.guild.roles.botRoleFor(interaction.client.user),
-						allow: [
-							Discord.PermissionsBitField.Flags.ViewChannel,
-							Discord.PermissionsBitField.Flags.ManageChannels,
-							Discord.PermissionsBitField.Flags.Connect
-						]
+						allow: [Discord.PermissionsBitField.Flags.ViewChannel, Discord.PermissionsBitField.Flags.ManageChannels, Discord.PermissionsBitField.Flags.Connect]
 					},
 					{
 						id: interaction.guild.roles.everyone,
@@ -97,9 +72,6 @@ module.exports = {
 
 		updateChannels.execute(newServer);
 
-		const responseEmbed = new Discord.EmbedBuilder()
-			.setDescription('The channels have been created successfully.')
-			.setColor(embedColor);
-		await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
+		await sendMessage.newBasicMessage(interaction, 'The channels have been created successfully.');
 	}
 };
