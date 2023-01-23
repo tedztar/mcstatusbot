@@ -32,8 +32,12 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 ## To-Do
 
 - [ ] Allow users to manage default server for `/status` command (`/default ip` command and `/monitor ip [default]` option, add new key-value pair to server object and use findIndex to get default server)
-- [ ] Allow users to set a nickname for the server (`/nickname` command and `/monitor ip nickname`)
+- [ ] Allow users to set a nickname for the server (`/nickname` and `/monitor ip nickname`)
+- [ ] Rework admin permissions
+- [ ] Rework status and unmonitor commands to include dropdown menus
+- [ ] Rework monitor command to include modal workflow
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
+- [ ] Update readme with screenshots
 - [ ] Rectify backend caching
 - [ ] Fix DDNS support issues
 - [x] Add bug reporting command

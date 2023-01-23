@@ -12,14 +12,17 @@ module.exports = {
 				value: 'Displays the current status and active players for your server'
 			},
 			{
-				name: '/monitor ip',
-				value: 'Monitor the server with the specified IP address'
+				name: '/monitor ip [nickname]',
+				value: 'Monitor the server with the specified IP address and optionally set a nickname'
 			},
 			{
-				name: '/unmonitor ip|all',
+				name: '/unmonitor [ip|all]',
 				value: 'Unmonitor the server with the specified IP address or all servers'
 			},
-			{ name: '/bug desc', value: 'Send a bug to maintainers ' }
+			{
+				name: '/bug description',
+				value: 'Send a bug report to the maintainers'
+			}
 		);
 		await interaction.editReply({ embeds: [helpEmbed], ephemeral: true });
 	}
