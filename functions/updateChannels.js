@@ -32,6 +32,6 @@ async function setOnline(statusChannel, playersChannel, res) {
 		await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
 			ViewChannel: true
 		});
-		await playersChannel.setName(`Players: ${res.players.online || 0} / ${res.players.max}`);
+		await playersChannel.setName(`Players: ${res.players?.online ?? 0} / ${res.players?.max ?? 'undefined'}`);
 	}
 }

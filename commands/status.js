@@ -20,9 +20,15 @@ module.exports = {
 			return;
 		}
 
-		ip = ipFull.split(':')[0];
-		port = ipFull.split(':')[1] || 25565;
-		const server = new mcping.MinecraftServer(ip, port);
+		[ip, port] = ipFull.split(':');
+		let server;
+		try {
+			server = new mcping.MinecraftServer(ip, port ?? 25565);
+		} catch (err) {
+			console.log(err);
+			await sendMessage.newBasicMessage(interaction, 'Invalid IP address provided');
+			return;
+		}
 
 		server.ping(2500, 47, async function (err, res) {
 			if (err) {
