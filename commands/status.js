@@ -21,42 +21,41 @@ module.exports = {
 		}
 
 		[ip, port] = ipFull.split(':');
-		let server;
+		const server = new mcping.MinecraftServer(ip, port ?? 25565);
+
 		try {
-			server = new mcping.MinecraftServer(ip, port ?? 25565);
-		} catch (err) {
-			console.log(err);
-			await sendMessage.newBasicMessage(interaction, 'Invalid IP address provided');
+			server.ping(2500, 47, async function (err, res) {
+				if (err) {
+					await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${ipFull}:`);
+					return;
+				}
+
+				if (!res.players.sample) {
+					serverStatus = `*No one is playing!*`;
+				} else {
+					let onlinePlayers = [];
+					for (var i = 0; i < res.players.sample.length; i++) {
+						onlinePlayers.push(res.players.sample[i].name);
+					}
+					onlinePlayers = onlinePlayers
+						.sort()
+						.join(', ')
+						.replace(/\u00A7[0-9A-FK-OR]|\\n/gi, '');
+					serverStatus = `**${res.players.online || 0}/${res.players.max}** player(s) online.\n\n${onlinePlayers}`;
+				}
+
+				const responseEmbed = new Discord.EmbedBuilder()
+					.setTitle(`Status for ${ipFull}:`)
+					.setColor(embedColor)
+					.setDescription(serverStatus)
+					.addFields({ name: 'Server version:', value: res.version.name })
+					.setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`);
+				interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
+			});
+		} catch (error) {
+			console.log(`${error.code}: ${ip}:${port}`);
+			await sendMessage.newBasicMessage(interaction, 'The IP address supplied was invalid');
 			return;
 		}
-
-		server.ping(2500, 47, async function (err, res) {
-			if (err) {
-				await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${ipFull}:`);
-				return;
-			}
-
-			if (!res.players.sample) {
-				serverStatus = `*No one is playing!*`;
-			} else {
-				let onlinePlayers = [];
-				for (var i = 0; i < res.players.sample.length; i++) {
-					onlinePlayers.push(res.players.sample[i].name);
-				}
-				onlinePlayers = onlinePlayers
-					.sort()
-					.join(', ')
-					.replace(/\u00A7[0-9A-FK-OR]|\\n/gi, '');
-				serverStatus = `**${res.players.online || 0}/${res.players.max}** player(s) online.\n\n${onlinePlayers}`;
-			}
-
-			const responseEmbed = new Discord.EmbedBuilder()
-				.setTitle(`Status for ${ipFull}:`)
-				.setColor(embedColor)
-				.setDescription(serverStatus)
-				.addFields({ name: 'Server version:', value: res.version.name })
-				.setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`);
-			interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
-		});
 	}
 };
