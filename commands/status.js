@@ -11,8 +11,8 @@ module.exports = {
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });
 
-		const monitoredServers = (await serverDB.get(interaction.guildId)) || null;
-		defaultIp = monitoredServers ? monitoredServers[0].ip : null;
+		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
+		defaultIp = monitoredServers[0] ? monitoredServers[0].ip : null;
 		ipFull = interaction.options.getString('ip') || defaultIp;
 
 		if (!ipFull) {
@@ -20,37 +20,42 @@ module.exports = {
 			return;
 		}
 
-		ip = ipFull.split(':')[0];
-		port = ipFull.split(':')[1] || 25565;
-		const server = new mcping.MinecraftServer(ip, port);
+		[ip, port] = ipFull.split(':');
+		const server = new mcping.MinecraftServer(ip, port ?? 25565);
 
-		server.ping(2500, 47, async function (err, res) {
-			if (err) {
-				await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${ipFull}:`);
-				return;
-			}
-
-			if (!res.players.sample) {
-				serverStatus = `*No one is playing!*`;
-			} else {
-				let onlinePlayers = [];
-				for (var i = 0; i < res.players.sample.length; i++) {
-					onlinePlayers.push(res.players.sample[i].name);
+		try {
+			server.ping(2500, 47, async function (err, res) {
+				if (err) {
+					await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${ipFull}:`);
+					return;
 				}
-				onlinePlayers = onlinePlayers
-					.sort()
-					.join(', ')
-					.replace(/\u00A7[0-9A-FK-OR]|\\n/gi, '');
-				serverStatus = `**${res.players.online || 0}/${res.players.max}** player(s) online.\n\n${onlinePlayers}`;
-			}
 
-			const responseEmbed = new Discord.EmbedBuilder()
-				.setTitle(`Status for ${ipFull}:`)
-				.setColor(embedColor)
-				.setDescription(serverStatus)
-				.addFields({ name: 'Server version:', value: res.version.name })
-				.setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`);
-			interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
-		});
+				if (!res.players.sample) {
+					serverStatus = `*No one is playing!*`;
+				} else {
+					let onlinePlayers = [];
+					for (var i = 0; i < res.players.sample.length; i++) {
+						onlinePlayers.push(res.players.sample[i].name);
+					}
+					onlinePlayers = onlinePlayers
+						.sort()
+						.join(', ')
+						.replace(/\u00A7[0-9A-FK-OR]|\\n/gi, '');
+					serverStatus = `**${res.players.online || 0}/${res.players.max}** player(s) online.\n\n${onlinePlayers}`;
+				}
+
+				const responseEmbed = new Discord.EmbedBuilder()
+					.setTitle(`Status for ${ipFull}:`)
+					.setColor(embedColor)
+					.setDescription(serverStatus)
+					.addFields({ name: 'Server version:', value: res.version.name })
+					.setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`);
+				interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
+			});
+		} catch (error) {
+			console.log(`${error.code}: ${ip}:${port}`);
+			await sendMessage.newBasicMessage(interaction, 'The IP address supplied was invalid');
+			return;
+		}
 	}
 };
