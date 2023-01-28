@@ -1,4 +1,5 @@
 ![Discord Bots](https://badgen.net/https/achiommino.npkn.net/mcstatus-discordbot/)
+![Donate](https://badgen.net/Make/a%20donation/yellow)
 
 # Minecraft Server Status - Discord Bot
 
@@ -6,16 +7,14 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 **To use:** Simply [invite](https://discord.com/api/oauth2/authorize?client_id=788083161296273517&permissions=268435472&scope=bot%20applications.commands) the bot to your server
 
-**Enjoying our bot?** A donation of any amount helps keep our server running!
-
-<a href="https://www.buymeacoffee.com/rahulrao" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 30px !important;width: 110px !important;" ></a>
+**Enjoying our bot?** A [donation](https://www.buymeacoffee.com/rahulrao) of any amount helps keep our server running!
 
 ## Now Updated!!
 
 - Updated Jan 2023
 - New hosting provider
 - Bot will be hosted centrally from now on
-- Fixing bugs from now till Feb and then focusing on new features
+- Fixing bugs from till mid Feb and then focusing on new features
 
 ## Features
 
@@ -39,6 +38,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - [ ] Allow users to set a nickname for the server (`/nickname` command and `/monitor ip nickname`)
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
 - [ ] Rectify backend caching
+- [x] Update backend error handling
 - [ ] Fix DDNS support issues
 - [x] Add bug reporting command
 - [ ] Support compatibility with bedrock servers
