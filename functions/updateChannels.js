@@ -9,7 +9,12 @@ module.exports = {
 			const playersChannel = await client.channels.cache.get(server.playersId);
 
 			mcserver.ping(2500, 47, async (err, res) => {
-				err ? await setOffline(statusChannel, playersChannel) : await setOnline(statusChannel, playersChannel, res);
+				// another try catch here as setOffline/Online may sometimes fail
+				try {
+					err ? await setOffline(statusChannel, playersChannel) : await setOnline(statusChannel, playersChannel, res);
+				} catch (error) {
+					console.log(`${error.code}: encountered while updating ${statusChannel}, ${playersChannel}`);
+				}
 			});
 		} catch (error) {
 			console.log(`${error.code}: encountered while updating ${statusChannel}, ${playersChannel}`);
