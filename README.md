@@ -1,5 +1,5 @@
 ![Discord Bots](https://badgen.net/https/achiommino.npkn.net/mcstatus-discordbot/)
-![Donate](https://badgen.net/Make/a%20donation/yellow)
+![Donate](https://badgen.net/badge/Make/a%20donation/yellow)
 
 # Minecraft Server Status - Discord Bot
 
