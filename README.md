@@ -1,9 +1,9 @@
 ![Discord Bots](https://badgen.net/https/achiommino.npkn.net/mcstatus-discordbot/)
-![Donate](https://badgen.net/badge/Make/a%20donation/yellow)
+<a href="https://www.buymeacoffee.com/rahulrao"><img src="https://badgen.net/badge/Make/a%20donation/yellow"></img></a>
 
 # Minecraft Server Status - Discord Bot
 
-A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that displays the status of [Minecraft](https://minecraft.gamepedia.com) servers using the [mcping-js](https://www.npmjs.com/package/mcping-js) node module.
+A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that displays the status of [Minecraft](https://minecraft.gamepedia.com) servers using the [mcping-js](https://www.npmjs.com/package/mcping-js) library.
 
 **To use:** Simply [invite](https://discord.com/api/oauth2/authorize?client_id=788083161296273517&permissions=268435472&scope=bot%20applications.commands) the bot to your server
 
