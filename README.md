@@ -7,7 +7,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 **To use:** Simply [invite](https://discord.com/api/oauth2/authorize?client_id=788083161296273517&permissions=268435472&scope=bot%20applications.commands) the bot to your server
 
-**Enjoying our bot?** A [donation](https://www.buymeacoffee.com/rahulrao) of any amount helps keep our server running!
+**Enjoying our bot?** Our bot is completely free to use, and will always remain so. A [donation](https://www.buymeacoffee.com/rahulrao) of any amount helps keep our server running!
 
 ## Now Updated!!
 
