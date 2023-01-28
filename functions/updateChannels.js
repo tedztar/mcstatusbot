@@ -8,14 +8,11 @@ module.exports = {
 
 		try {
 			mcserver.ping(2500, 47, async (err, res) => {
-				try {
-					err ? await setOffline(statusChannel, playersChannel) : await setOnline(statusChannel, playersChannel, res);
-				} catch (error) {
-					console.log(error.code);
-				}
+				err ? await setOffline(statusChannel, playersChannel) : await setOnline(statusChannel, playersChannel, res);
 			});
 		} catch (error) {
-			console.log(`${error.code}: ${statusChannel}, ${playersChannel}`);
+			await setOffline(statusChannel, playersChannel);
+			console.log(`${error.code}: encountered while updating ${statusChannel}, ${playersChannel}`);
 		}
 	}
 };
