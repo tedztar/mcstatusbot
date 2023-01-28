@@ -7,6 +7,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 **To use:** Simply [invite](https://discord.com/api/oauth2/authorize?client_id=788083161296273517&permissions=268435472&scope=bot%20applications.commands) the bot to your server
 
 **Enjoying our bot?** A donation of any amount helps keep our server running!
+
 <a href="https://www.buymeacoffee.com/rahulrao" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
 
 ## Now Updated!!
