@@ -14,11 +14,15 @@ module.exports = {
 };
 
 async function updateServers(client) {
+	let serversUpdated = 0;
+
 	await client.guilds.cache.forEach(async (guild) => {
 		let serverList = (await serverDB.get(guild.id)) || [];
 		for (const server of serverList) {
 			await updateChannels.execute(server);
+			serversUpdated++;
 		}
 	});
-	console.log('Servers updated.');
+
+	console.log(`${serversUpdated} servers updated.`);
 }
