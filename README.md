@@ -6,12 +6,10 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 **To use:** Simply [invite](https://discord.com/api/oauth2/authorize?client_id=788083161296273517&permissions=268435472&scope=bot%20applications.commands) the bot to your server
 
-## Now Updated!!
+## Now Updated!
 
 - Updated Jan 2023
-- New hosting provider
-- Bot will be hosted centrally from now on
-- Fixing bugs from now till Feb and then focusing on new features
+- Nicknames have been implemented! Set a nickname for your server with the `/nickname` command. You can refer to the server using its nickname in all commands!
 
 ## Features
 
