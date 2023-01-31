@@ -14,7 +14,7 @@ module.exports = {
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		let serverIp = monitoredServers.length == 1 ? monitoredServers[0].ip : null;
 		if(interaction.options.getString('server')) {
-			serverIndex = monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
+			serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
 		}
 		if (!serverIp) {
@@ -49,7 +49,7 @@ module.exports = {
 					.setDescription(serverStatus)
 					.addFields({ name: 'Server version:', value: res.version.name })
 					.setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`);
-				interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
+				await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 			}
 		});
 	}

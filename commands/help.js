@@ -8,7 +8,7 @@ module.exports = {
 
 		const helpEmbed = new Discord.EmbedBuilder().setTitle('Commands:').setColor(embedColor).addFields(
 			{
-				name: '/status [ip]',
+				name: '/status [server|ip]',
 				value: 'Displays the current status and active players for your server'
 			},
 			{
@@ -16,7 +16,11 @@ module.exports = {
 				value: 'Monitor the server with the specified IP address and optionally set a nickname'
 			},
 			{
-				name: '/unmonitor [ip|all]',
+				name: '/nickname [server] nickname',
+				value: 'Change the display name of a monitored Minecraft server'
+			},
+			{
+				name: '/unmonitor [server|all]',
 				value: 'Unmonitor the server with the specified IP address or all servers'
 			},
 			{

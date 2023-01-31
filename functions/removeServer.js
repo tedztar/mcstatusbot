@@ -10,8 +10,8 @@ module.exports = {
 
 		// Remove server from database
 		let monitoredServers = (await serverDB.get(guild.id)) || [];
-		serverIndex = monitoredServers.indexOf(server);
-		monitoredServers.splice(serverIndex, 1);
+		serverIndex = await monitoredServers.indexOf(server);
+		await monitoredServers.splice(serverIndex, 1);
 		await serverDB.set(guild.id, monitoredServers);
 	}
 };

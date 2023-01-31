@@ -42,8 +42,8 @@ module.exports = {
 		// Find the server to unmonitor
 		let server = monitoredServers.length == 1 ? monitoredServers[0] : null;
 		if (interaction.options.getString('server')) {
-			let serverIndex = monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
-			serverIndex == -1 ? serverIndex = monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server')) : null;
+			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
+			serverIndex == -1 ? serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server')) : null;
 			server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
 		}
 
@@ -54,7 +54,7 @@ module.exports = {
 		}
 		
 		// Unmonitor the server
-		removeServer.execute(interaction.guild, server);
+		await removeServer.execute(interaction.guild, server);
 
 		await sendMessage.newBasicMessage(interaction, 'The channels have been removed successfully.');
 	}

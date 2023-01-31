@@ -26,14 +26,14 @@ module.exports = {
 
 		// Check if the server is already being monitored
 		let monitoredServers = (await serverDB.get(interaction.guildId)) || [];
-		let serverIndex = monitoredServers.findIndex((server) => server.ip == interaction.options.getString('ip'));
+		let serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('ip'));
 		if (serverIndex != -1) {
 			await sendMessage.newBasicMessage(interaction, 'This server is already being monitored!');
 			return;
 		}
 
 		// Check if the nickname is already being used
-		nicknameIndex = monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('nickname'));
+		nicknameIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('nickname'));
 		if (interaction.options.getString('nickname') && nicknameIndex != -1) {
 			await sendMessage.newBasicMessage(interaction, 'This nickname is already being used!');
 			return;
@@ -86,10 +86,10 @@ module.exports = {
 				newServer.playersId = channel.id;
 			});
 
-		monitoredServers.push(newServer);
+		await monitoredServers.push(newServer);
 		await serverDB.set(interaction.guildId, monitoredServers);
 
-		updateChannels.execute(newServer);
+		await updateChannels.execute(newServer);
 
 		await sendMessage.newBasicMessage(interaction, 'The channels have been created successfully.');
 	}
