@@ -6,7 +6,7 @@ const sendMessage = require('../functions/sendMessage');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('status')
-		.setDescription('Displays the current status and active players for your server')
+		.setDescription('Displays the current status and active players for any server')
 		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });

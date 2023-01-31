@@ -6,7 +6,7 @@ const sendMessage = require('../functions/sendMessage');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('unmonitor')
-		.setDescription('Remove a Minecraft server from the monitor list')
+		.setDescription('Unmonitor the specified server or all servers')
 		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });

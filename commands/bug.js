@@ -6,7 +6,7 @@ var profanity = require('@2toad/profanity').profanity;
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bug')
-		.setDescription('Send bug report to maintainers')
+		.setDescription('Send a bug report to maintainers')
 		.addStringOption((option) => option.setName('bug').setDescription('Description of the bug').setRequired(true)),
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });

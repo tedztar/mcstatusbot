@@ -5,7 +5,7 @@ const sendMessage = require('../functions/sendMessage');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('nickname')
-		.setDescription('Change the display name of a monitored Minecraft server')
+		.setDescription('Change the nickname of a monitored Minecraft server')
 		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(true))
 		.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(true)),
 	async execute(interaction) {

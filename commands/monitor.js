@@ -6,7 +6,7 @@ const sendMessage = require('../functions/sendMessage');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('monitor')
-		.setDescription('Create a channel category and 2 voice channels that display the status of a Minecraft server')
+		.setDescription('Create 2 voice channels that display the status of a Minecraft server')
 		.addStringOption((option) => option.setName('ip').setDescription('IP address').setRequired(true))
 		.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(false)),
 	async execute(interaction) {
