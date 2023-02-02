@@ -12,35 +12,38 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: true });
 
 		//configure mailer
-		let transporter = nodemailer.createTransport({
-			host: process.env.EM_HOST,
-			port: process.env.EM_PORT,
-			secure: true,
-			auth: {
-				user: process.env.EM_USER,
-				pass: process.env.EM_PASS
-			}
-		});
+		// let transporter = nodemailer.createTransport({
+		// 	host: process.env.EM_HOST,
+		// 	port: process.env.EM_PORT,
+		// 	secure: true,
+		// 	auth: {
+		// 		user: process.env.EM_USER,
+		// 		pass: process.env.EM_PASS
+		// 	}
+		// });
 
-		const bug = interaction.options.getString('bug');
+		// const bug = interaction.options.getString('bug');
 
-		if (!bug) {
-			await sendMessage.newBasicMessage(interaction, 'Please specify a bug that you would like to report.');
-			return;
-		}
+		// if (!bug) {
+		// 	await sendMessage.newBasicMessage(interaction, 'Please specify a bug that you would like to report.');
+		// 	return;
+		// }
 
-		if (profanity.exists(bug)) {
-			await sendMessage.newBasicMessage(interaction, 'Your query triggered our spam protection. Please try again, or open a github issue.');
-			return;
-		}
+		// if (profanity.exists(bug)) {
+		// 	await sendMessage.newBasicMessage(interaction, 'Your query triggered our spam protection. Please try again, or open a github issue.');
+		// 	return;
+		// }
 
-		await transporter.sendMail({
-			from: `"MCStatusBot" <${process.env.EM_USER}>`,
-			to: `${process.env.EM_R1}, ${process.env.EM_R2}`,
-			subject: `Bug Report - ${interaction.user.username}, ${interaction.guildId}`,
-			text: `${bug}`
-		});
+		// await transporter.sendMail({
+		// 	from: `"MCStatusBot" <${process.env.EM_USER}>`,
+		// 	to: `${process.env.EM_R1}, ${process.env.EM_R2}`,
+		// 	subject: `Bug Report - ${interaction.user.username}, ${interaction.guildId}`,
+		// 	text: `${bug}`
+		// });
 
-		await sendMessage.newBasicMessage(interaction, 'Thank You for reporting a bug and helping to improve this bot! Your feedback is greatly appreciated!');
+		await sendMessage.newBasicMessage(
+			interaction,
+			'Send all bugs to our github issues page: https://github.com/tedztar/mcstatusbot/issues. Thank you for your feedback!'
+		);
 	}
 };
