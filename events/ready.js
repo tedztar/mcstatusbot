@@ -20,5 +20,6 @@ async function updateServers(client) {
 			await updateChannels.execute(server);
 		}
 	});
-	console.log('Servers updated.');
+
+	console.log(`Servers updated.`);
 }

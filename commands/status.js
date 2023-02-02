@@ -22,14 +22,16 @@ module.exports = {
 			return;
 		}
 
-		ip = serverIp.split(':')[0];
-		port = serverIp.split(':')[1] || 25565;
-		const server = new mcping.MinecraftServer(ip, port);
-		server.ping(2500, 47, async function (err, res) {
-			if (err) {
-				await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${serverIp}:`);
-				return;
-			} else {
+		[ip, port] = serverIp.split(':');
+		const server = new mcping.MinecraftServer(ip, port ?? 25565);
+
+		try {
+			server.ping(2500, 47, async function (err, res) {
+				if (err) {
+					await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${ipFull}:`);
+					return;
+				}
+        
 				if (!res.players.sample) {
 					serverStatus = `*No one is playing!*`;
 				} else {
@@ -43,14 +45,20 @@ module.exports = {
 						.replace(/\u00A7[0-9A-FK-OR]|\\n/gi, '');
 					serverStatus = `**${res.players.online || 0}/${res.players.max}** player(s) online.\n\n${onlinePlayers}`;
 				}
+
 				const responseEmbed = new Discord.EmbedBuilder()
 					.setTitle(`Status for ${serverIp}:`)
 					.setColor(embedColor)
 					.setDescription(serverStatus)
 					.addFields({ name: 'Server version:', value: res.version.name })
 					.setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`);
+
 				await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
-			}
-		});
+			});
+		} catch (error) {
+			console.log(`${error.code}: ${ip}:${port}`);
+			await sendMessage.newBasicMessage(interaction, 'The IP address supplied was invalid');
+			return;
+		}
 	}
 };

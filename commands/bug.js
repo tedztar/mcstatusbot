@@ -27,20 +27,20 @@ module.exports = {
 		if (!bug) {
 			await sendMessage.newBasicMessage(interaction, 'Please specify a bug that you would like to report.');
 			return;
-		} else {
-			if (profanity.exists(bug)) {
-				await sendMessage.newBasicMessage(interaction, 'Your query triggered our spam protection. Please try again, or open a github issue.');
-				return;
-			} else {
-				await transporter.sendMail({
-					from: `"MCStatusBot" <${process.env.EM_USER}>`,
-					to: `${process.env.EM_R1}, ${process.env.EM_R2}`,
-					subject: `Bug Report - ${interaction.user.username}, ${interaction.guildId}`,
-					text: `${bug}`
-				});
-
-				await sendMessage.newBasicMessage(interaction, 'Thank You for reporting a bug and helping to improve this bot! Your feedback is greatly appreciated!');
-			}
 		}
+
+		if (profanity.exists(bug)) {
+			await sendMessage.newBasicMessage(interaction, 'Your query triggered our spam protection. Please try again, or open a github issue.');
+			return;
+		}
+
+		await transporter.sendMail({
+			from: `"MCStatusBot" <${process.env.EM_USER}>`,
+			to: `${process.env.EM_R1}, ${process.env.EM_R2}`,
+			subject: `Bug Report - ${interaction.user.username}, ${interaction.guildId}`,
+			text: `${bug}`
+		});
+
+		await sendMessage.newBasicMessage(interaction, 'Thank You for reporting a bug and helping to improve this bot! Your feedback is greatly appreciated!');
 	}
 };
