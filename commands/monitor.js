@@ -6,8 +6,9 @@ const sendMessage = require('../functions/sendMessage');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('monitor')
-		.setDescription('Create a channel category and 2 voice channels that display the status of a Minecraft server')
-		.addStringOption((option) => option.setName('ip').setDescription('IP address').setRequired(true)),
+		.setDescription('Create 2 voice channels that display the status of a Minecraft server')
+		.addStringOption((option) => option.setName('ip').setDescription('IP address').setRequired(true))
+		.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(false)),
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });
 
@@ -17,18 +18,37 @@ module.exports = {
 			return;
 		}
 
-		let newServer = {
-			ip: interaction.options.getString('ip')
-		};
-
-		// Create the server category
+		// Check if the bot has the manage roles permission
 		if (!interaction.guild.roles.botRoleFor(interaction.client.user).permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
 			await sendMessage.newBasicMessage(interaction, 'This bot needs the "manage roles" permission in order to create channels!');
 			return;
 		}
+
+		// Check if the server is already being monitored
+		let monitoredServers = (await serverDB.get(interaction.guildId)) || [];
+		let serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('ip'));
+		if (serverIndex != -1) {
+			await sendMessage.newBasicMessage(interaction, 'This server is already being monitored!');
+			return;
+		}
+
+		// Check if the nickname is already being used
+		nicknameIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('nickname'));
+		if (interaction.options.getString('nickname') && nicknameIndex != -1) {
+			await sendMessage.newBasicMessage(interaction, 'This nickname is already being used!');
+			return;
+		}
+
+		// Create the server object
+		let newServer = {
+			ip: interaction.options.getString('ip'),
+			nickname: interaction.options.getString('nickname') || null
+		};
+
+		// Create the server category
 		await interaction.guild.channels
 			.create({
-				name: interaction.options.getString('ip'),
+				name: interaction.options.getString('nickname') || interaction.options.getString('ip'),
 				type: Discord.ChannelType.GuildCategory,
 				permissionOverwrites: [
 					{
@@ -45,7 +65,7 @@ module.exports = {
 				newServer.categoryId = channel.id;
 			});
 
-		// Crate channels and add to category
+		// Create the channels and add to category
 		await interaction.guild.channels
 			.create({
 				name: 'Status: Updating...',
@@ -66,11 +86,10 @@ module.exports = {
 				newServer.playersId = channel.id;
 			});
 
-		let monitoredServers = (await serverDB.get(interaction.guildId)) || [];
-		monitoredServers.push(newServer);
+		await monitoredServers.push(newServer);
 		await serverDB.set(interaction.guildId, monitoredServers);
 
-		updateChannels.execute(newServer);
+		await updateChannels.execute(newServer);
 
 		await sendMessage.newBasicMessage(interaction, 'The channels have been created successfully.');
 	}
