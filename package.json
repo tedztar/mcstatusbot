@@ -15,9 +15,9 @@
     "discord.js": "^14.1.2",
     "dotenv": "^16.0.3",
     "express": "^4.17.2",
+    "github-create-issue": "^2.0.0",
     "keyv": "^4.0.4",
     "mcping-js": "^1.5.0",
-    "nodemailer": "^6.8.0",
     "pg": "^8.7.1"
   },
   "repository": {
