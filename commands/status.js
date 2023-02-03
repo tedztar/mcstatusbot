@@ -6,21 +6,23 @@ const sendMessage = require('../functions/sendMessage');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('status')
-		.setDescription('Displays the current status and active players for your server')
-		.addStringOption((option) => option.setName('ip').setDescription('IP Address').setRequired(false)),
+		.setDescription('Displays the current status and active players for any server')
+		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });
 
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
-		defaultIp = monitoredServers[0] ? monitoredServers[0].ip : null;
-		ipFull = interaction.options.getString('ip') || defaultIp;
-
-		if (!ipFull) {
+		let serverIp = monitoredServers.length == 1 ? monitoredServers[0].ip : null;
+		if(interaction.options.getString('server')) {
+			serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
+			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
+		}
+		if (!serverIp) {
 			await sendMessage.newBasicMessage(interaction, 'You must monitor a server or specify an IP address to use this command!');
 			return;
 		}
 
-		[ip, port] = ipFull.split(':');
+		[ip, port] = serverIp.split(':');
 		const server = new mcping.MinecraftServer(ip, port ?? 25565);
 
 		try {
@@ -29,7 +31,7 @@ module.exports = {
 					await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${ipFull}:`);
 					return;
 				}
-
+        
 				if (!res.players.sample) {
 					serverStatus = `*No one is playing!*`;
 				} else {
@@ -45,12 +47,13 @@ module.exports = {
 				}
 
 				const responseEmbed = new Discord.EmbedBuilder()
-					.setTitle(`Status for ${ipFull}:`)
+					.setTitle(`Status for ${serverIp}:`)
 					.setColor(embedColor)
 					.setDescription(serverStatus)
 					.addFields({ name: 'Server version:', value: res.version.name })
 					.setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`);
-				interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
+
+				await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 			});
 		} catch (error) {
 			console.log(`${error.code}: ${ip}:${port}`);

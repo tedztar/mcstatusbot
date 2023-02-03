@@ -8,18 +8,25 @@ module.exports = {
 
 		const helpEmbed = new Discord.EmbedBuilder().setTitle('Commands:').setColor(embedColor).addFields(
 			{
-				name: '/status [ip]',
-				value: 'Displays the current status and active players for your server'
+				name: '/status [server|ip]',
+				value: 'Displays the current status and active players for any server'
 			},
 			{
-				name: '/monitor ip',
-				value: 'Monitor the server with the specified IP address'
+				name: '/monitor ip [nickname]',
+				value: 'Create 2 voice channels that display the status of a Minecraft server and optionally set a nickname'
 			},
 			{
-				name: '/unmonitor ip|all',
-				value: 'Unmonitor the server with the specified IP address or all servers'
+				name: '/nickname [server] nickname',
+				value: 'Change the nickname of a monitored Minecraft server'
 			},
-			{ name: '/bug desc', value: 'Send a bug to maintainers ' }
+			{
+				name: '/unmonitor [server|all]',
+				value: 'Unmonitor the specified server or all servers'
+			},
+			{
+				name: '/bug description',
+				value: 'Send a bug report to the maintainers'
+			}
 		);
 		await interaction.editReply({ embeds: [helpEmbed], ephemeral: true });
 	}

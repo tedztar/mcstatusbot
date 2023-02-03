@@ -1,4 +1,4 @@
-![Discord Bots](https://badgen.net/https/achiommino.npkn.net/mcstatus-discordbot/)
+<img src="https://badgen.net/https/achiommino.npkn.net/mcstatus-discordbot/"></img>
 <a href="https://www.buymeacoffee.com/rahulrao"><img src="https://badgen.net/badge/Make/a%20donation/yellow"></img></a>
 
 # Minecraft Server Status - Discord Bot
@@ -12,9 +12,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 ## Now Updated!!
 
 - Updated Jan 2023
-- New hosting provider
-- Bot will be hosted centrally from now on
-- Fixing bugs from till mid Feb and then focusing on new features
+- Nicknames have been implemented! Set a nickname for your server with the `/nickname` command. You can refer to the server using its nickname in all commands!
 
 ## Features
 
@@ -26,17 +24,22 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## Usage
 
+- `/status [server|ip]` - Displays the current status and active players for any server
+- `/monitor ip [nickname]` - Create 2 voice channels that display the status of a Minecraft server and optionally set a nickname
+- `/nickname [server] nickname` - Change the nickname of a monitored Minecraft server
+- `/unmonitor [server|all]` - Unmonitor the specified server or all servers
+- `/bug description` - Send a bug report to the maintainers
 - `/help` - List the other commands
-- `/status ip?` - Displays the current status and active players for the default server (the first server that was monitored that hasn't been unmonitored) or the specified IP address if provided
-- `/monitor ip` - Monitor the server with the specified IP address
-- `/unmonitor ip|all` - Unmonitor the server with the specified IP address or all servers
-- `/bug desc` - Send a bug report to the maintainers
 
 ## To-Do
 
 - [ ] Allow users to manage default server for `/status` command (`/default ip` command and `/monitor ip [default]` option, add new key-value pair to server object and use findIndex to get default server)
-- [ ] Allow users to set a nickname for the server (`/nickname` command and `/monitor ip nickname`)
+- [x] Allow users to set a nickname for the server (`/nickname` and `/monitor ip nickname`)
+- [ ] Rework admin permissions
+- [ ] Rework status, nickname, and unmonitor commands to include dropdown menus
+- [ ] Rework monitor and nickname commands to include modal workflow
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
+- [ ] Update readme with screenshots
 - [ ] Rectify backend caching
 - [x] Update backend error handling
 - [ ] Fix DDNS support issues
