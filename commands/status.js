@@ -13,7 +13,7 @@ module.exports = {
 
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		let serverIp = monitoredServers.length == 1 ? monitoredServers[0].ip : null;
-		if(interaction.options.getString('server')) {
+		if (interaction.options.getString('server')) {
 			serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
 		}
@@ -28,10 +28,10 @@ module.exports = {
 		try {
 			server.ping(2500, 47, async function (err, res) {
 				if (err) {
-					await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${ipFull}:`);
+					await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${serverIp}:`);
 					return;
 				}
-        
+
 				if (!res.players.sample) {
 					serverStatus = `*No one is playing!*`;
 				} else {
