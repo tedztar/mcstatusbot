@@ -12,10 +12,20 @@ module.exports = {
 			await command.execute(interaction);
 		} catch (error) {
 			console.log(error.code);
-			await interaction.editReply({
-				content: 'There was an error while executing this command!',
-				ephemeral: true
-			});
+
+			try {
+				await interaction.editReply({
+					content: 'There was an error while executing this command!',
+					ephemeral: true
+				});
+			} catch (err) {
+				console.log(`${err.code} occured while editing reply. Trying fresh reply`);
+
+				await interaction.reply({
+					content: 'There was an error while executing this command!',
+					ephemeral: true
+				});
+			}
 		}
 	}
 };
