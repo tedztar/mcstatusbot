@@ -1,4 +1,4 @@
-<img src="https://badgen.net/https/achiommino.npkn.net/mcstatus-discordbot/"></img>
+<img src="https://badgen.net/https/achiommino.npkn.net/mcstatus-discordbot/" loading="lazy"></img>
 <a href="https://www.buymeacoffee.com/rahulrao"><img src="https://badgen.net/badge/Make/a%20donation/yellow"></img></a>
 
 # Minecraft Server Status - Discord Bot
