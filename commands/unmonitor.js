@@ -9,8 +9,6 @@ module.exports = {
 		.setDescription('Unmonitor the specified server or all servers')
 		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
 	async execute(interaction) {
-		await interaction.deferReply({ ephemeral: true });
-
 		// Check if member has administrator permission
 		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
 			await sendMessage.newBasicMessage(interaction, 'You must have the administrator permission to use this command!');

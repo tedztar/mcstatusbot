@@ -27,8 +27,8 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 - `/status [server|ip]` - Displays the current status and active players for any server
 - `/monitor ip [nickname]` - Create 2 voice channels that display the status of a Minecraft server and optionally set a nickname
-- `/nickname [server] nickname` - Change the nickname of a monitored Minecraft server
-- `/default [server]` - Set a server to be the default for all commands
+- `/nickname nickname [server]` - Change the nickname of a monitored Minecraft server
+- `/default server` - Set a server to be the default for all commands
 - `/unmonitor [server|all]` - Unmonitor the specified server or all servers
 - `/bug description` - Send a bug report to the maintainers
 - `/help` - List the other commands

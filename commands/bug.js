@@ -7,16 +7,9 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bug')
 		.setDescription('Send a bug report to maintainers')
-		.addStringOption((option) => option.setName('bug').setDescription('Description of the bug').setRequired(true)),
+		.addStringOption((option) => option.setName('description').setDescription('Description of the bug').setRequired(true)),
 	async execute(interaction) {
-		await interaction.deferReply({ ephemeral: true });
-
-		const bug = interaction.options.getString('bug');
-
-		if (!bug) {
-			await sendMessage.newBasicMessage(interaction, 'Please specify a bug that you would like to report.');
-			return;
-		}
+		const bug = interaction.options.getString('description');
 
 		if (profanity.exists(bug)) {
 			await sendMessage.newBasicMessage(interaction, 'Your query triggered our spam protection. Please try again, or open a github issue.');

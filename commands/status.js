@@ -9,8 +9,6 @@ module.exports = {
 		.setDescription('Displays the current status and active players for any server')
 		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
 	async execute(interaction) {
-		await interaction.deferReply({ ephemeral: true });
-
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 
 		// Find the default server

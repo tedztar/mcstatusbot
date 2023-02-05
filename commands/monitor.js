@@ -11,8 +11,6 @@ module.exports = {
 		.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(false))
 		.addBooleanOption((option) => option.setName('default').setDescription('Set this server to be the default for all commands').setRequired(false)),
 	async execute(interaction) {
-		await interaction.deferReply({ ephemeral: true });
-
 		// Check if the member has the administrator permission
 		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
 			await sendMessage.newBasicMessage(interaction, 'You must have the administrator permission to use this command!');
@@ -41,20 +39,19 @@ module.exports = {
 		}
 
 		// Set the default server to the new server if specified
-		if (interaction.options.getString('default') && monitoredServers.length) {
+		if (interaction.options.getBoolean('default') && monitoredServers.length) {
 			for (const server of monitoredServers) {
 				server.default = false;
 			}
-			await serverDB.set(interaction.guildId, monitoredServers);
 		}
 
 		// Create the server object
 		let newServer = {
 			ip: interaction.options.getString('ip'),
 			nickname: interaction.options.getString('nickname') || null,
-			default: interaction.options.getString('default') || false
+			default: interaction.options.getBoolean('default') || false
 		};
-		!monitoredServers.length ? newServer.default == true : null;
+		!monitoredServers.length ? newServer.default = true : null;
 
 		// Create the server category
 		await interaction.guild.channels
@@ -102,6 +99,6 @@ module.exports = {
 
 		await updateChannels.execute(newServer);
 
-		await sendMessage.newBasicMessage(interaction, 'The channels have been created successfully.');
+		await sendMessage.newBasicMessage(interaction, 'The channels have successfully been created.');
 	}
 };
