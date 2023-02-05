@@ -9,25 +9,14 @@ module.exports = {
 		if (!command) return;
 
 		try {
+			await interaction.deferReply({ ephemeral: true });
 			await command.execute(interaction);
 		} catch (error) {
 			console.log(error.code);
-
-			try {
-				await interaction.reply({
-					content: 'There was an error while executing this command!',
-					ephemeral: true
-				});
-			} catch (err) {
-				console.log(`${err.code} occured while replying. Trying to edit existing reply`);
-
-				await interaction
-					.editReply({
-						content: 'There was an error while executing this command!',
-						ephemeral: true
-					})
-					.catch((e) => console.log(e.code));
-			}
+			await interaction.editReply({
+				content: 'There was an error while executing this command!',
+				ephemeral: true
+			});
 		}
 	}
 };
