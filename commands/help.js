@@ -12,12 +12,16 @@ module.exports = {
 				value: 'Displays the current status and active players for any server'
 			},
 			{
-				name: '/monitor ip [nickname]',
+				name: '/monitor ip [nickname] [default (true/false)]',
 				value: 'Create 2 voice channels that display the status of a Minecraft server and optionally set a nickname'
 			},
 			{
 				name: '/nickname [server] nickname',
 				value: 'Change the nickname of a monitored Minecraft server'
+			},
+			{
+				name: '/default [server]',
+				value: 'Set a server to be the default for all commands'
 			},
 			{
 				name: '/unmonitor [server|all]',

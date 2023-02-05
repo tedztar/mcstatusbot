@@ -12,8 +12,12 @@ module.exports = {
 		await interaction.deferReply({ ephemeral: true });
 
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
-		let serverIp = monitoredServers.length == 1 ? monitoredServers[0].ip : null;
-		if (interaction.options.getString('server')) {
+
+		// Find the default server
+		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+		let serverIp = monitoredServers[defaultServerIndex].ip;
+
+		if(interaction.options.getString('server')) {
 			serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
 		}

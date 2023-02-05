@@ -37,8 +37,11 @@ module.exports = {
 			return;
 		}
 
+		// Find the default server
+		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+		let server = monitoredServers[defaultServerIndex];
+
 		// Find the server to rename
-		let server = monitoredServers.length == 1 ? monitoredServers[0] : null;
 		if (interaction.options.getString('server')) {
 			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIndex == -1 ? serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server')) : null;

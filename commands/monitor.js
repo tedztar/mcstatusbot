@@ -8,7 +8,8 @@ module.exports = {
 		.setName('monitor')
 		.setDescription('Create 2 voice channels that display the status of a Minecraft server')
 		.addStringOption((option) => option.setName('ip').setDescription('IP address').setRequired(true))
-		.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(false)),
+		.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(false))
+		.addBooleanOption((option) => option.setName('default').setDescription('Set this server to be the default for all commands').setRequired(false)),
 	async execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });
 
@@ -39,11 +40,21 @@ module.exports = {
 			return;
 		}
 
+		// Set the default server to the new server if specified
+		if (interaction.options.getString('default') && monitoredServers.length) {
+			for (const server of monitoredServers) {
+				server.default = false;
+			}
+			await serverDB.set(interaction.guildId, monitoredServers);
+		}
+
 		// Create the server object
 		let newServer = {
 			ip: interaction.options.getString('ip'),
-			nickname: interaction.options.getString('nickname') || null
+			nickname: interaction.options.getString('nickname') || null,
+			default: interaction.options.getString('default') || false
 		};
+		!monitoredServers.length ? newServer.default == true : null;
 
 		// Create the server category
 		await interaction.guild.channels
