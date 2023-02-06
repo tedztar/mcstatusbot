@@ -11,7 +11,8 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## Now Updated!!
 
-- Updated Jan 2023
+- Updated Feb 2023
+- Default server option has been implemented! Set a monitored server to be the default for all commands so that you don't have to constantly type in the nickname or IP address
 - Nicknames have been implemented! Set a nickname for your server with the `/nickname` command. You can refer to the server using its nickname in all commands!
 
 ## Features
@@ -26,7 +27,8 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 - `/status [server|ip]` - Displays the current status and active players for any server
 - `/monitor ip [nickname]` - Create 2 voice channels that display the status of a Minecraft server and optionally set a nickname
-- `/nickname [server] nickname` - Change the nickname of a monitored Minecraft server
+- `/nickname nickname [server]` - Change the nickname of a monitored Minecraft server
+- `/default server` - Set a server to be the default for all commands
 - `/unmonitor [server|all]` - Unmonitor the specified server or all servers
 - `/bug description` - Send a bug report to the maintainers
 - `/help` - List the other commands
@@ -45,3 +47,4 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - [ ] Fix DDNS support issues
 - [x] Add bug reporting command
 - [ ] Support compatibility with bedrock servers
+- [ ] IP validation

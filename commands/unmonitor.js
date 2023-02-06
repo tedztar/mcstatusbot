@@ -9,8 +9,6 @@ module.exports = {
 		.setDescription('Unmonitor the specified server or all servers')
 		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
 	async execute(interaction) {
-		await interaction.deferReply({ ephemeral: true });
-
 		// Check if member has administrator permission
 		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
 			await sendMessage.newBasicMessage(interaction, 'You must have the administrator permission to use this command!');
@@ -39,8 +37,11 @@ module.exports = {
 			return;
 		}
 
+		// Find the default server
+		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+		let server = monitoredServers[defaultServerIndex];
+
 		// Find the server to unmonitor
-		let server = monitoredServers.length == 1 ? monitoredServers[0] : null;
 		if (interaction.options.getString('server')) {
 			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIndex == -1 ? serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server')) : null;
