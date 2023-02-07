@@ -19,7 +19,7 @@ module.exports = {
 			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
 		} else {
 			// Find the default server
-			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+			let defaultServerIndex = (await monitoredServers.findIndex((server) => server.default)) || 0;
 			serverIp = monitoredServers[defaultServerIndex].ip;
 		}
 

@@ -38,11 +38,13 @@ module.exports = {
 			return;
 		}
 
-		// Set the default server to the new server if specified
+		// Unset the default server if the new server is to be the default for all commands
 		if (interaction.options.getBoolean('default') && monitoredServers.length) {
-			for (const server of monitoredServers) {
-				server.default = false;
-			}
+			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default) || 0;
+			let oldDefaultServer = monitoredServers[defaultServerIndex];
+			oldDefaultServer.default = false;
+			let oldDefaultCategory = await interaction.guild.channels.cache.get(oldDefaultServer.categoryId);
+			oldDefaultCategory.setName(oldDefaultCategory.name.slice(0,-1));
 		}
 
 		// Create the server object

@@ -44,7 +44,7 @@ module.exports = {
 			server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
 		} else {
 			// Find the default server
-			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+			let defaultServerIndex = (await monitoredServers.findIndex((server) => server.default)) || 0;
 			server = monitoredServers[defaultServerIndex];
 		}
 
@@ -54,12 +54,17 @@ module.exports = {
 			return;
 		}
 
-		// Rename the server
+		// Rename the server category
+		try {
+			await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
+		} catch (rateLimit) {
+			await sendMessage.newBasicMessage(interaction, 'The rate limit has been reached, please try renaming this server in a few minutes!');
+			return;
+		}
+
+		// Change the server nickname in the database
 		server.nickname = interaction.options.getString('nickname');
 		await serverDB.set(interaction.guildId, monitoredServers);
-
-		// Rename the server category
-		await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
 
 		await sendMessage.newBasicMessage(interaction, 'The server has successfully been renamed.');
 	}
