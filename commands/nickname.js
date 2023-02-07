@@ -21,7 +21,7 @@ module.exports = {
 			return;
 		}
 
-        // Check if there are any servers to rename
+		// Check if there are any servers to rename
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		if (!monitoredServers.length) {
 			await sendMessage.newBasicMessage(interaction, 'There are no servers to rename!');
@@ -35,36 +35,36 @@ module.exports = {
 			return;
 		}
 
-		// Find the default server
-		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default) || 0;
-		let server = monitoredServers[defaultServerIndex];
+		let server;
 
 		// Find the server to rename
 		if (interaction.options.getString('server')) {
 			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
-			serverIndex == -1 ? serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server')) : null;
+			serverIndex == -1 ? (serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server'))) : null;
 			server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
+		} else {
+			// Find the default server
+			let defaultServerIndex = (await monitoredServers.findIndex((server) => server.default)) || 0;
+			server = monitoredServers[defaultServerIndex];
 		}
 
 		// Check if the server is being monitored
 		if (!server) {
-			await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!')
+			await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!');
 			return;
 		}
 
-        // Rename the server category
+		// Rename the server category
 		try {
-			await interaction.guild.channels.cache.get(server.categoryId)
-			.setName(interaction.options.getString('nickname'));
-		}
-		catch(rateLimit) {
+			await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
+		} catch (rateLimit) {
 			await sendMessage.newBasicMessage(interaction, 'The rate limit has been reached, please try renaming this server in a few minutes!');
 			return;
 		}
 
 		// Change the server nickname in the database
-        server.nickname = interaction.options.getString('nickname');
-        await serverDB.set(interaction.guildId, monitoredServers);
+		server.nickname = interaction.options.getString('nickname');
+		await serverDB.set(interaction.guildId, monitoredServers);
 
 		await sendMessage.newBasicMessage(interaction, 'The server has successfully been renamed.');
 	}

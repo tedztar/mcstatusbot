@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const mcping = require('mcping-js');
 const Discord = require('discord.js');
 const sendMessage = require('../functions/sendMessage');
+const unidecode = require('unidecode');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -11,21 +12,27 @@ module.exports = {
 	async execute(interaction) {
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 
-		// Find the default server
-		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default) || 0;
-		let serverIp = monitoredServers[defaultServerIndex].ip || null;
+		let serverIp;
 
-		if(interaction.options.getString('server')) {
-			serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
+		if (interaction.options.getString('server')) {
+			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
+		} else {
+			// Find the default server
+			let defaultServerIndex = (await monitoredServers.findIndex((server) => server.default)) || 0;
+			serverIp = monitoredServers[defaultServerIndex].ip;
 		}
+
 		if (!serverIp) {
 			await sendMessage.newBasicMessage(interaction, 'You must monitor a server or specify an IP address to use this command!');
 			return;
 		}
 
-		[ip, port] = serverIp.split(':');
-		const server = new mcping.MinecraftServer(ip, port ?? 25565);
+		let [ip, port] = serverIp.split(':');
+		ip = unidecode(ip);
+		port = parseInt(port || 25565);
+
+		const server = new mcping.MinecraftServer(ip, port);
 
 		try {
 			server.ping(2500, 47, async function (err, res) {
