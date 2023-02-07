@@ -19,12 +19,12 @@ module.exports = {
 			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
 		} else {
 			// Find the default server
-			let defaultServerIndex = (await monitoredServers.findIndex((server) => server.default)) || 0;
-			serverIp = monitoredServers[defaultServerIndex].ip;
+			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+			serverIp = defaultServerIndex == -1 ? null : monitoredServers[defaultServerIndex].ip;
 		}
 
 		if (!serverIp) {
-			await sendMessage.newBasicMessage(interaction, 'You must monitor a server or specify an IP address to use this command!');
+			await sendMessage.newBasicMessage(interaction, 'You must monitor a server or specify an IP address!');
 			return;
 		}
 

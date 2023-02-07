@@ -46,8 +46,8 @@ module.exports = {
 			server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
 		} else {
 			// Find the default server
-			let defaultServerIndex = (await monitoredServers.findIndex((server) => server.default)) || 0;
-			server = monitoredServers[defaultServerIndex];
+			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+			serverIp = defaultServerIndex == -1 ? null : monitoredServers[defaultServerIndex].ip;
 		}
 
 		// Check if the server is being monitored
