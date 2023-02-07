@@ -2,7 +2,9 @@ const mcping = require('mcping-js');
 
 module.exports = {
 	async execute(server) {
-		const mcserver = new mcping.MinecraftServer(server.ip.split(':')[0], Number(server.ip.split(':')[1]));
+		const [ip, port] = server.ip.split(':');
+
+		const mcserver = new mcping.MinecraftServer(ip, port || 25565);
 		const statusChannel = await client.channels.cache.get(server.statusId);
 		const playersChannel = await client.channels.cache.get(server.playersId);
 
@@ -11,7 +13,7 @@ module.exports = {
 				err ? await setOffline(statusChannel, playersChannel) : await setOnline(statusChannel, playersChannel, res);
 			});
 		} catch (error) {
-			console.log(`${error.code}: encountered while updating ${statusChannel}, ${playersChannel}`);
+			console.log(`${error.code}: encountered while updating server ${ip}:${port}`);
 		}
 	}
 };
