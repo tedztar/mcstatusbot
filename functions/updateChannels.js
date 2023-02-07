@@ -3,7 +3,7 @@ const unidecode = require('unidecode');
 
 module.exports = {
 	async execute(server) {
-		const [ip, port] = server.ip.split(':');
+		let [ip, port] = server.ip.split(':');
 		ip = unidecode(ip);
 		port = parseInt(port || 25565);
 

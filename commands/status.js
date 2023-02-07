@@ -65,8 +65,7 @@ module.exports = {
 				await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 			});
 		} catch (error) {
-			// console.log(`${error.code}: ${ip}:${port}`);
-			console.log(error);
+			console.log(`${error.code}: ${ip}:${port}`);
 			await sendMessage.newBasicMessage(interaction, 'The IP address supplied was invalid');
 			return;
 		}
