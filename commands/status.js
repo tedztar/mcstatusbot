@@ -14,12 +14,12 @@ module.exports = {
 		let serverIp;
 
 		if (interaction.options.getString('server')) {
-			serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
+			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
 		} else {
 			// Find the default server
 			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
-			let serverIp = monitoredServers[defaultServerIndex].ip;
+			serverIp = monitoredServers[defaultServerIndex].ip;
 		}
 
 		if (!serverIp) {
