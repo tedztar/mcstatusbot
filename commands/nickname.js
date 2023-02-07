@@ -61,12 +61,12 @@ module.exports = {
 		}
 
 		// Rename the server category
-		try {
-			await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
-		} catch (rateLimit) {
-			await sendMessage.newBasicMessage(interaction, 'The rate limit has been reached, please try renaming this server in a few minutes!');
-			return;
-		}
+		// try {
+		// 	await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
+		// } catch (rateLimit) {
+		// 	await sendMessage.newBasicMessage(interaction, 'The rate limit has been reached, please try renaming this server in a few minutes!');
+		// 	return;
+		// }
 
 		// Change the server nickname in the database
 		server.nickname = interaction.options.getString('nickname');
