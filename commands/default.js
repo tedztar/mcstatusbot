@@ -6,7 +6,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('default')
 		.setDescription('Set a server to be the default for all commands')
-		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(true)),
+		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
 	async execute(interaction) {
 		// Check if the member has the administrator permission
 		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
@@ -14,34 +14,52 @@ module.exports = {
 			return;
 		}
 
-        // Check if there are any servers to make the default for all commands
+		// Check if there are any servers to make the default
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		if (!monitoredServers.length) {
-			await sendMessage.newBasicMessage(interaction, 'There are no servers to make the default for all commands!');
-			return;
-		}
-		if (monitoredServers.length == 1) {
-			await sendMessage.newBasicMessage(interaction, 'You only have 1 monitored server and it is already the default for all commands!');
+			await sendMessage.newBasicMessage(interaction, 'There are no servers to make the default!');
 			return;
 		}
 
-		// Find the server to make the default for all commands
+		// List the default server if no server is specified
+		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+		if (!interaction.options.getString('server')) {
+			if (defaultServerIndex != -1) {
+				const server = monitoredServers[defaultServerIndex];
+				await sendMessage.newMessageWithTitle(interaction, server.nickname || server.ip, 'Default Server:');
+			} else {
+				await sendMessage.newBasicMessage(interaction, 'You do not have a default server set.');
+			}
+			return;
+		}
+
+		if (!interaction.options.getString('server')) {
+			await sendMessage.newBasicMessage(interaction, 'You must specify an IP address to make default');
+			return;
+		}
+		// At this point, you SHOULD have setString('server'):
+
+		// Find the server to make the default
 		let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
-		serverIndex == -1 ? serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server')) : null;
+		serverIndex == -1 ? (serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server'))) : null;
 		let server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
 
 		// Check if the server is being monitored
 		if (!server) {
-			await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!')
+			await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!');
 			return;
 		}
 
-		// Change the default server for all commands
-		for (const server of monitoredServers) {
-			server.default = false;
+		//Check if the server is already the default server
+		if (server.default) {
+			await sendMessage.newBasicMessage(interaction, 'The server you have specified is already the default server!');
+			return;
 		}
-        server.default = true;
-        await serverDB.set(interaction.guildId, monitoredServers);
+
+		// Change the default server
+		if (defaultServerIndex != -1) monitoredServers[defaultServerIndex].default = false;
+		server.default = true;
+		await serverDB.set(interaction.guildId, monitoredServers);
 
 		await sendMessage.newBasicMessage(interaction, 'The server has successfully been made the default for all commands.');
 	}

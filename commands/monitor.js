@@ -23,6 +23,12 @@ module.exports = {
 			return;
 		}
 
+		// Check if the nickname of IP is a reserved keyword
+		if (reservedNames.includes(interaction.options.getString('ip')) || reservedNames.includes(interaction.options.getString('nickname'))) {
+			await sendMessage.newBasicMessage(interaction, 'You tried to give a server a restricted name. Please try a different name');
+			return;
+		}
+
 		// Check if the server is already being monitored
 		let monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		let serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('ip'));
@@ -38,10 +44,13 @@ module.exports = {
 			return;
 		}
 
-		// Set the default server to the new server if specified
+		// Unset the default server if the new server is to be the default for all commands
 		if (interaction.options.getBoolean('default') && monitoredServers.length) {
-			for (const server of monitoredServers) {
-				server.default = false;
+			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+
+			if (defaultServerIndex != -1) {
+				let oldDefaultServer = monitoredServers[defaultServerIndex];
+				oldDefaultServer.default = false;
 			}
 		}
 
@@ -51,7 +60,6 @@ module.exports = {
 			nickname: interaction.options.getString('nickname') || null,
 			default: interaction.options.getBoolean('default') || false
 		};
-		!monitoredServers.length ? newServer.default = true : null;
 
 		// Create the server category
 		await interaction.guild.channels
@@ -99,6 +107,9 @@ module.exports = {
 
 		await updateChannels.execute(newServer);
 
-		await sendMessage.newBasicMessage(interaction, 'The channels have successfully been created.');
+		await sendMessage.newBasicMessage(
+			interaction,
+			`The channels have successfully been created. ${interaction.options.getBoolean('default') ? 'This server was also set as the default server.' : ''}`
+		);
 	}
 };

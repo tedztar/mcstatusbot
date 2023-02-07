@@ -4,8 +4,13 @@ const express = require('express');
 const fs = require('fs');
 const Keyv = require('keyv');
 
-client = new Client({ intents: [GatewayIntentBits.Guilds] });
+client = new Client({
+	intents: [GatewayIntentBits.Guilds],
+	rest: { rejectOnRateLimit: ['/channels'] }
+});
 embedColor = '#7289DA';
+
+reservedNames = ['all'];
 
 // Server
 express().listen(process.env.PORT || 5000);

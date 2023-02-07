@@ -31,7 +31,13 @@ module.exports = {
 		// Unmonitor all servers if specified
 		if (interaction.options.getString('server') == 'all') {
 			for (const server of monitoredServers) {
-				await removeServer.execute(interaction.guild, server);
+				try {
+					await removeServer.execute(interaction.guild, server);
+				} catch (error) {
+					console.log(`${error.code} occured while deleting server channels`);
+					await sendMessage.newBasicMessage(interaction, 'There was an error deleting the channels. You might have to delete them manually.');
+					return;
+				}
 			}
 			await sendMessage.newBasicMessage(interaction, 'The channels have been removed successfully.');
 			return;
@@ -47,7 +53,7 @@ module.exports = {
 		} else {
 			// Find the default server
 			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
-			server = monitoredServers[defaultServerIndex];
+			serverIp = defaultServerIndex == -1 ? null : monitoredServers[defaultServerIndex].ip;
 		}
 
 		// Check if the server is being monitored
@@ -56,8 +62,23 @@ module.exports = {
 			return;
 		}
 
+		// Check if the server being unmonitored is the default server for all commands
+		if (server.default && monitoredServers.length > 1) {
+			await sendMessage.newBasicMessage(
+				interaction,
+				'You have more than one server monitored, and the server you are trying to unmonitor is the default server. Please set a new default first!'
+			);
+			return;
+		}
+
 		// Unmonitor the server
-		await removeServer.execute(interaction.guild, server);
+		try {
+			await removeServer.execute(interaction.guild, server);
+		} catch (error) {
+			console.log(`${error.code} occured while deleting server channels`);
+			await sendMessage.newBasicMessage(interaction, 'There was an error deleting the channels. You might have to delete them manually.');
+			return;
+		}
 
 		await sendMessage.newBasicMessage(interaction, 'The channels have been removed successfully.');
 	}

@@ -28,6 +28,12 @@ module.exports = {
 			return;
 		}
 
+		// Check if the nickname of IP is a reserved keyword
+		if (reservedNames.includes(interaction.options.getString('nickname'))) {
+			await sendMessage.newBasicMessage(interaction, 'You tried to give a server a restricted name. Please try a different name');
+			return;
+		}
+
 		// Check if the nickname is already being used
 		nicknameIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('nickname'));
 		if (interaction.options.getString('nickname') && nicknameIndex != -1) {
@@ -45,7 +51,7 @@ module.exports = {
 		} else {
 			// Find the default server
 			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
-			server = monitoredServers[defaultServerIndex];
+			serverIp = defaultServerIndex == -1 ? null : monitoredServers[defaultServerIndex].ip;
 		}
 
 		// Check if the server is being monitored
@@ -54,12 +60,17 @@ module.exports = {
 			return;
 		}
 
-		// Rename the server
+		// Rename the server category
+		try {
+			await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
+		} catch (rateLimit) {
+			await sendMessage.newBasicMessage(interaction, 'The rate limit has been reached, please try renaming this server in a few minutes!');
+			return;
+		}
+
+		// Change the server nickname in the database
 		server.nickname = interaction.options.getString('nickname');
 		await serverDB.set(interaction.guildId, monitoredServers);
-
-		// Rename the server category
-		await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
 
 		await sendMessage.newBasicMessage(interaction, 'The server has successfully been renamed.');
 	}
