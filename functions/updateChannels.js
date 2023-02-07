@@ -4,7 +4,7 @@ module.exports = {
 	async execute(server) {
 		const [ip, port] = server.ip.split(':');
 
-		const mcserver = new mcping.MinecraftServer(ip, port || 25565);
+		const mcserver = new mcping.MinecraftServer(ip, parseInt(port) || 25565);
 		const statusChannel = await client.channels.cache.get(server.statusId);
 		const playersChannel = await client.channels.cache.get(server.playersId);
 
