@@ -15,7 +15,7 @@ module.exports = {
 		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
 		let serverIp = monitoredServers[defaultServerIndex].ip;
 
-		if(interaction.options.getString('server')) {
+		if (interaction.options.getString('server')) {
 			serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
 		}
@@ -25,7 +25,7 @@ module.exports = {
 		}
 
 		[ip, port] = serverIp.split(':');
-		const server = new mcping.MinecraftServer(ip, port ?? 25565);
+		const server = new mcping.MinecraftServer(ip, port || 25565);
 
 		try {
 			server.ping(2500, 47, async function (err, res) {
