@@ -24,7 +24,7 @@ module.exports = {
 		}
 
 		if (!serverIp) {
-			await sendMessage.newBasicMessage(interaction, 'You must monitor a server or specify an IP address!');
+			await sendMessage.newBasicMessage(interaction, 'You must set a default server or specify an IP address!');
 			return;
 		}
 

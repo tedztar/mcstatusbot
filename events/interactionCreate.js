@@ -14,8 +14,8 @@ module.exports = {
 				try {
 					await command.execute(interaction);
 				} catch (error) {
-					// console.log(`${error.code} occured while executing command`);
-					console.log(error);
+					console.log(`${error.code} occured while executing command`);
+
 					await interaction.editReply({
 						content: 'There was an error while executing this command!',
 						ephemeral: true
