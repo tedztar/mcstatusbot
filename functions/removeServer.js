@@ -9,7 +9,7 @@ module.exports = {
 			];
 			channels.forEach((channel) => channel.delete());
 		} catch (error) {
-			console.log('Error deleting channel');
+			console.log(error);
 		}
 
 		// Remove server from database

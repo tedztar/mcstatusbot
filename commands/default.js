@@ -17,11 +17,11 @@ module.exports = {
         // Check if there are any servers to make the default for all commands
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		if (!monitoredServers.length) {
-			await sendMessage.newBasicMessage(interaction, 'There are no servers to make the default for all commands!');
+			await sendMessage.newBasicMessage(interaction, 'There are no servers to make the default!');
 			return;
 		}
 		if (monitoredServers.length == 1) {
-			await sendMessage.newBasicMessage(interaction, 'You only have 1 monitored server and it is already the default for all commands!');
+			await sendMessage.newBasicMessage(interaction, 'You only have 1 monitored server and it is already the default!');
 			return;
 		}
 
@@ -36,12 +36,24 @@ module.exports = {
 			return;
 		}
 
-		// Change the default server for all commands
-		for (const server of monitoredServers) {
-			server.default = false;
+		//Check if the server is already the default server for all commands
+		if (server.default) {
+			await sendMessage.newBasicMessage(interaction, 'The server you have specified is already the default server!')
+			return;
 		}
+
+		// Change the default server for all commands
+		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default) || 0;
+		let oldDefaultServer = monitoredServers[defaultServerIndex];
+		oldDefaultServer.default = false;
         server.default = true;
         await serverDB.set(interaction.guildId, monitoredServers);
+
+		// Add a * to the category name to indicate the default server
+		let oldDefaultCategory = await interaction.guild.channels.cache.get(oldDefaultServer.categoryId);
+		await oldDefaultCategory.setName(oldDefaultCategory.name.slice(0,-1));
+		let newDefaultCategory = await interaction.guild.channels.cache.get(server.categoryId);
+		await newDefaultCategory.setName(newDefaultCategory.name + '*');
 
 		await sendMessage.newBasicMessage(interaction, 'The server has successfully been made the default for all commands.');
 	}

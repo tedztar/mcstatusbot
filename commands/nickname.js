@@ -36,7 +36,7 @@ module.exports = {
 		}
 
 		// Find the default server
-		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default) || 0;
 		let server = monitoredServers[defaultServerIndex];
 
 		// Find the server to rename

@@ -38,7 +38,7 @@ module.exports = {
 		}
 
 		// Find the default server
-		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default) || 0;
 		let server = monitoredServers[defaultServerIndex];
 
 		// Find the server to unmonitor
@@ -51,6 +51,12 @@ module.exports = {
 		// Check if the server is being monitored
 		if (!server) {
 			await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!')
+			return;
+		}
+
+		// Check if the server being unmonitored is the default server for all commands
+		if (server.default && monitoredServers.length > 1) {
+			await sendMessage.newBasicMessage(interaction, 'You have more than one server monitored, and the server you are trying to unmonitor is the default server. Please set a new default!');
 			return;
 		}
 		

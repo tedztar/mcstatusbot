@@ -12,8 +12,8 @@ module.exports = {
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 
 		// Find the default server
-		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
-		let serverIp = monitoredServers[defaultServerIndex].ip;
+		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default) || 0;
+		let serverIp = monitoredServers[defaultServerIndex].ip || null;
 
 		if(interaction.options.getString('server')) {
 			serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
