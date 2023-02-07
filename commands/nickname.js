@@ -28,6 +28,12 @@ module.exports = {
 			return;
 		}
 
+		// Check if the nickname of IP is a reserved keyword
+		if (reservedNames.includes(interaction.options.getString('nickname'))) {
+			await sendMessage.newBasicMessage(interaction, 'You tried to give a server a restricted name. Please try a different name');
+			return;
+		}
+
 		// Check if the nickname is already being used
 		nicknameIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('nickname'));
 		if (interaction.options.getString('nickname') && nicknameIndex != -1) {
