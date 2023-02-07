@@ -1,10 +1,13 @@
 const mcping = require('mcping-js');
+const unidecode = require('unidecode');
 
 module.exports = {
 	async execute(server) {
 		const [ip, port] = server.ip.split(':');
+		ip = unidecode(ip);
+		port = parseInt(port || 25565);
 
-		const mcserver = new mcping.MinecraftServer(ip, parseInt(port) || 25565);
+		const mcserver = new mcping.MinecraftServer(ip, port);
 		const statusChannel = await client.channels.cache.get(server.statusId);
 		const playersChannel = await client.channels.cache.get(server.playersId);
 
