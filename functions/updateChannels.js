@@ -8,12 +8,7 @@ module.exports = {
 
 		try {
 			mcserver.ping(2500, 47, async (err, res) => {
-				// another try catch here as setOffline/Online may sometimes fail
-				try {
-					err ? await setOffline(statusChannel, playersChannel) : await setOnline(statusChannel, playersChannel, res);
-				} catch (error) {
-					console.log(`${error.code}: encountered while updating ${statusChannel}, ${playersChannel}`);
-				}
+				err ? await setOffline(statusChannel, playersChannel) : await setOnline(statusChannel, playersChannel, res);
 			});
 		} catch (error) {
 			console.log(`${error.code}: encountered while updating ${statusChannel}, ${playersChannel}`);
@@ -22,21 +17,29 @@ module.exports = {
 };
 
 async function setOffline(statusChannel, playersChannel) {
-	if (statusChannel) await statusChannel.setName('Status: Offline');
-	if (playersChannel) {
-		await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
-			ViewChannel: false
-		});
-		await playersChannel.setName('Players: 0');
+	try {
+		if (statusChannel) await statusChannel.setName('Status: Offline');
+		if (playersChannel) {
+			await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
+				ViewChannel: false
+			});
+			await playersChannel.setName('Players: 0');
+		}
+	} catch (error) {
+		console.log(`${error.code}: encountered while setting ${statusChannel}, ${playersChannel} as offline`);
 	}
 }
 
 async function setOnline(statusChannel, playersChannel, res) {
-	if (statusChannel) await statusChannel.setName('Status: Online');
-	if (playersChannel) {
-		await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
-			ViewChannel: true
-		});
-		await playersChannel.setName(`Players: ${res.players?.online ?? 0} / ${res.players?.max ?? 'undefined'}`);
+	try {
+		if (statusChannel) await statusChannel.setName('Status: Online');
+		if (playersChannel) {
+			await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
+				ViewChannel: true
+			});
+			await playersChannel.setName(`Players: ${res.players?.online ?? 0} / ${res.players?.max ?? 'undefined'}`);
+		}
+	} catch (error) {
+		console.log(`${error.code}: encountered while setting ${statusChannel}, ${playersChannel} as online`);
 	}
 }
