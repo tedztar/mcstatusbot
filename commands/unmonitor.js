@@ -37,23 +37,25 @@ module.exports = {
 			return;
 		}
 
-		// Find the default server
-		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
-		let server = monitoredServers[defaultServerIndex];
+		let server;
 
 		// Find the server to unmonitor
 		if (interaction.options.getString('server')) {
 			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
-			serverIndex == -1 ? serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server')) : null;
+			serverIndex == -1 ? (serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server'))) : null;
 			server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
+		} else {
+			// Find the default server
+			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+			server = monitoredServers[defaultServerIndex];
 		}
 
 		// Check if the server is being monitored
 		if (!server) {
-			await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!')
+			await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!');
 			return;
 		}
-		
+
 		// Unmonitor the server
 		await removeServer.execute(interaction.guild, server);
 
