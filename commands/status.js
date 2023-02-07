@@ -2,6 +2,7 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const mcping = require('mcping-js');
 const Discord = require('discord.js');
 const sendMessage = require('../functions/sendMessage');
+const unidecode = require('unidecode');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -27,8 +28,11 @@ module.exports = {
 			return;
 		}
 
-		[ip, port] = serverIp.split(':');
-		const server = new mcping.MinecraftServer(ip, parseInt(port) || 25565);
+		let [ip, port] = serverIp.split(':');
+		ip = unidecode(ip);
+		port = parseInt(port || 25565);
+
+		const server = new mcping.MinecraftServer(ip, port);
 
 		try {
 			server.ping(2500, 47, async function (err, res) {
@@ -61,7 +65,8 @@ module.exports = {
 				await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 			});
 		} catch (error) {
-			console.log(`${error.code}: ${ip}:${port}`);
+			// console.log(`${error.code}: ${ip}:${port}`);
+			console.log(error);
 			await sendMessage.newBasicMessage(interaction, 'The IP address supplied was invalid');
 			return;
 		}

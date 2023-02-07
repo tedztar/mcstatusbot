@@ -18,7 +18,8 @@
     "github-create-issue": "^2.0.0",
     "keyv": "^4.0.4",
     "mcping-js": "^1.5.0",
-    "pg": "^8.7.1"
+    "pg": "^8.7.1",
+    "unidecode": "^0.1.8"
   },
   "repository": {
     "type": "git",
