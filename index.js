@@ -5,8 +5,8 @@ const fs = require('fs');
 const Keyv = require('keyv');
 
 client = new Client({
-	intents: [GatewayIntentBits.Guilds],
-	rest: { rejectOnRateLimit: ['/channels'] }
+	intents: [GatewayIntentBits.Guilds]
+	// rest: { rejectOnRateLimit: ['/channels'] }
 });
 embedColor = '#7289DA';
 
