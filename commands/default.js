@@ -6,7 +6,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('default')
 		.setDescription('Set a server to be the default for all commands')
-		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(true)),
+		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
 	async execute(interaction) {
 		// Check if the member has the administrator permission
 		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
@@ -14,7 +14,7 @@ module.exports = {
 			return;
 		}
 
-        // Check if there are any servers to make the default for all commands
+        // Check if there are any servers to make the default
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		if (!monitoredServers.length) {
 			await sendMessage.newBasicMessage(interaction, 'There are no servers to make the default!');
@@ -25,7 +25,15 @@ module.exports = {
 			return;
 		}
 
-		// Find the server to make the default for all commands
+		// List the default server if no server is specified
+		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default) || 0;
+		let oldDefaultServer = monitoredServers[defaultServerIndex];
+		if(!interaction.options.getString('server')) {
+			await sendMessage.newMessageWithTitle(interaction, oldDefaultServer.nickname || oldDefaultServer.ip, 'Default Server:');
+			return;
+		}
+
+		// Find the server to make the default
 		let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 		serverIndex == -1 ? serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server')) : null;
 		let server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
@@ -36,24 +44,16 @@ module.exports = {
 			return;
 		}
 
-		//Check if the server is already the default server for all commands
+		//Check if the server is already the default server
 		if (server.default) {
 			await sendMessage.newBasicMessage(interaction, 'The server you have specified is already the default server!')
 			return;
 		}
 
-		// Change the default server for all commands
-		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default) || 0;
-		let oldDefaultServer = monitoredServers[defaultServerIndex];
+		// Change the default server
 		oldDefaultServer.default = false;
-        server.default = true;
+		server.default = true;
         await serverDB.set(interaction.guildId, monitoredServers);
-
-		// Add a * to the category name to indicate the default server
-		let oldDefaultCategory = await interaction.guild.channels.cache.get(oldDefaultServer.categoryId);
-		await oldDefaultCategory.setName(oldDefaultCategory.name.slice(0,-1));
-		let newDefaultCategory = await interaction.guild.channels.cache.get(server.categoryId);
-		await newDefaultCategory.setName(newDefaultCategory.name + '*');
 
 		await sendMessage.newBasicMessage(interaction, 'The server has successfully been made the default for all commands.');
 	}

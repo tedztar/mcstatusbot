@@ -73,7 +73,6 @@ module.exports = {
 			})
 			.then((channel) => {
 				newServer.categoryId = channel.id;
-				newServer.default ? channel.setName(channel.name + '*') : null;
 			});
 
 		// Create the channels and add to category
