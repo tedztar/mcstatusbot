@@ -12,7 +12,7 @@ module.exports = {
 		const playersChannel = await client.channels.cache.get(server.playersId);
 
 		try {
-			mcserver.ping(2500, 47, async (err, res) => {
+			mcserver.ping(30000, 47, async (err, res) => {
 				console.log(err ? `${err} while updating ${server.ip}` : '');
 				err ? await setOffline(statusChannel, playersChannel) : await setOnline(statusChannel, playersChannel, res);
 			});

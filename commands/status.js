@@ -35,7 +35,7 @@ module.exports = {
 		const server = new mcping.MinecraftServer(ip, port);
 
 		try {
-			server.ping(2500, 47, async function (err, res) {
+			server.ping(30000, 47, async function (err, res) {
 				if (err) {
 					await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${serverIp}:`);
 					return;
