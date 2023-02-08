@@ -23,9 +23,9 @@ module.exports = {
 			return;
 		}
 
-		// Check if the nickname of IP is a reserved keyword
+		// Check if the nickname or IP is a reserved keyword
 		if (reservedNames.includes(interaction.options.getString('ip')) || reservedNames.includes(interaction.options.getString('nickname'))) {
-			await sendMessage.newBasicMessage(interaction, 'You tried to give a server a restricted name. Please try a different name');
+			await sendMessage.newBasicMessage(interaction, 'You tried to give the server a restricted name, please try a different name!');
 			return;
 		}
 
@@ -49,8 +49,7 @@ module.exports = {
 			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
 
 			if (defaultServerIndex != -1) {
-				let oldDefaultServer = monitoredServers[defaultServerIndex];
-				oldDefaultServer.default = false;
+				monitoredServers[defaultServerIndex].default = false;
 			}
 		}
 
@@ -58,7 +57,7 @@ module.exports = {
 		let newServer = {
 			ip: interaction.options.getString('ip'),
 			nickname: interaction.options.getString('nickname') || null,
-			default: interaction.options.getBoolean('default') || false
+			default: !monitoredServers.length ? true : interaction.options.getBoolean('default') || false
 		};
 
 		// Create the server category

@@ -18,7 +18,7 @@ module.exports = {
 				value: 'Change the nickname of a monitored Minecraft server'
 			},
 			{
-				name: '/default server',
+				name: '/default [server]',
 				value: 'Set a server to be the default for all commands'
 			},
 			{
