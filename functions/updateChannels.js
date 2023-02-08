@@ -13,11 +13,11 @@ module.exports = {
 
 		try {
 			mcserver.ping(30000, 47, async (err, res) => {
-				// console.log(err ? `${err} while updating ${server.ip}` : '');
 				err ? await setOffline(statusChannel, playersChannel) : await setOnline(statusChannel, playersChannel, res);
 			});
 		} catch (error) {
-			console.log(`${error.code}: encountered while updating server ${ip}:${port}`);
+			console.log(error);
+			console.log(`Error: could not ping server ${ip}:${port}`);
 		}
 	}
 };
@@ -25,17 +25,30 @@ module.exports = {
 async function setOffline(statusChannel, playersChannel) {
 	try {
 		if (statusChannel) await statusChannel.setName('Status: Offline');
-		if (playersChannel) await playersChannel.setName('Players: 0');
+		if (playersChannel) {
+				await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
+					ViewChannel: false
+				});
+				await playersChannel.setName('Players: 0');
+		}
 	} catch (error) {
-		console.log(`${error.code}: encountered while setting ${statusChannel}, ${playersChannel} as offline`);
+		console.log(error);
+		console.log(`Error: possibly reached rate limit while setting ${statusChannel}, ${playersChannel} as offline`);
 	}
 }
 
+// ****Check channel name variables
 async function setOnline(statusChannel, playersChannel, res) {
 	try {
 		if (statusChannel) await statusChannel.setName('Status: Online');
-		if (playersChannel) await playersChannel.setName(`Players: ${res.players?.online ?? 0} / ${res.players?.max ?? 'undefined'}`);
+		if (playersChannel) {
+			await playersChannel.permissionOverwrites.edit(playersChannel.guild.roles.everyone, {
+				ViewChannel: true
+			});
+			await playersChannel.setName(`Players: ${res.players?.online ?? 0} / ${res.players?.max ?? 'undefined'}`);
+		}
 	} catch (error) {
-		console.log(`${error.code}: encountered while setting ${statusChannel}, ${playersChannel} as online`);
+		console.log(error);
+		console.log(`Error: possibly reached rate limit while setting ${statusChannel}, ${playersChannel} as online`);
 	}
 }

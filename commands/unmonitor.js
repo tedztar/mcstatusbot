@@ -34,8 +34,9 @@ module.exports = {
 				try {
 					await removeServer.execute(interaction.guild, server);
 				} catch (error) {
-					console.log(`${error.code} occured while deleting server channels`);
-					await sendMessage.newBasicMessage(interaction, 'There was an error deleting the channels. You might have to delete them manually.');
+					console.log(error);
+					console.log('Error: could not delete server channels');
+					await sendMessage.newBasicMessage(interaction, 'There was an error while deleting the channels. You might have to delete them manually.');
 					return;
 				}
 			}
@@ -50,16 +51,18 @@ module.exports = {
 			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIndex == -1 ? (serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server'))) : null;
 			server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
-		} else {
-			// Find the default server
-			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
-			serverIp = defaultServerIndex == -1 ? null : monitoredServers[defaultServerIndex].ip;
-		}
 
-		// Check if the server is being monitored
-		if (!server) {
-			await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!');
-			return;
+			// Check if the server is being monitored
+			if (!server) {
+				await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!');
+				return;
+			}
+		}
+		
+		// Find the default server if no server was specified
+		else {
+			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+			server = defaultServerIndex != -1 ? monitoredServers[defaultServerIndex] : monitoredServers[0];
 		}
 
 		// Check if the server being unmonitored is the default server for all commands
@@ -75,8 +78,9 @@ module.exports = {
 		try {
 			await removeServer.execute(interaction.guild, server);
 		} catch (error) {
-			console.log(`${error.code} occured while deleting server channels`);
-			await sendMessage.newBasicMessage(interaction, 'There was an error deleting the channels. You might have to delete them manually.');
+			console.log(error);
+			console.log('Error: could not delete server channels');
+			await sendMessage.newBasicMessage(interaction, 'There was an error while deleting the channels. You might have to delete them manually.');
 			return;
 		}
 

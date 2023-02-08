@@ -23,26 +23,18 @@ module.exports = {
 
 		// List the default server if no server is specified
 		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+		let oldDefaultServer = defaultServerIndex != -1? monitoredServers[defaultServerIndex] : monitoredServers[0];
 		if (!interaction.options.getString('server')) {
-			if (defaultServerIndex != -1) {
-				const server = monitoredServers[defaultServerIndex];
-				await sendMessage.newMessageWithTitle(interaction, server.nickname || server.ip, 'Default Server:');
-			} else {
-				await sendMessage.newBasicMessage(interaction, 'You do not have a default server set.');
-			}
+			await sendMessage.newMessageWithTitle(interaction, server.nickname || server.ip, 'Default Server:');
 			return;
 		}
 
-		if (!interaction.options.getString('server')) {
-			await sendMessage.newBasicMessage(interaction, 'You must specify an IP address to make default');
-			return;
-		}
-		// At this point, you SHOULD have setString('server'):
+		let server;
 
 		// Find the server to make the default
 		let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 		serverIndex == -1 ? (serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server'))) : null;
-		let server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
+		server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
 
 		// Check if the server is being monitored
 		if (!server) {
@@ -57,7 +49,7 @@ module.exports = {
 		}
 
 		// Change the default server
-		if (defaultServerIndex != -1) monitoredServers[defaultServerIndex].default = false;
+		oldDefaultServer.default = false;
 		server.default = true;
 		await serverDB.set(interaction.guildId, monitoredServers);
 

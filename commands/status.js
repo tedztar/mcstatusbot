@@ -14,18 +14,22 @@ module.exports = {
 
 		let serverIp;
 
+		// Find the server to retrieve the status
 		if (interaction.options.getString('server')) {
 			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
-		} else {
-			// Find the default server
-			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
-			serverIp = defaultServerIndex == -1 ? null : monitoredServers[defaultServerIndex].ip;
-		}
+		} 
+		
+		else {
+			// Check if there is a default server to retrieve the status
+			if (!monitoredServers.length) {
+				await sendMessage.newBasicMessage(interaction, 'You must monitor a server or specify an IP address!');
+				return;
+			}
 
-		if (!serverIp) {
-			await sendMessage.newBasicMessage(interaction, 'You must set a default server or specify an IP address!');
-			return;
+			// Find the default server if no server was specified
+			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+			serverIp = defaultServerIndex != -1 ? monitoredServers[defaultServerIndex].ip : monitoredServers[0].ip;
 		}
 
 		let [ip, port] = serverIp.split(':');
