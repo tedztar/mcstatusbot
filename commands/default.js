@@ -23,7 +23,7 @@ module.exports = {
 
 		// List the default server if no server is specified
 		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
-		let oldDefaultServer = defaultServerIndex != -1? monitoredServers[defaultServerIndex] : monitoredServers[0];
+		let oldDefaultServer = defaultServerIndex != -1 ? monitoredServers[defaultServerIndex] : monitoredServers[0];
 		if (!interaction.options.getString('server')) {
 			await sendMessage.newMessageWithTitle(interaction, oldDefaultServer.nickname || oldDefaultServer.ip, 'Default Server:');
 			return;

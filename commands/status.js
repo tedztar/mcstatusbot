@@ -18,9 +18,7 @@ module.exports = {
 		if (interaction.options.getString('server')) {
 			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIp = serverIndex == -1 ? interaction.options.getString('server') : monitoredServers[serverIndex].ip;
-		} 
-		
-		else {
+		} else {
 			// Check if there is a default server to retrieve the status
 			if (!monitoredServers.length) {
 				await sendMessage.newBasicMessage(interaction, 'You must monitor a server or specify an IP address!');

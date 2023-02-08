@@ -24,11 +24,7 @@ module.exports = {
 			})
 			.catch(async (error) => {
 				console.log(error);
-
-				await interaction.reply({
-					content: 'There was an error while executing this command!',
-					ephemeral: true
-				});
+				console.log('Could not defer reply!');
 			});
 	}
 };
