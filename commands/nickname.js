@@ -30,7 +30,7 @@ module.exports = {
 
 		// Check if the nickname of IP is a reserved keyword
 		if (reservedNames.includes(interaction.options.getString('nickname'))) {
-			await sendMessage.newBasicMessage(interaction, 'You tried to give a server a restricted name. Please try a different name');
+			await sendMessage.newBasicMessage(interaction, 'You tried to give the server a restricted name, please try a different name!');
 			return;
 		}
 
@@ -48,25 +48,27 @@ module.exports = {
 			let serverIndex = await monitoredServers.findIndex((server) => server.nickname == interaction.options.getString('server'));
 			serverIndex == -1 ? (serverIndex = await monitoredServers.findIndex((server) => server.ip == interaction.options.getString('server'))) : null;
 			server = serverIndex != -1 ? monitoredServers[serverIndex] : null;
-		} else {
-			// Find the default server
-			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
-			serverIp = defaultServerIndex == -1 ? null : monitoredServers[defaultServerIndex].ip;
+
+			// Check if the server is being monitored
+			if (!server) {
+				await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!');
+				return;
+			}
 		}
 
-		// Check if the server is being monitored
-		if (!server) {
-			await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!');
-			return;
+		// Find the default server if no server was specified
+		else {
+			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
+			server = defaultServerIndex != -1 ? monitoredServers[defaultServerIndex] : monitoredServers[0];
 		}
 
 		// Rename the server category
-		// try {
-		// 	await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
-		// } catch (rateLimit) {
-		// 	await sendMessage.newBasicMessage(interaction, 'The rate limit has been reached, please try renaming this server in a few minutes!');
-		// 	return;
-		// }
+		try {
+			await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
+		} catch (rateLimit) {
+			await sendMessage.newBasicMessage(interaction, 'The rate limit has been reached, please try renaming this server in a few minutes!');
+			return;
+		}
 
 		// Change the server nickname in the database
 		server.nickname = interaction.options.getString('nickname');

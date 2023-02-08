@@ -8,13 +8,13 @@ module.exports = {
 
 		if (!command) return;
 
-		interaction
+		await interaction
 			.deferReply({ ephemeral: true })
 			.then(async () => {
 				try {
 					await command.execute(interaction);
 				} catch (error) {
-					console.log(`${error.code} occured while executing command`);
+					console.log(error);
 
 					await interaction.editReply({
 						content: 'There was an error while executing this command!',
@@ -22,6 +22,13 @@ module.exports = {
 					});
 				}
 			})
-			.catch((error) => console.log(error));
+			.catch(async (error) => {
+				console.log(error);
+
+				await interaction.reply({
+					content: 'There was an error while executing this command!',
+					ephemeral: true
+				});
+			});
 	}
 };
