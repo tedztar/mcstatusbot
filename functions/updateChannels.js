@@ -13,7 +13,7 @@ module.exports = {
 
 		try {
 			mcserver.ping(30000, 47, async (err, res) => {
-				console.log(err ? `${err} while updating ${server.ip}` : '');
+				// console.log(err ? `${err} while updating ${server.ip}` : '');
 				err ? await setOffline(statusChannel, playersChannel) : await setOnline(statusChannel, playersChannel, res);
 			});
 		} catch (error) {
