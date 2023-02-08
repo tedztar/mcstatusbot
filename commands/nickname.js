@@ -30,7 +30,7 @@ module.exports = {
 
 		// Check if the nickname of IP is a reserved keyword
 		if (reservedNames.includes(interaction.options.getString('nickname'))) {
-			await sendMessage.newBasicMessage(interaction, 'You tried to give a server a restricted name, please try a different name!');
+			await sendMessage.newBasicMessage(interaction, 'You tried to give the server a restricted name, please try a different name!');
 			return;
 		}
 
