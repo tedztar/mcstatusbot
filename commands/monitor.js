@@ -78,6 +78,12 @@ module.exports = {
 			})
 			.then((channel) => {
 				newServer.categoryId = channel.id;
+			})
+			.catch(async (error) => {
+				console.log('error while creating category');
+
+				await sendMessage.newBasicMessage(interaction, "There was an error creating channels. Please check the bot's permissions and try again");
+				throw new Error(error); // push the error up the stack
 			});
 
 		// Create the channels and add to category
@@ -89,6 +95,12 @@ module.exports = {
 			.then(async function (channel) {
 				await channel.setParent(newServer.categoryId);
 				newServer.statusId = channel.id;
+			})
+			.catch(async (error) => {
+				console.log('error while creating status channel');
+
+				await sendMessage.newBasicMessage(interaction, "There was an error creating channels. Please check the bot's permissions and try again");
+				throw new Error(error);
 			});
 
 		await interaction.guild.channels
@@ -99,6 +111,12 @@ module.exports = {
 			.then(async function (channel) {
 				await channel.setParent(newServer.categoryId);
 				newServer.playersId = channel.id;
+			})
+			.catch(async (error) => {
+				console.log('error while creating players channel');
+
+				await sendMessage.newBasicMessage(interaction, "There was an error creating channels. Please check the bot's permissions and try again");
+				throw new Error(error);
 			});
 
 		await monitoredServers.push(newServer);
