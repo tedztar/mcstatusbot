@@ -23,9 +23,10 @@ module.exports = {
 
 		// List the default server if no server is specified
 		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
-		let oldDefaultServer = defaultServerIndex != -1? monitoredServers[defaultServerIndex] : monitoredServers[0];
+		let oldDefaultServer = defaultServerIndex != -1 ? monitoredServers[defaultServerIndex] : monitoredServers[0];
 		if (!interaction.options.getString('server')) {
-			await sendMessage.newMessageWithTitle(interaction, oldDefaultServer.nickname || oldDefaultServer.ip, 'Default Server:');
+			await sendMessage.newMessageWithTitle(interaction, 'Default Server:', oldDefaultServer.nickname || oldDefaultServer.ip);
+            console.log(`${oldDefaultServer.ip} was listed as the default for guild ${interaction.guildId}`);
 			return;
 		}
 
@@ -52,6 +53,8 @@ module.exports = {
 		oldDefaultServer.default = false;
 		server.default = true;
 		await serverDB.set(interaction.guildId, monitoredServers);
+
+        console.log(`${server.ip} was set as the default for guild ${interaction.guildId}`);
 
 		await sendMessage.newBasicMessage(interaction, 'The server has successfully been made the default for all commands.');
 	}

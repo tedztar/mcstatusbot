@@ -26,7 +26,7 @@ module.exports = {
 				value: 'Unmonitor the specified server or all servers'
 			},
 			{
-				name: '/bug description',
+				name: '/bug',
 				value: 'Send a bug report to the maintainers'
 			}
 		);

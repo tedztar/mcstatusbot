@@ -21,5 +21,5 @@ async function updateServers(client) {
 		}
 	});
 
-	console.log(`Servers updated.`);
+	console.log('Servers updated');
 }

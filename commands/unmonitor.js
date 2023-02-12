@@ -15,6 +15,11 @@ module.exports = {
 			return;
 		}
 
+        if (!interaction.guild.roles.botRoleFor(interaction.client.user).permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
+			await sendMessage.newBasicMessage(interaction, 'This bot needs the "manage roles" permission in order to rename channels!');
+			return;
+        }
+
 		// Check if there are any servers to unmonitor
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		if (!monitoredServers.length) {
@@ -34,13 +39,14 @@ module.exports = {
 				try {
 					await removeServer.execute(interaction.guild, server);
 				} catch (error) {
-					console.log(error);
-					console.log('Error: could not delete server channels');
 					await sendMessage.newBasicMessage(interaction, 'There was an error while deleting the channels. You might have to delete them manually.');
 					return;
 				}
 			}
-			await sendMessage.newBasicMessage(interaction, 'The channels have been removed successfully.');
+
+console.log(`All servers were unmonitored for guild ${interaction.guildId}`);
+            
+			await sendMessage.newBasicMessage(interaction, 'The channels have successfully been removed.');
 			return;
 		}
 
@@ -78,11 +84,11 @@ module.exports = {
 		try {
 			await removeServer.execute(interaction.guild, server);
 		} catch (error) {
-			console.log(error);
-			console.log('Error: could not delete server channels');
 			await sendMessage.newBasicMessage(interaction, 'There was an error while deleting the channels. You might have to delete them manually.');
 			return;
 		}
+
+        console.log(`${newServer.ip} was unmonitored for guild ${interaction.guildId}`);
 
 		await sendMessage.newBasicMessage(interaction, 'The channels have been removed successfully.');
 	}

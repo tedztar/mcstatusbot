@@ -65,8 +65,18 @@ module.exports = {
 		// Rename the server category
 		try {
 			await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
-		} catch (rateLimit) {
-			await sendMessage.newBasicMessage(interaction, 'The rate limit has been reached, please try renaming this server in a few minutes!');
+		} catch (error) {
+            console.log(error);
+            if (true) { // Logic to handle whether error is RateLimitError
+                console.log(`Reached the rate limit while renaming channel ${server.categoryId} in guild ${interaction.guildId}`);
+                await sendMessage.newBasicMessage(interaction, 'The rate limit for this channel has been reached, please try renaming this server in a few minutes!');
+            } else {
+                console.warn(
+                `Error renaming channel while setting nickname
+                    Channel ID: ${server.categoryId}
+                    Guild ID: ${interaction.guildId}`
+                )
+            } 
 			return;
 		}
 

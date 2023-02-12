@@ -8,13 +8,27 @@ module.exports = {
 
 		if (!command) return;
 
-		await interaction
-			.deferReply({ ephemeral: true })
+		await interaction.deferReply({ ephemeral: true })
 			.then(async () => {
 				try {
 					await command.execute(interaction);
 				} catch (error) {
-					console.log(error);
+                    let commandOptions = [];
+                    await interaction.options.data.forEach((option) => {
+                        const filteredData = ['name', 'value'];
+                        Object.keys(option)
+                        .filter(data => option.includes(data))
+                        .reduce((obj, key) => {
+                            obj[key] = option[key];
+                            commandOptions.push(obj);
+                        }, {});
+                    });
+                    console.warn(
+                        `Error executing command
+                            Guild ID: ${interaction.guildId}
+                            Command: /${interaction.commandName}
+                            Command Options: ${commandOptions}`
+                    );
 
 					await interaction.editReply({
 						content: 'There was an error while executing this command!',
@@ -23,7 +37,11 @@ module.exports = {
 				}
 			})
 			.catch(async (error) => {
-				console.log(error);
+                console.warn(
+                    `Error deferring reply to command
+                        Guild ID: ${interaction.guildId}
+                        Command: /${interaction.commandName}`
+                );
 
 				await interaction.reply({
 					content: 'There was an error while executing this command!',

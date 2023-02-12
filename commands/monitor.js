@@ -82,37 +82,55 @@ module.exports = {
 			})
 			.then((channel) => {
 				newServer.categoryId = channel.id;
-			});
+			})
+            .catch((error) => {
+                console.warn(
+                    `Error creating category channel
+                        Guild ID: ${interaction.guildId}`
+                );
 
 		// Create the channels and add to category
-		await interaction.guild.channels
+        let voiceChannels = [
+            {type: 'statusId', name:'Status: Updating...'},
+            {type: 'playersId', name: 'Players: Updating...'}
+        ];
+        voiceChannels.forEach(async (voiceChannel) => {
+            await interaction.guild.channels
 			.create({
-				name: 'Status: Updating...',
+				name: voiceChannel.name,
 				type: Discord.ChannelType.GuildVoice
 			})
-			.then(async function (channel) {
+			.then(async (channel) => {
 				await channel.setParent(newServer.categoryId);
-				newServer.statusId = channel.id;
-			});
-
-		await interaction.guild.channels
-			.create({
-				name: 'Players: Updating...',
-				type: Discord.ChannelType.GuildVoice
-			})
-			.then(async function (channel) {
-				await channel.setParent(newServer.categoryId);
-				newServer.playersId = channel.id;
-			});
+				newServer[voiceChannel.type] = channel.id;
+            })
+            .catch(async (error) => {
+                await interaction.guild.channels.cache.get(newServer.categoryId).delete()
+                .catch((error) => {
+                    console.warn(
+                        `Error deleting category channel while aborting monitor command
+                            Channel ID: ${newServer.categoryId}
+                            Guild ID: ${interaction.guildId}
+                            Server IP: ${newServer.ip}`
+                    )
+                    throw error;
+                })
+                console.warn(
+                    `Error creating voice channel
+                        Guild ID: ${interaction.guildId}`
+                );
+            };
+        }
 
 		await monitoredServers.push(newServer);
 		await serverDB.set(interaction.guildId, monitoredServers);
 
 		await updateChannels.execute(newServer);
 
-		await sendMessage.newBasicMessage(
-			interaction,
-			`The channels have successfully been created. ${interaction.options.getBoolean('default') ? 'This server was also set as the default server.' : ''}`
+        console.log(`${newServer.ip} was monitored for guild ${interaction.guildId}`);
+
+		await sendMessage.newBasicMessage(interaction,
+			`The server has successfully been monitored${interaction.options.getBoolean('default') ? ' and set as the default server.' : '.'}`
 		);
 	}
 };
