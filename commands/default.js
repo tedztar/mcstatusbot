@@ -17,7 +17,7 @@ module.exports = {
 		// Check if there are any servers to make the default
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		if (!monitoredServers.length) {
-			await sendMessage.newBasicMessage(interaction, 'There are no servers to make the default!');
+			await sendMessage.newBasicMessage(interaction, 'There are no monitored servers!');
 			return;
 		}
 
