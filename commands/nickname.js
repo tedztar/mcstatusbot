@@ -16,7 +16,7 @@ module.exports = {
 		}
 
 		// Check if the bot has the manage roles permission
-		if (!interaction.guild.roles.botRoleFor(interaction.client.user).permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
+		if (!interaction.guild.roles.botRoleFor(interaction.client.user)?.permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
 			await sendMessage.newBasicMessage(interaction, 'This bot needs the "manage roles" permission in order to rename channels!');
 			return;
 		}

@@ -18,12 +18,12 @@ module.exports = {
 		}
 
 		// Check if the bot has the manage roles permission
-		if (!interaction.guild.roles.botRoleFor(interaction.client.user).permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
+		if (!interaction.guild.roles.botRoleFor(interaction.client.user)?.permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
 			await sendMessage.newBasicMessage(interaction, 'This bot needs the "manage roles" permission in order to create channels!');
 			return;
 		}
 
-		// Check if the nickname of IP is a reserved keyword
+		// Check if the nickname or IP is a reserved keyword
 		if (reservedNames.includes(interaction.options.getString('ip')) || reservedNames.includes(interaction.options.getString('nickname'))) {
 			await sendMessage.newBasicMessage(interaction, 'You tried to give the server a restricted name, please try a different name!');
 			return;
@@ -49,8 +49,7 @@ module.exports = {
 			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
 
 			if (defaultServerIndex != -1) {
-				let oldDefaultServer = monitoredServers[defaultServerIndex];
-				oldDefaultServer.default = false;
+				monitoredServers[defaultServerIndex].default = false;
 			}
 		}
 
@@ -58,11 +57,8 @@ module.exports = {
 		let newServer = {
 			ip: interaction.options.getString('ip'),
 			nickname: interaction.options.getString('nickname') || null,
-			default: interaction.options.getBoolean('default') || false
+			default: !monitoredServers.length ? true : interaction.options.getBoolean('default') || false
 		};
-
-		// Make the server the default if it's the only one in the guild
-		!monitoredServers.length ? newServer.default = true : null;
 
 		// Create the server category
         try {

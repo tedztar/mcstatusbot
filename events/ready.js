@@ -9,7 +9,7 @@ module.exports = {
 		await client.user.setActivity('/help', { type: 'WATCHING' });
 		console.log('Ready!');
 		await updateServers(client);
-		setInterval(updateServers, 5 * 60 * 1000, client);
+		setInterval(updateServers, 6 * 60 * 1000, client);
 	}
 };
 

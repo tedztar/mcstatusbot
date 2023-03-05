@@ -62,10 +62,8 @@ module.exports = {
 				await sendMessage.newBasicMessage(interaction, 'The server you have specified was not already being monitored!');
 				return;
 			}
-		}
-		
-		// Find the default server if no server was specified
-		else {
+		} else {
+			// Find the default server if no server was specified
 			let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
 			server = defaultServerIndex != -1 ? monitoredServers[defaultServerIndex] : monitoredServers[0];
 		}
