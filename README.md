@@ -1,5 +1,5 @@
-<img src="https://badgen.net/https/achiommino.npkn.net/mcstatus-discordbot/" loading="lazy"></img>
-<a href="https://www.buymeacoffee.com/rahulrao"><img src="https://badgen.net/badge/Make/a%20donation/yellow"></img></a>
+![Discord Server Count](https://img.shields.io/endpoint?url=https%3A%2F%2Fachiommino.npkn.net%2Fmcstatus-discordbot)
+![Make A Donation](https://img.shields.io/static/v1?label=&message=Donate&color=d9b811&logo=buymeacoffee&logoColor=white&link=https://www.buymeacoffee.com/rahulrao)
 
 # Minecraft Server Status - Discord Bot
 
