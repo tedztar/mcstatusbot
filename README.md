@@ -30,7 +30,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - `/nickname nickname [server]` - Change the nickname of a monitored Minecraft server
 - `/default server` - Set a server to be the default for all commands
 - `/unmonitor [server|all]` - Unmonitor the specified server or all servers
-- `/bug description` - Send a bug report to the maintainers
+- `/bug` - Send a bug report to the maintainers
 - `/help` - List the other commands
 
 ## To-Do

@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const updateChannels = require('../functions/updateChannels');
+const renameChannels = require('../functions/renameChannels');
 const sendMessage = require('../functions/sendMessage');
 
 module.exports = {
@@ -61,8 +61,8 @@ module.exports = {
 		};
 
 		// Create the server category
-		await interaction.guild.channels
-			.create({
+        try {
+    		let category = await interaction.guild.channels.create({
 				name: interaction.options.getString('nickname') || interaction.options.getString('ip'),
 				type: Discord.ChannelType.GuildCategory,
 				permissionOverwrites: [
@@ -75,58 +75,61 @@ module.exports = {
 						deny: [Discord.PermissionsBitField.Flags.Connect]
 					}
 				]
-			})
-			.then((channel) => {
-				newServer.categoryId = channel.id;
-			})
-			.catch(async (error) => {
-				console.log('error while creating category');
-
-				await sendMessage.newBasicMessage(interaction, "There was an error creating channels. Please check the bot's permissions and try again");
-				throw new Error(error); // push the error up the stack
 			});
+			newServer.categoryId = category.id;
+        } catch (error) {
+            console.warn(
+                `Error creating category channel
+                    Guild ID: ${interaction.guildId}`
+            );
+            await sendMessage.newBasicMessage(interaction, 'There was an error while creating the channels!');
+			return;
+        }
 
 		// Create the channels and add to category
-		await interaction.guild.channels
-			.create({
-				name: 'Status: Updating...',
-				type: Discord.ChannelType.GuildVoice
-			})
-			.then(async function (channel) {
-				await channel.setParent(newServer.categoryId);
-				newServer.statusId = channel.id;
-			})
-			.catch(async (error) => {
-				console.log('error while creating status channel');
-
-				await sendMessage.newBasicMessage(interaction, "There was an error creating channels. Please check the bot's permissions and try again");
-				throw new Error(error);
-			});
-
-		await interaction.guild.channels
-			.create({
-				name: 'Players: Updating...',
-				type: Discord.ChannelType.GuildVoice
-			})
-			.then(async function (channel) {
-				await channel.setParent(newServer.categoryId);
-				newServer.playersId = channel.id;
-			})
-			.catch(async (error) => {
-				console.log('error while creating players channel');
-
-				await sendMessage.newBasicMessage(interaction, "There was an error creating channels. Please check the bot's permissions and try again");
-				throw new Error(error);
-			});
+        let voiceChannels = [
+            {type: 'statusId', name:'Status: Updating...'},
+            {type: 'playersId', name: 'Players: Updating...'}
+        ];
+        for (const voiceChannel of voiceChannels) {
+            try {
+                let channel = await interaction.guild.channels.create({
+    				name: voiceChannel.name,
+    				type: Discord.ChannelType.GuildVoice
+    			});
+                newServer[voiceChannel.type] = channel.id;
+    			await channel.setParent(newServer.categoryId);
+            } catch (error) {
+                try {
+                    for (const channelId of [categoryId, statusId, playersId]) {
+                        await interaction.guild.channels.cache.get(newServer[channelId])?.delete();
+                    }
+                } catch (error) {
+                    console.warn(
+                        `Error deleting channel while aborting monitor command
+                            Guild ID: ${interaction.guildId}
+                            Server IP: ${newServer.ip}`
+                    );
+                    throw error;
+                }
+                console.warn(
+                    `Error creating voice channel
+                        Guild ID: ${interaction.guildId}`
+                );
+                await sendMessage.newBasicMessage(interaction, 'There was an error while creating the channels!');
+                return;
+            }
+        }
 
 		await monitoredServers.push(newServer);
 		await serverDB.set(interaction.guildId, monitoredServers);
 
-		await updateChannels.execute(newServer);
+		await renameChannels.execute(newServer);
 
-		await sendMessage.newBasicMessage(
-			interaction,
-			`The channels have successfully been created. ${interaction.options.getBoolean('default') ? 'This server was also set as the default server.' : ''}`
+        console.log(`${newServer.ip} was monitored for guild ${interaction.guildId}`);
+
+		await sendMessage.newBasicMessage(interaction,
+			`The server has successfully been monitored${interaction.options.getBoolean('default') ? ' and set as the default server.' : '.'}`
 		);
 	}
 };

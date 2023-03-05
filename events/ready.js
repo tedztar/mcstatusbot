@@ -1,5 +1,5 @@
 const deployCommands = require('../functions/deployCommands');
-const updateChannels = require('../functions/updateChannels');
+const renameChannels = require('../functions/renameChannels');
 
 module.exports = {
 	name: 'ready',
@@ -17,9 +17,9 @@ async function updateServers(client) {
 	await client.guilds.cache.forEach(async (guild) => {
 		let serverList = (await serverDB.get(guild.id)) || [];
 		for (const server of serverList) {
-			await updateChannels.execute(server);
+			await renameChannels.execute(server);
 		}
 	});
 
-	console.log(`Servers updated.`);
+	console.log('Servers updated');
 }

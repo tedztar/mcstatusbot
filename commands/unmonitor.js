@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const Discord = require('discord.js');
-const removeServer = require('../functions/removeServer');
 const sendMessage = require('../functions/sendMessage');
 
 module.exports = {
@@ -14,6 +13,11 @@ module.exports = {
 			await sendMessage.newBasicMessage(interaction, 'You must have the administrator permission to use this command!');
 			return;
 		}
+
+        if (!interaction.guild.roles.botRoleFor(interaction.client.user).permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
+			await sendMessage.newBasicMessage(interaction, 'This bot needs the "manage roles" permission in order to rename channels!');
+			return;
+        }
 
 		// Check if there are any servers to unmonitor
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
@@ -32,15 +36,16 @@ module.exports = {
 		if (interaction.options.getString('server') == 'all') {
 			for (const server of monitoredServers) {
 				try {
-					await removeServer.execute(interaction.guild, server);
+					await removeServer(interaction.guild, server);
 				} catch (error) {
-					console.log(error);
-					console.log('Error: could not delete server channels');
-					await sendMessage.newBasicMessage(interaction, 'There was an error while deleting the channels. You might have to delete them manually.');
+					await sendMessage.newBasicMessage(interaction, 'There was an error while deleting the channels. You might have to delete them manually!');
 					return;
 				}
 			}
-			await sendMessage.newBasicMessage(interaction, 'The channels have been removed successfully.');
+
+            console.log(`All servers were unmonitored for guild ${interaction.guildId}`);
+            
+			await sendMessage.newBasicMessage(interaction, 'The channels have successfully been removed.');
 			return;
 		}
 
@@ -74,14 +79,42 @@ module.exports = {
 
 		// Unmonitor the server
 		try {
-			await removeServer.execute(interaction.guild, server);
+			await removeServer(interaction.guild, server);
 		} catch (error) {
-			console.log(error);
-			console.log('Error: could not delete server channels');
-			await sendMessage.newBasicMessage(interaction, 'There was an error while deleting the channels. You might have to delete them manually.');
+			await sendMessage.newBasicMessage(interaction, 'There was an error while deleting the channels. You might have to delete them manually!');
 			return;
 		}
+
+        console.log(`${server.ip} was unmonitored for guild ${interaction.guildId}`);
 
 		await sendMessage.newBasicMessage(interaction, 'The channels have been removed successfully.');
 	}
 };
+
+async function removeServer(guild, server) {
+        // Remove server from database
+		let monitoredServers = (await serverDB.get(guild.id)) || [];
+		serverIndex = await monitoredServers.indexOf(server);
+		await monitoredServers.splice(serverIndex, 1);
+		await serverDB.set(guild.id, monitoredServers);
+        
+		// Remove channels and server category
+		const channels = [
+			await guild.channels.cache.get(server.statusId),
+			await guild.channels.cache.get(server.playersId),
+			await guild.channels.cache.get(server.categoryId)
+		];
+        for (const channel of channels) {
+            try {
+                await channel.delete();
+            } catch(error) {
+                console.warn(
+                    `Error deleting channel while removing server from guild
+                        Channel ID: ${channel.id}
+                        Guild ID: ${guild.id}
+                        Server IP: ${server.ip}`
+                );
+                throw error;
+            }
+        }
+}

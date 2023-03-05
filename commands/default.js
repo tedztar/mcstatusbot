@@ -17,7 +17,7 @@ module.exports = {
 		// Check if there are any servers to make the default
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		if (!monitoredServers.length) {
-			await sendMessage.newBasicMessage(interaction, 'There are no servers to make the default!');
+			await sendMessage.newBasicMessage(interaction, 'There are no monitored servers!');
 			return;
 		}
 
@@ -25,7 +25,8 @@ module.exports = {
 		let defaultServerIndex = await monitoredServers.findIndex((server) => server.default);
 		let oldDefaultServer = defaultServerIndex != -1 ? monitoredServers[defaultServerIndex] : monitoredServers[0];
 		if (!interaction.options.getString('server')) {
-			await sendMessage.newMessageWithTitle(interaction, oldDefaultServer.nickname || oldDefaultServer.ip, 'Default Server:');
+			await sendMessage.newMessageWithTitle(interaction, 'Default Server:', oldDefaultServer.nickname || oldDefaultServer.ip);
+            console.log(`${oldDefaultServer.ip} was listed as the default for guild ${interaction.guildId}`);
 			return;
 		}
 
@@ -52,6 +53,8 @@ module.exports = {
 		oldDefaultServer.default = false;
 		server.default = true;
 		await serverDB.set(interaction.guildId, monitoredServers);
+
+        console.log(`${server.ip} was set as the default for guild ${interaction.guildId}`);
 
 		await sendMessage.newBasicMessage(interaction, 'The server has successfully been made the default for all commands.');
 	}

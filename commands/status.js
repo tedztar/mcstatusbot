@@ -34,12 +34,13 @@ module.exports = {
 		ip = unidecode(ip);
 		port = parseInt(port || 25565);
 
-		const server = new mcping.MinecraftServer(ip, port);
+		const mcserver = new mcping.MinecraftServer(ip, port);
 
 		try {
-			server.ping(30000, 47, async function (err, res) {
+			mcserver.ping(5000, 47, async function (err, res) {
 				if (err) {
-					await sendMessage.newMessageWithTitle(interaction, `*The server is offline!*`, `Status for ${serverIp}:`);
+					await sendMessage.newMessageWithTitle(interaction, `Status for ${serverIp}:`, `*The server is offline!*`);
+                    console.log(`${serverIp} was pinged with the status command by a user in guild ${interaction.guildId}`);
 					return;
 				}
 
@@ -65,10 +66,16 @@ module.exports = {
 					.setThumbnail(`https://api.mcsrvstat.us/icon/${ip}:${port}`);
 
 				await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
+
+                console.log(`${serverIp} was pinged with the status command by a user in guild ${interaction.guildId}`);
 			});
 		} catch (error) {
-			console.log(`${error.code}: ${ip}:${port}`);
-			await sendMessage.newBasicMessage(interaction, 'The IP address supplied was invalid');
+			console.warn(
+                `Error pinging Minecraft server while running status command
+                    Guild ID: ${interaction.guildId}
+                    Server IP: ${serverIp}`
+            )
+			await sendMessage.newBasicMessage(interaction, 'The IP address you specified could not be pinged!');
 			return;
 		}
 	}
