@@ -1,7 +1,6 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const mcping = require('mcping-js');
-const Discord = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const sendMessage = require('../functions/sendMessage');
+const mcping = require('mcping-js');
 const unidecode = require('unidecode');
 
 module.exports = {
@@ -58,7 +57,7 @@ module.exports = {
 					serverStatus = `**${res.players.online || 0}/${res.players.max}** player(s) online.\n\n${onlinePlayers}`;
 				}
 
-				const responseEmbed = new Discord.EmbedBuilder()
+				const responseEmbed = new EmbedBuilder()
 					.setTitle(`Status for ${serverIp}:`)
 					.setColor(embedColor)
 					.setDescription(serverStatus)

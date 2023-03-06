@@ -12,7 +12,7 @@ module.exports = {
 			await guild.channels.cache.get(server.playersId),
 			await guild.channels.cache.get(server.categoryId)
 		];
-        channels.forEach((channel) => {
+        for (const channel of channels) {
             try {
                 channel.delete();
             } catch(error) {
@@ -24,6 +24,6 @@ module.exports = {
                 );
                 throw error;
             }
-        });
+        }
 	}
 };

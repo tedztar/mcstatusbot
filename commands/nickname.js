@@ -1,5 +1,4 @@
-const Discord = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const sendMessage = require('../functions/sendMessage');
 
 module.exports = {
@@ -7,16 +6,12 @@ module.exports = {
 		.setName('nickname')
 		.setDescription('Change the nickname of a monitored Minecraft server')
 		.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(true))
-		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
+		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false))
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+		.setDMPermission(false),
 	async execute(interaction) {
-		// Check if the member has the administrator permission
-		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
-			await sendMessage.newBasicMessage(interaction, 'You must have the administrator permission to use this command!');
-			return;
-		}
-
 		// Check if the bot has the manage roles permission
-		if (!interaction.guild.roles.botRoleFor(interaction.client.user)?.permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
+		if (!interaction.guild.roles.botRoleFor(interaction.client.user)?.permissions.has(PermissionFlagsBits.ManageRoles)) {
 			await sendMessage.newBasicMessage(interaction, 'This bot needs the "manage roles" permission in order to rename channels!');
 			return;
 		}

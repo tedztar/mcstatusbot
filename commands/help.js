@@ -1,10 +1,11 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-	data: new SlashCommandBuilder().setName('help').setDescription('List the other commands'),
+	data: new SlashCommandBuilder()
+		.setName('help')
+		.setDescription('List the other commands'),
 	async execute(interaction) {
-		const helpEmbed = new Discord.EmbedBuilder().setTitle('Commands:').setColor(embedColor).addFields(
+		const helpEmbed = new EmbedBuilder().setTitle('Commands:').setColor(embedColor).addFields(
 			{
 				name: '/status [server|ip]',
 				value: 'Displays the current status and active players for any server'

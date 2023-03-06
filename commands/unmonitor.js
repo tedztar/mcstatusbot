@@ -1,20 +1,15 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
-const Discord = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const sendMessage = require('../functions/sendMessage');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('unmonitor')
 		.setDescription('Unmonitor the specified server or all servers')
-		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
+		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false))
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+		.setDMPermission(false),
 	async execute(interaction) {
-		// Check if member has administrator permission
-		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
-			await sendMessage.newBasicMessage(interaction, 'You must have the administrator permission to use this command!');
-			return;
-		}
-
-        if (!interaction.guild.roles.botRoleFor(interaction.client.user).permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) {
+        if (!interaction.guild.roles.botRoleFor(interaction.client.user).permissions.has(PermissionFlagsBits.ManageRoles)) {
 			await sendMessage.newBasicMessage(interaction, 'This bot needs the "manage roles" permission in order to rename channels!');
 			return;
         }

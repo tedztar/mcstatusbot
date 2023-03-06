@@ -1,19 +1,14 @@
-const Discord = require('discord.js');
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const sendMessage = require('../functions/sendMessage');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('default')
 		.setDescription('Set a server to be the default for all commands')
-		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false)),
+		.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false))
+		.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
+		.setDMPermission(false),
 	async execute(interaction) {
-		// Check if the member has the administrator permission
-		if (!interaction.memberPermissions.has(Discord.PermissionsBitField.Flags.Administrator)) {
-			await sendMessage.newBasicMessage(interaction, 'You must have the administrator permission to use this command!');
-			return;
-		}
-
 		// Check if there are any servers to make the default
 		const monitoredServers = (await serverDB.get(interaction.guildId)) || [];
 		if (!monitoredServers.length) {

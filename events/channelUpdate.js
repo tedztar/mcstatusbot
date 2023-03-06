@@ -1,11 +1,11 @@
-const Discord = require('discord.js');
+const { Events, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
-	name: 'channelUpdate',
+	name: Events.ChannelUpdate,
 	once: false,
 	async execute(_, newChannel, client) {
 		// Check if the bot has the manage roles permission
-		if (!newChannel.guild.roles.botRoleFor(client.user)?.permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) return;
+		if (!newChannel.guild.roles.botRoleFor(client.user)?.permissions.has(PermissionFlagsBits.ManageRoles)) return;
 
 		// Check if the updated channel is in the list of monitored channels
 		const monitoredServers = (await serverDB.get(newChannel.guildId)) || [];
