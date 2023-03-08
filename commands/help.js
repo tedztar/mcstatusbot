@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { embedColor } = require('../functions/sendMessage');
 
 module.exports = {
 	data: new SlashCommandBuilder()

@@ -1,11 +1,11 @@
 const { SlashCommandBuilder } = require('discord.js');
-const sendMessage = require('../functions/sendMessage');
+const { sendMessage } = require('../functions/sendMessage');
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('bug')
 		.setDescription('Send a bug report to maintainers'),
 	async execute(interaction) {
-		await sendMessage.newBasicMessage(interaction, 'Report a bug by opening an issue on our [GitHub repository](https://github.com/RahulR100/mcstatusbot/issues).');
+		await sendMessage(interaction, 'Report a bug by opening an issue on our [GitHub repository](https://github.com/RahulR100/mcstatusbot/issues).');
 	}
 };
