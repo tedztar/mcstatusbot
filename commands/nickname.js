@@ -21,11 +21,11 @@ module.exports = {
 
 		// Find the server to rename
 		if (interaction.options.getString('server')) {
-			server = findServer(interaction.options.getString('server'), ['ip', 'nickname'], interaction.guildId);
+			server = await findServer(interaction.options.getString('server'), ['ip', 'nickname'], interaction.guildId);
 			if (await isNotMonitored(server, interaction)) return;
 		}
 		else {
-			server = findDefaultServer(interaction.guildId);
+			server = await findDefaultServer(interaction.guildId);
 		}
 
 		if (await isMissingPermissions('channel', server.categoryId, interaction)) return;

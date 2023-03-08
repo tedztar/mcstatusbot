@@ -2,7 +2,7 @@ const { getMonitoredServers } = require("./databaseFunctions");
 
 module.exports = {
     async findServer(query, fields, guildId) {
-        const monitoredServers = getMonitoredServers(guildId);
+        const monitoredServers = await getMonitoredServers(guildId);
         let serverIndex = -1;
         let server;
 
@@ -16,7 +16,7 @@ module.exports = {
         return server;
     },
     async findDefaultServer(guildId) {
-        const monitoredServers = getMonitoredServers(guildId);
+        const monitoredServers = await getMonitoredServers(guildId);
         const serverIndex = await monitoredServers.findIndex((server) => server.default);
         server = serverIndex != -1 ? monitoredServers[serverIndex] : monitoredServers[0];
         return server;

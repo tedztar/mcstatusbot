@@ -27,12 +27,12 @@ module.exports = {
         }
     },
     async isMonitored(ip, guildId, interaction) {
-        let server = findServer(ip, ['ip'], guildId);
+        let server = await findServer(ip, ['ip'], guildId);
         if (server) {
             interaction ? await sendMessage(interaction, 'This IP address is already being monitored!') : null;
             return true;
         }
-        server = findServer(ip, ['nickname'], guildId);
+        server = await findServer(ip, ['nickname'], guildId);
         if (server) {
             interaction ? await sendMessage(interaction, 'This IP address is the nickname of another server that is already being monitored!') : null;
             return true;
@@ -55,12 +55,12 @@ module.exports = {
         }
     },
     async isNicknameUsed(nickname, guildId, interaction) {
-        let server = findServer(nickname, ['nickname'], guildId);
+        let server = await findServer(nickname, ['nickname'], guildId);
         if (nickname && server) {
             interaction ? await sendMessage(interaction, 'This nickname is already being used!') : null;
             return true;
         }
-        server = findServer(nickname, ['ip'], guildId);
+        server = await findServer(nickname, ['ip'], guildId);
         if (nickname && server) {
             interaction ? await sendMessage(interaction, 'This nickname is the IP address of another server that is already being monitored!') : null;
             return true;
@@ -74,7 +74,7 @@ module.exports = {
         }
     },
     async isServerUnspecified(server, guildId, interaction) {
-        if (multipleMonitoredServers(guildId) && !server) {
+        if (await multipleMonitoredServers(guildId) && !server) {
             interaction ? await sendMessage(interaction, 'There are multiple monitored servers, and no server was specified!') : null;
             return true;
         }
@@ -83,7 +83,7 @@ module.exports = {
         }
     },
     async removingDefaultServer(server, guildId, interaction) {
-        if (multipleMonitoredServers(guildId) && this.isDefault(server)) {
+        if (await multipleMonitoredServers(guildId) && await this.isDefault(server)) {
             interaction ? await sendMessage(interaction, 'There are multiple monitored servers, and this server is the default server!') : null;
             return true;
         }

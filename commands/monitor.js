@@ -23,7 +23,7 @@ module.exports = {
 
 		// Unset the default server if the new server is to be the default
 		if (interaction.options.getBoolean('default')) {
-			let server = findDefaultServer(interaction.guildId);
+			let server = await findDefaultServer(interaction.guildId);
 			server ? server.default = false : null;
 		}
 
@@ -31,7 +31,7 @@ module.exports = {
 		let newServer = {
 			ip: interaction.options.getString('ip'),
 			nickname: interaction.options.getString('nickname') || null,
-			default: noMonitoredServers(interaction.guildId) ? true : interaction.options.getBoolean('default') || false
+			default: await noMonitoredServers(interaction.guildId) ? true : interaction.options.getBoolean('default') || false
 		};
 
 		// Create the server category
@@ -96,7 +96,7 @@ module.exports = {
 		}
 
 		// Add the server to the database
-		let monitoredServers = getMonitoredServers(interaction.guildId);
+		let monitoredServers = await getMonitoredServers(interaction.guildId);
 		await monitoredServers.push(newServer);
 		await setMonitoredServers(interaction.guildId, monitoredServers);
 

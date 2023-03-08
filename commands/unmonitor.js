@@ -94,7 +94,7 @@ async function removeServer(server, guild) {
 	}
 
 	// Remove server from database
-	let monitoredServers = getMonitoredServers(guild.id);
+	let monitoredServers = await getMonitoredServers(guild.id);
 	serverIndex = await monitoredServers.indexOf(server);
 	await monitoredServers.splice(serverIndex, 1);
 	await setMonitoredServers(guild.id, monitoredServers);

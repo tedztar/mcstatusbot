@@ -11,8 +11,8 @@ module.exports = {
 		if (await isMissingPermissions('channel', newChannel.id)) return;
 
 		// Check if the updated channel is in the list of monitored channels
-		server = findServer(newChannel.id, ['categoryId'], newChannel.guildId);
-		if (!isNotMonitored(server)) return;
+		server = await findServer(newChannel.id, ['categoryId'], newChannel.guildId);
+		if (await isNotMonitored(server)) return;
 
 		// Check if the channel name is the same as the nickname listed in the database
 		if (newChannel.name == server.nickname || newChannel.name == server.ip) return;
