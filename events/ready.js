@@ -1,28 +1,28 @@
 const { Events } = require('discord.js');
+const { getMonitoredServers } = require('../functions/databaseFunctions');
 const { deployCommands } = require('../functions/deployCommands');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { renameChannels } = require('../functions/renameChannels');
 
-module.exports = {
-	name: Events.ClientReady,
-	once: true,
-	async execute(client) {
-		await deployCommands();
-		await client.user.setActivity('/help', { type: 'WATCHING' });
-		console.log('Ready!');
-		await updateServers(client);
-		setInterval(updateServers, 6 * 60 * 1000, client);
-	}
-};
+const name = Events.ClientReady;
+const once = true;
+
+async function execute(client) {
+	await deployCommands();
+	await client.user.setActivity('/help', { type: 'WATCHING' });
+	console.log('Ready!');
+	await updateServers(client);
+	setInterval(updateServers, 6 * 60 * 1000, client);
+}
 
 // Fix await/async to speed up fucntion
 async function updateServers(client) {
 	await client.guilds.cache.forEach(async (guild) => {
-		let serverList = (await serverDB.get(guild.id)) || [];
+		let serverList = await getMonitoredServers(guild.id);
 		for (const server of serverList) {
 			let serverStatus;
 			try {
-				serverStatus = await getServerStatus(server.ip, 30*1000);
+				serverStatus = await getServerStatus(server.ip, 30 * 1000);
 			}
 			catch {
 				console.warn(
@@ -40,3 +40,5 @@ async function updateServers(client) {
 	});
 	console.log('Servers updated');
 }
+
+module.exports = { name, once, execute };

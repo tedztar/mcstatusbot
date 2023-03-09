@@ -1,49 +1,48 @@
 const { Events } = require('discord.js');
 
-module.exports = {
-    name: Events.InteractionCreate,
-    once: false,
-    async execute(interaction) {
-        if (!interaction.isChatInputCommand()) return;
+const name = Events.InteractionCreate;
+const once = false;
 
-        const command = interaction.client.commands.get(interaction.commandName);
+async function execute(interaction) {
+    if (!interaction.isChatInputCommand()) return;
 
-        if (!command) return;
+    const command = interaction.client.commands.get(interaction.commandName);
 
-        try {
-            await interaction.deferReply({ ephemeral: true });
-            await command.execute(interaction);
-        } catch (error) {
-            if (interaction.replied || interaction.deferred) {
-                let commandOptions = getCommandOptions(interaction);
-                
-                console.warn(
-                    `Error executing command
+    if (!command) return;
+
+    try {
+        await interaction.deferReply({ ephemeral: true });
+        await command.execute(interaction);
+    } catch (error) {
+        if (interaction.replied || interaction.deferred) {
+            let commandOptions = getCommandOptions(interaction);
+
+            console.warn(
+                `Error executing command
                         Guild ID: ${interaction.guildId}
                         Command: /${interaction.commandName}
-                        Command Options: ${JSON.stringify(commandOptions) || 'None'}`
-                );
-                console.log(error);
+                        Command Options: ${commandOptions ? JSON.stringify(commandOptions) : 'None'}`
+            );
+            console.log(error);
 
-                await interaction.editReply({
-                    content: 'There was an error while executing this command!',
-                    ephemeral: true
-                });
-            } else {
-                console.warn(
-                    `Error deferring reply to command
+            await interaction.editReply({
+                content: 'There was an error while executing this command!',
+                ephemeral: true
+            });
+        } else {
+            console.warn(
+                `Error deferring reply to command
                         Guild ID: ${interaction.guildId}
                         Command: /${interaction.commandName}`
-                );
+            );
 
-                await interaction.reply({
-                    content: 'There was an error while executing this command!',
-                    ephemeral: true
-                });
-            }
+            await interaction.reply({
+                content: 'There was an error while executing this command!',
+                ephemeral: true
+            });
         }
     }
-};
+}
 
 function getCommandOptions(interaction) {
     let commandOptions = [];
@@ -57,5 +56,7 @@ function getCommandOptions(interaction) {
             }, {});
         commandOptions.push(filteredOption);
     }
-    return commandOptions;
+    return commandOptions.length ? commandOptions : null;
 }
+
+module.exports = { name, once, execute };

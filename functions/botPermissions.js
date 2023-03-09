@@ -5,29 +5,28 @@ const requiredPermissions = [
     'Connect'
 ];
 
-module.exports = {
-    async isMissingPermissions(type, id, interaction) {
-        const missingPermissions = this.getMissingPermissions(type, id);
-        if (missingPermissions) {
-            interaction ? await sendMessage(
-                interaction,
-                `This bot needs the following ${type} permissions to use this command: ${missingPermissionsList}`
-            ) : null;
-            return true;
-        }
-        else {
-            return false;
-        }
-    },
-    getMissingPermissions(type, id) {
-        const botPermissions = getBotPermissions(type, id);
-        let missingPermissions = [];
-        for (const permission of requiredPermissions) {
-            if (!botPermissions[permission]) missingPermissions.push(permission);
-        }
-        const missingPermissionsList = missingPermissions.join(', ').split(/(?=[A-Z])/).join(' ');
-        return missingPermissionsList;
+async function isMissingPermissions(type, id, interaction) {
+    const missingPermissions = getMissingPermissions(type, id);
+    if (missingPermissions) {
+        interaction ? await sendMessage(
+            interaction,
+            `This bot needs the following ${type} permissions to use this command: ${missingPermissionsList}`
+        ) : null;
+        return true;
     }
+    else {
+        return false;
+    }
+}
+
+function getMissingPermissions(type, id) {
+    const botPermissions = getBotPermissions(type, id);
+    let missingPermissions = [];
+    for (const permission of requiredPermissions) {
+        if (!botPermissions[permission]) missingPermissions.push(permission);
+    }
+    const missingPermissionsList = missingPermissions.join(', ').split(/(?=[A-Z])/).join(' ');
+    return missingPermissionsList;
 }
 
 function getBotPermissions(type, id) {
@@ -50,3 +49,5 @@ function getBotPermissions(type, id) {
         }, {});
     return filteredBotPermissions;
 }
+
+module.exports = { isMissingPermissions, getMissingPermissions };

@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const express = require('express');
+const { database } = require('./functions/databaseFunctions');
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds],
@@ -10,6 +11,9 @@ const client = new Client({
 });
 
 express().listen(process.env.PORT || 5000);
+
+// Database Handler
+database.on('error', (error) => console.error('Keyv connection error: ', error));
 
 // Command Handler
 client.commands = new Collection();

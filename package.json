@@ -8,11 +8,11 @@
   "main": "index.js",
   "dependencies": {
     "@2toad/profanity": "^2.2.0",
-    "@keyv/postgres": "^1.0.17",
+    "@keyv/postgres": "^1.4.3",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "express": "^4.17.2",
-    "keyv": "^4.0.4",
+    "keyv": "^4.5.2",
     "mcping-js": "^1.5.0",
     "pg": "^8.7.1",
     "unidecode": "^0.1.8"

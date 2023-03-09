@@ -4,22 +4,23 @@ const { getMonitoredServers, setMonitoredServers } = require('../functions/datab
 const { findServer } = require('../functions/findServer');
 const { isNotMonitored } = require('../functions/inputValidation');
 
-module.exports = {
-	name: Events.ChannelUpdate,
-	once: false,
-	async execute(_, newChannel) {
-		if (await isMissingPermissions('channel', newChannel.id)) return;
+const name = Events.ChannelUpdate;
+const once = false;
 
-		// Check if the updated channel is in the list of monitored channels
-		server = await findServer(newChannel.id, ['categoryId'], newChannel.guildId);
-		if (await isNotMonitored(server)) return;
+async function execute(_, newChannel) {
+	if (await isMissingPermissions('channel', newChannel.id)) return;
 
-		// Check if the channel name is the same as the nickname listed in the database
-		if (newChannel.name == server.nickname || newChannel.name == server.ip) return;
+	// Check if the updated channel is in the list of monitored channels
+	server = await findServer(newChannel.id, ['categoryId'], newChannel.guildId);
+	if (await isNotMonitored(server)) return;
 
-		// Set the nickname listed in the database to the channel name
-		let monitoredServers = await getMonitoredServers(newChannel.guildId);
-		server.nickname = newChannel.name;
-		await setMonitoredServers(newChannel.guildId, monitoredServers);
-	}
-};
+	// Check if the channel name is the same as the nickname listed in the database
+	if (newChannel.name == server.nickname || newChannel.name == server.ip) return;
+
+	// Set the nickname listed in the database to the channel name
+	let monitoredServers = await getMonitoredServers(newChannel.guildId);
+	server.nickname = newChannel.name;
+	await setMonitoredServers(newChannel.guildId, monitoredServers);
+}
+
+module.exports = { name, once, execute };
