@@ -23,16 +23,19 @@ async function execute(interaction) {
 		let monitoredServers = await getMonitoredServers(interaction.guild.id);
 		for (const server of monitoredServers) {
 			let skipServer = false;
-			const channelIds = [server.categoryId, server.statusId, server.playersId];
 
 			// Check if the bot has the required permissions
-			for (const channelId of channelIds) {
-				let type = channelId == server.categoryId ? 'category' : 'channel';
-				if (await isMissingPermissions(type, interaction.guild.channels.cache.get(channelId))) {
-					let missingPermissions = getMissingPermissions(type, interaction.guild.channels.cache.get(channelId));
+			const channels = [
+				{id: server.categoryId, type: 'Category'},
+				{id: server.statusId, type: 'Status Channel'},
+				{id: server.playersId, type: 'Players Channel'}
+			];
+			for (const channel of channels) {
+				if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id))) {
+					let missingPermissions = getMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id));
 					notUnmonitored.push({
 						name: server.nickname || server.ip,
-						type,
+						type: channel.type,
 						missingPermissions
 					})
 					skipServer = true;
@@ -55,16 +58,16 @@ async function execute(interaction) {
 		}
 		else {
 			let notUnmonitoredList = notUnmonitored.map((server) => {
-				return `${server.name} (${server['type'][0].toUpperCase() + server.type.slice(1)}): ${server.missingPermissions}`;
+				return `${server.name} // ${server.type}: ${server.missingPermissions}`;
 			}).join('\n');
 			let notDeletedList = notDeleted.join(', ');
 			await sendMessage(interaction,
 				`There was an error while unmonitoring some of the servers!	
 				${notUnmonitored.length ? `
-				The following servers need the required category and/or channel permissions before you can unmonitor them:
+				The following servers need the required category and/or channel permissions before you can unmonitor them:\n
 				${notUnmonitoredList}` : ''}
 				${notDeleted.length ? `
-				The following servers were unmonitored, but the channels need to be removed manually:
+				The following servers were unmonitored, but the channels need to be removed manually:\n
 				${notDeletedList}` : ''}`
 			);
 		}
@@ -84,10 +87,13 @@ async function execute(interaction) {
 	if (await removingDefaultServer(server, interaction.guildId, interaction)) return;
 
 	// Check if the bot has the required permissions
-	const channelIds = [server.categoryId, server.statusId, server.playersId];
-	for (const channelId of channelIds) {
-		type = channelId == server.categoryId ? 'category' : 'channel';
-		if (await isMissingPermissions(type, interaction.guild.channels.cache.get(channelId), interaction)) return;
+	const channels = [
+		{id: server.categoryId, type: 'Category'},
+		{id: server.statusId, type: 'Status Channel'},
+		{id: server.playersId, type: 'Players Channel'}
+	];
+	for (const channel of channels) {
+		if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id), interaction)) return;
 	}
 
 	// Unmonitor the server

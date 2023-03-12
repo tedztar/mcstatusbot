@@ -8,8 +8,6 @@ const once = false;
 
 async function execute(_, newChannel) {
 	try {
-		return;
-		
 		// Check if the updated channel is in the list of monitored channels
 		let server = await findServer(newChannel.id, ['categoryId'], newChannel.guildId);
 		if (await isNotMonitored(server)) return;

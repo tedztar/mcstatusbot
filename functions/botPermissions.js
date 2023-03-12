@@ -9,13 +9,12 @@ const requiredPermissions = [
 
 async function isMissingPermissions(type, object, interaction) {
     if (!object) return false;
-    
 
     const missingPermissions = getMissingPermissions(type, object);
     if (missingPermissions) {
         interaction ? await sendMessage(
             interaction,
-            `The bot needs the following permissions in the ${type} to use this command:
+            `The bot needs the following permissions in the ${type.toLowerCase()} to use this command:
 
             ${missingPermissions}`
         ) : null;
@@ -27,27 +26,19 @@ async function isMissingPermissions(type, object, interaction) {
 }
 
 function getMissingPermissions(type, object) {
+    type = type.toLowerCase();
+    basicType = (type == 'status channel' || type == 'players channel') ? 'channel' : type;
     const botPermissions = getBotPermissions(type, object);
     let missingPermissions = [];
     for (const permission of requiredPermissions) {
-        if (!botPermissions[permission.flag]) missingPermissions.push(permission[type]);
+        if (!botPermissions[permission.flag]) missingPermissions.push(permission[basicType]);
     }
     const missingPermissionsList = missingPermissions.join(', ');
     return missingPermissionsList;
 }
 
 function getBotPermissions(type, object) {
-    let botPermissions;
-    if (type == 'category' || type == 'channel') {
-        botPermissions = object.guild.members.me.permissionsIn(object.id).serialize();
-    }
-    else if (type == 'server') {
-        botPermissions = object.members.me.permissions.serialize();
-    }
-    else {
-        console.warn(`Error getting permissions: type is not a category, channel, or guild`);
-        return;
-    }
+    let botPermissions = type == 'server' ? object.members.me.permissions.serialize() : object.guild.members.me.permissionsIn(object.id).serialize();
     let requiredPermissionsFlags = requiredPermissions.map(permission => { return permission['flag'] });
     let filteredBotPermissions = Object.keys(botPermissions)
         .filter(permission => requiredPermissionsFlags.includes(permission))
