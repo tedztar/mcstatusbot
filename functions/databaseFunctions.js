@@ -11,4 +11,9 @@ async function setMonitoredServers(guildId, monitoredServers) {
     return;
 }
 
-module.exports = { database, getMonitoredServers, setMonitoredServers };
+async function deleteFromDatabase(guildId) {
+    await database.delete(guildId);
+    return;
+}
+
+module.exports = { database, getMonitoredServers, setMonitoredServers, deleteFromDatabase };

@@ -35,16 +35,15 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## To-Do
 
-- [x] Default servers
-- [x] Server nicknames
-- [x] Command + bot permissions rework
+### Feature Updates
 - [ ] Rework status, nickname, and unmonitor commands to include dropdown menus
 - [ ] Rework monitor and nickname commands to include modal workflow
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
-- [ ] Update readme with screenshots
-- [ ] Rectify backend caching
-- [x] Update backend error handling
-- [ ] Fix DDNS support issues
-- [x] Add bug reporting command
 - [ ] Support compatibility with bedrock servers
-- [ ] IP validation
+
+### Backend Updates
+- [ ] Update readme with screenshots
+- [ ] Fix async/await and for vs forEach usage
+- [ ] Implement optional success and error message pass-through in console
+- [ ] Move error logging to own file 
+- [ ] IP address validation

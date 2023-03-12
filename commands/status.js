@@ -31,7 +31,7 @@ async function execute(interaction) {
 							Guild ID: ${interaction.guildId}
 							Server IP: ${serverIp}`
 		)
-		await sendMessage(interaction, 'The IP address you specified could not be pinged!');
+		await sendMessage(interaction, 'This IP address could not be pinged!');
 		return;
 	}
 

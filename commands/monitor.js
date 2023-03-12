@@ -5,7 +5,7 @@ const { getServerStatus } = require('../functions/getServerStatus');
 const { isMissingPermissions } = require('../functions/botPermissions');
 const { noMonitoredServers, isMonitored, isNicknameUsed } = require('../functions/inputValidation');
 const { getMonitoredServers, setMonitoredServers } = require('../functions/databaseFunctions');
-const { findDefaultServer } = require('../functions/findServer');
+const { findDefaultServer, findServerIndex } = require('../functions/findServer');
 
 const data = new SlashCommandBuilder()
 	.setName('monitor')
@@ -17,18 +17,21 @@ const data = new SlashCommandBuilder()
 	.setDMPermission(false);
 
 async function execute(interaction) {
-	if (await isMissingPermissions('server', interaction.guildId, interaction)) return;
+	if (await isMissingPermissions('server', interaction.guild, interaction)) return;
 	if (await isMonitored(interaction.options.getString('ip'), interaction.guildId, interaction)) return;
 	if (await isNicknameUsed(interaction.options.getString('nickname'), interaction.guildId, interaction)) return;
 
 	// Unset the default server if the new server is to be the default
 	if (interaction.options.getBoolean('default')) {
 		let server = await findDefaultServer(interaction.guildId);
-		server ? server.default = false : null;
+		let serverIndex = await findServerIndex(server, interaction.guildId);
+		let monitoredServers = await getMonitoredServers(interaction.guildId);
+		monitoredServers[serverIndex].default = false;
+		await setMonitoredServers(interaction.guildId, monitoredServers);
 	}
 
 	// Create the server object
-	let newServer = {
+	let server = {
 		ip: interaction.options.getString('ip'),
 		nickname: interaction.options.getString('nickname') || null,
 		default: await noMonitoredServers(interaction.guildId) ? true : interaction.options.getBoolean('default') || false
@@ -41,7 +44,7 @@ async function execute(interaction) {
 			type: ChannelType.GuildCategory,
 			permissionOverwrites: [
 				{
-					id: interaction.guild.roles.botRoleFor(interaction.client.user),
+					id: interaction.guild.members.me,
 					allow: [PermissionFlagsBits.ViewChannel, PermissionFlagsBits.Connect, PermissionFlagsBits.ManageChannels]
 				},
 				{
@@ -50,7 +53,7 @@ async function execute(interaction) {
 				}
 			]
 		});
-		newServer.categoryId = category.id;
+		server.categoryId = category.id;
 	} catch (error) {
 		console.warn(
 			`Error creating category channel
@@ -71,18 +74,18 @@ async function execute(interaction) {
 				name: voiceChannel.name,
 				type: ChannelType.GuildVoice
 			});
-			newServer[voiceChannel.idType] = channel.id;
-			await channel.setParent(newServer.categoryId);
+			server[voiceChannel.idType] = channel.id;
+			await channel.setParent(server.categoryId);
 		} catch (error) {
 			try {
 				for (const channelId of [categoryId, statusId, playersId]) {
-					await interaction.guild.channels.cache.get(newServer[channelId])?.delete();
+					await interaction.guild.channels.cache.get(server[channelId])?.delete();
 				}
 			} catch (error) {
 				console.warn(
 					`Error deleting channel while aborting monitor command
 								Guild ID: ${interaction.guildId}
-								Server IP: ${newServer.ip}`
+								Server IP: ${server.ip}`
 				);
 				throw error;
 			}
@@ -97,22 +100,22 @@ async function execute(interaction) {
 
 	// Add the server to the database
 	let monitoredServers = await getMonitoredServers(interaction.guildId);
-	await monitoredServers.push(newServer);
+	monitoredServers.push(server);
 	await setMonitoredServers(interaction.guildId, monitoredServers);
 
-	// Get the server status and update the channels
-	const serverStatus = await getServerStatus(newServer.ip, 30 * 1000);
-	const channels = [
-		{ object: await interaction.client.channels.cache.get(newServer.statusId), name: 'statusName' },
-		{ object: await interaction.client.channels.cache.get(newServer.playersId), name: 'playersName' }
-	];
-	await renameChannels(channels, serverStatus);
-
-	console.log(`${newServer.ip} was monitored for guild ${interaction.guildId}`);
+	console.log(`${server.ip} was monitored for guild ${interaction.guildId}`);
 
 	await sendMessage(interaction,
 		`The server has successfully been monitored${interaction.options.getBoolean('default') ? ' and set as the default server.' : '.'}`
 	);
+
+	// Get the server status and update the channels
+	const serverStatus = await getServerStatus(server.ip, 5 * 1000);
+	const channels = [
+		{ object: await interaction.guild.channels.cache.get(server.statusId), name: 'statusName' },
+		{ object: await interaction.guild.channels.cache.get(server.playersId), name: 'playersName' }
+	];
+	await renameChannels(channels, serverStatus);
 }
 
 module.exports = { data, execute };

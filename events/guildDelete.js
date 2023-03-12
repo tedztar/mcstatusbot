@@ -1,10 +1,11 @@
 const { Events } = require('discord.js');
+const { deleteFromDatabase } = require('../functions/databaseFunctions');
 
 const name = Events.GuildDelete;
 const once = false;
 
 async function execute(guild) {
-	await serverDB.delete(guild.id);
+	await deleteFromDatabase(guild.id);
 }
 
 module.exports = { name, once, execute };

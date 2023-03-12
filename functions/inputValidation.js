@@ -1,5 +1,5 @@
 const { getMonitoredServers } = require("./databaseFunctions");
-const { findServer } = require("./findServer");
+const { findServer, findDefaultServer } = require("./findServer");
 const { sendMessage } = require("./sendMessage");
 
 const reservedNames = ['all'];
@@ -18,8 +18,9 @@ async function noMonitoredServers(guildId, interaction, isStatusCommand) {
     }
 }
 
-async function isDefault(server, interaction) {
-    if (server.default) {
+async function isDefault(server, guildId, interaction) {
+    let defaultServer = await findDefaultServer(guildId);
+    if (JSON.stringify(server) == JSON.stringify(defaultServer)) {
         interaction ? await sendMessage(interaction, 'This server is already the default server!') : null;
         return true;
     }
@@ -89,7 +90,7 @@ async function isServerUnspecified(server, guildId, interaction) {
 }
 
 async function removingDefaultServer(server, guildId, interaction) {
-    if (await multipleMonitoredServers(guildId) && await isDefault(server)) {
+    if (await multipleMonitoredServers(guildId) && await isDefault(server, guildId)) {
         interaction ? await sendMessage(interaction, 'There are multiple monitored servers, and this server is the default server!') : null;
         return true;
     }

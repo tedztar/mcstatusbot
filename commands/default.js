@@ -1,6 +1,6 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { getMonitoredServers, setMonitoredServers } = require('../functions/databaseFunctions');
-const { findServer, findDefaultServer } = require('../functions/findServer');
+const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
 const { noMonitoredServers, isDefault, isNotMonitored } = require('../functions/inputValidation');
 const { sendMessage } = require('../functions/sendMessage');
 
@@ -24,14 +24,16 @@ async function execute(interaction) {
 
 	let newDefaultServer = await findServer(interaction.options.getString('server'), ['ip', 'nickname'], interaction.guildId);
 	if (await isNotMonitored(newDefaultServer, interaction)) return;
-	if (await isDefault(newDefaultServer, interaction)) return;
+	if (await isDefault(newDefaultServer, interaction.guildId, interaction)) return;
 
 	let monitoredServers = await getMonitoredServers(interaction.guildId);
-	oldDefaultServer.default = false;
-	newDefaultServer.default = true;
+	const oldDefaultServerIndex = await findServerIndex(oldDefaultServer, interaction.guildId);
+	const newDefaultServerIndex = await findServerIndex(newDefaultServer, interaction.guildId);
+	monitoredServers[oldDefaultServerIndex].default = false;
+	monitoredServers[newDefaultServerIndex].default = true;
 	await setMonitoredServers(interaction.guildId, monitoredServers);
 
-	console.log(`${server.ip} was set as the default for guild ${interaction.guildId}`);
+	console.log(`${newDefaultServer.ip} was set as the default for guild ${interaction.guildId}`);
 
 	await sendMessage(interaction, 'The server has successfully been made the default for all commands.');
 }

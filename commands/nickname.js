@@ -2,7 +2,7 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { sendMessage } = require('../functions/sendMessage');
 const { isMissingPermissions } = require('../functions/botPermissions');
 const { getMonitoredServers, setMonitoredServers } = require('../functions/databaseFunctions');
-const { findServer, findDefaultServer } = require('../functions/findServer');
+const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
 const { noMonitoredServers, isNotMonitored, isNicknameUsed } = require('../functions/inputValidation');
 
 const data = new SlashCommandBuilder()
@@ -28,11 +28,12 @@ async function execute(interaction) {
 		server = await findDefaultServer(interaction.guildId);
 	}
 
-	if (await isMissingPermissions('channel', server.categoryId, interaction)) return;
+	if (await isMissingPermissions('category', interaction.guild.channels.cache.get(server.categoryId), interaction)) return;
 
 	// Rename the server category
 	try {
-		await interaction.guild.channels.cache.get(server.categoryId).setName(interaction.options.getString('nickname'));
+		let channel = await interaction.guild.channels.cache.get(server.categoryId);
+		await channel?.setName(interaction.options.getString('nickname'));
 	} catch (error) {
 		if (error.name.includes('RateLimitError')) {
 			console.log(`Reached the rate limit while renaming channel ${server.categoryId} in guild ${interaction.guildId}`);
@@ -50,7 +51,8 @@ async function execute(interaction) {
 
 	// Change the server nickname in the database
 	let monitoredServers = await getMonitoredServers(interaction.guildId);
-	server.nickname = interaction.options.getString('nickname');
+	const serverIndex = await findServerIndex(server, interaction.guildId);
+	monitoredServers[serverIndex].nickname = interaction.options.getString('nickname');
 	await setMonitoredServers(interaction.guildId, monitoredServers);
 
 	console.log(`${server.ip} was given a nickname in guild ${interaction.guildId}`);
