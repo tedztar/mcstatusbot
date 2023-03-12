@@ -1,23 +1,33 @@
-const Discord = require('discord.js');
+const { Events } = require('discord.js');
+const { getMonitoredServers, setMonitoredServers } = require('../functions/databaseFunctions');
+const { findServer, findServerIndex } = require('../functions/findServer');
+const { isNotMonitored } = require('../functions/inputValidation');
 
-module.exports = {
-	name: 'channelUpdate',
-	once: false,
-	async execute(_, newChannel, client) {
-		// Check if the bot has the manage roles permission
-		if (!newChannel.guild.roles.botRoleFor(client.user)?.permissions.has(Discord.PermissionsBitField.Flags.ManageRoles)) return;
+const name = Events.ChannelUpdate;
+const once = false;
 
+async function execute(_, newChannel) {
+	try {
 		// Check if the updated channel is in the list of monitored channels
-		const monitoredServers = (await serverDB.get(newChannel.guildId)) || [];
-		let serverIndex = await monitoredServers.findIndex((server) => newChannel.id == server.categoryId);
-		if (serverIndex == -1) return;
+		let server = await findServer(newChannel.id, ['categoryId'], newChannel.guildId);
+		if (await isNotMonitored(server)) return;
 
 		// Check if the channel name is the same as the nickname listed in the database
-		let server = monitoredServers[serverIndex];
 		if (newChannel.name == server.nickname || newChannel.name == server.ip) return;
 
 		// Set the nickname listed in the database to the channel name
-		server.nickname = newChannel.name;
-		await serverDB.set(newChannel.guildId, monitoredServers);
+		let monitoredServers = await getMonitoredServers(newChannel.guildId);
+		const serverIndex = await findServerIndex(server, newChannel.guildId);
+		monitoredServers[serverIndex].nickname = newChannel.name;
+		await setMonitoredServers(newChannel.guildId, monitoredServers);
 	}
-};
+	catch (error) {
+		console.warn(
+			`Error setting nickname while renaming channel
+                Channel ID: ${newChannel.id}
+                Guild ID: ${newChannel.guildId}`
+		);
+	}
+}
+
+module.exports = { name, once, execute };

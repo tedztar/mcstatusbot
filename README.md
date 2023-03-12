@@ -1,4 +1,4 @@
-![Discord Server Count](https://img.shields.io/endpoint?url=https%3A%2F%2Fachiommino.npkn.net%2Fmcstatus-discordbot)
+![Discord Server Count](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fachiommino.npkn.net%2Fmcstatus-discordbot&label=Servers&query=$.message&color=7289DA&logo=discord&logoColor=white)
 ![Make A Donation](https://img.shields.io/static/v1?label=&message=Donate&color=d9b811&logo=buymeacoffee&logoColor=white&link=https://www.buymeacoffee.com/rahulrao)
 
 # Minecraft Server Status - Discord Bot
@@ -35,16 +35,15 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## To-Do
 
-- [x] Allow users to manage default server for `/status` command (`/default ip` command and `/monitor ip [default]` option, add new key-value pair to server object and use findIndex to get default server)
-- [x] Allow users to set a nickname for the server (`/nickname` and `/monitor ip nickname`)
-- [ ] Rework admin permissions
+### Feature Updates
 - [ ] Rework status, nickname, and unmonitor commands to include dropdown menus
 - [ ] Rework monitor and nickname commands to include modal workflow
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
-- [ ] Update readme with screenshots
-- [ ] Rectify backend caching
-- [x] Update backend error handling
-- [ ] Fix DDNS support issues
-- [x] Add bug reporting command
 - [ ] Support compatibility with bedrock servers
-- [ ] IP validation
+
+### Backend Updates
+- [ ] Update readme with screenshots
+- [ ] Fix async/await and for vs forEach usage
+- [ ] Implement optional success and error message pass-through in console
+- [ ] Move error logging to own file 
+- [ ] IP address validation
