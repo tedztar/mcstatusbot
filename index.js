@@ -13,7 +13,9 @@ const client = new Client({
 express().listen(process.env.PORT || 5000);
 
 // Database Handler
-database.on('error', (error) => console.error('Keyv connection error: ', error));
+for (const namespace of Object.keys(database)) {
+	database[namespace].on('error', (error) => console.error('Keyv connection error: ', error));
+}
 
 // Command Handler
 client.commands = new Collection();
@@ -25,7 +27,7 @@ for (const file of commandFiles) {
 	if ('data' in command && 'execute' in command) {
 		client.commands.set(command.data.name, command);
 	} else {
-		console.warn(`Error registering /${path.basename(file,'.js')} command: missing a required "data" or "execute" property.`);
+		console.warn(`Error registering /${path.basename(file, '.js')} command: missing a required "data" or "execute" property.`);
 	}
 }
 

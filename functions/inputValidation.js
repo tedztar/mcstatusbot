@@ -1,11 +1,11 @@
-const { getMonitoredServers } = require("./databaseFunctions");
+const { getKey } = require("./databaseFunctions");
 const { findServer, findDefaultServer } = require("./findServer");
 const { sendMessage } = require("./sendMessage");
 
 const reservedNames = ['all'];
 
 async function noMonitoredServers(guildId, interaction, isStatusCommand) {
-    const monitoredServers = await getMonitoredServers(guildId);
+    const monitoredServers = await getKey('guildData', guildId);
     if (!monitoredServers.length) {
         interaction ? await sendMessage(
             interaction,
@@ -100,7 +100,7 @@ async function removingDefaultServer(server, guildId, interaction) {
 }
 
 async function multipleMonitoredServers(guildId) {
-    const monitoredServers = await getMonitoredServers(guildId);
+    const monitoredServers = await getKey('guildData', guildId);
     if (monitoredServers.length > 1) {
         return true;
     }

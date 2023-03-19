@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const { getMonitoredServers } = require('../functions/databaseFunctions');
+const { getKey, setKey } = require('../functions/databaseFunctions');
 const { deployCommands } = require('../functions/deployCommands');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { renameChannels } = require('../functions/renameChannels');
@@ -17,8 +17,11 @@ async function execute(client) {
 
 // Fix await/async to speed up fucntion
 async function updateServers(client) {
+	let serverCount = client.guilds.cache.size;
+	await setKey('applicationData', 'serverCount', serverCount);
+	
 	await client.guilds.cache.forEach(async (guild) => {
-		let serverList = await getMonitoredServers(guild.id);
+		let serverList = await getKey('guildData', guild.id);
 		for (const server of serverList) {
 			let serverStatus;
 			try {

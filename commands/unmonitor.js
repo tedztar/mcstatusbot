@@ -2,7 +2,7 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { sendMessage } = require('../functions/sendMessage');
 const { isMissingPermissions, getMissingPermissions } = require('../functions/botPermissions');
 const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
-const { getMonitoredServers, setMonitoredServers } = require('../functions/databaseFunctions');
+const { getKey, setKey } = require('../functions/databaseFunctions');
 const { noMonitoredServers, isServerUnspecified, removingDefaultServer, isNotMonitored } = require('../functions/inputValidation');
 
 const data = new SlashCommandBuilder()
@@ -20,7 +20,7 @@ async function execute(interaction) {
 	if (interaction.options.getString('server') == 'all') {
 		let notUnmonitored = [];
 		let notDeleted = [];
-		let monitoredServers = await getMonitoredServers(interaction.guild.id);
+		let monitoredServers = await getKey('guildData', interaction.guild.id);
 		for (const server of monitoredServers) {
 			let skipServer = false;
 
@@ -111,10 +111,10 @@ async function execute(interaction) {
 
 async function removeServer(server, guild) {
 	// Remove server from database
-	let monitoredServers = await getMonitoredServers(guild.id);
+	let monitoredServers = await getKey('guildData', guild.id);
 	let serverIndex = await findServerIndex(server, guild.id);
 	monitoredServers.splice(serverIndex, 1);
-	await setMonitoredServers(guild.id, monitoredServers);
+	await setKey('guildData', guild.id, monitoredServers);
 
 	// Remove channels and server category
 	const channels = [
