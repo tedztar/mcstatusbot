@@ -1,7 +1,7 @@
 const { getKey } = require("./databaseFunctions");
 
 async function findServer(query, fields, guildId) {
-    const monitoredServers = await getKey('guildData', guildId);
+    const monitoredServers = await getKey(guildId);
     let serverIndex = -1;
     let server;
 
@@ -16,14 +16,14 @@ async function findServer(query, fields, guildId) {
 }
 
 async function findDefaultServer(guildId) {
-    const monitoredServers = await getKey('guildData', guildId);
+    const monitoredServers = await getKey(guildId);
     const serverIndex = monitoredServers.findIndex((server) => server.default);
     server = serverIndex != -1 ? monitoredServers[serverIndex] : monitoredServers[0];
     return server;
 }
 
 async function findServerIndex(query, guildId) {
-    const monitoredServers = await getKey('guildData', guildId);
+    const monitoredServers = await getKey(guildId);
     const serverIndex = monitoredServers.findIndex((server) => JSON.stringify(server) == JSON.stringify(query));
     return serverIndex;
 }

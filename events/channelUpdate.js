@@ -16,10 +16,10 @@ async function execute(_, newChannel) {
 		if (newChannel.name == server.nickname || newChannel.name == server.ip) return;
 
 		// Set the nickname listed in the database to the channel name
-		let monitoredServers = await getKey('guildData', newChannel.guildId);
+		let monitoredServers = await getKey(newChannel.guildId);
 		const serverIndex = await findServerIndex(server, newChannel.guildId);
 		monitoredServers[serverIndex].nickname = newChannel.name;
-		await setKey('guildData', newChannel.guildId, monitoredServers);
+		await setKey(newChannel.guildId, monitoredServers);
 	}
 	catch (error) {
 		console.warn(

@@ -25,9 +25,9 @@ async function execute(interaction) {
 	if (interaction.options.getBoolean('default')) {
 		let server = await findDefaultServer(interaction.guildId);
 		let serverIndex = await findServerIndex(server, interaction.guildId);
-		let monitoredServers = await getKey('guildData', interaction.guildId);
+		let monitoredServers = await getKey(interaction.guildId);
 		monitoredServers[serverIndex].default = false;
-		await setKey('guildData', interaction.guildId, monitoredServers);
+		await setKey(interaction.guildId, monitoredServers);
 	}
 
 	// Create the server object
@@ -99,9 +99,9 @@ async function execute(interaction) {
 	}
 
 	// Add the server to the database
-	let monitoredServers = await getKey('guildData', interaction.guildId);
+	let monitoredServers = await getKey(interaction.guildId);
 	monitoredServers.push(server);
-	await setKey('guildData', interaction.guildId, monitoredServers);
+	await setKey(interaction.guildId, monitoredServers);
 
 	console.log(`${server.ip} was monitored for guild ${interaction.guildId}`);
 

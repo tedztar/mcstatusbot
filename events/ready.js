@@ -18,10 +18,10 @@ async function execute(client) {
 // Fix await/async to speed up fucntion
 async function updateServers(client) {
 	let serverCount = client.guilds.cache.size;
-	await setKey('applicationData', 'serverCount', serverCount);
+	await setKey('serverCount', serverCount);
 	
 	await client.guilds.cache.forEach(async (guild) => {
-		let serverList = await getKey('guildData', guild.id);
+		let serverList = await getKey(guild.id);
 		for (const server of serverList) {
 			let serverStatus;
 			try {

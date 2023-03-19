@@ -20,7 +20,7 @@ async function execute(interaction) {
 	if (interaction.options.getString('server') == 'all') {
 		let notUnmonitored = [];
 		let notDeleted = [];
-		let monitoredServers = await getKey('guildData', interaction.guild.id);
+		let monitoredServers = await getKey(interaction.guild.id);
 		for (const server of monitoredServers) {
 			let skipServer = false;
 
@@ -111,10 +111,10 @@ async function execute(interaction) {
 
 async function removeServer(server, guild) {
 	// Remove server from database
-	let monitoredServers = await getKey('guildData', guild.id);
+	let monitoredServers = await getKey(guild.id);
 	let serverIndex = await findServerIndex(server, guild.id);
 	monitoredServers.splice(serverIndex, 1);
-	await setKey('guildData', guild.id, monitoredServers);
+	await setKey(guild.id, monitoredServers);
 
 	// Remove channels and server category
 	const channels = [

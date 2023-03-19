@@ -13,9 +13,7 @@ const client = new Client({
 express().listen(process.env.PORT || 5000);
 
 // Database Handler
-for (const namespace of Object.keys(database)) {
-	database[namespace].on('error', (error) => console.error('Keyv connection error: ', error));
-}
+database.on('error', (error) => console.error('Keyv connection error: ', error));
 
 // Command Handler
 client.commands = new Collection();
