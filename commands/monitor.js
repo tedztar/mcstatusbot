@@ -4,7 +4,7 @@ const { renameChannels } = require('../functions/renameChannels');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { isMissingPermissions } = require('../functions/botPermissions');
 const { noMonitoredServers, isMonitored, isNicknameUsed } = require('../functions/inputValidation');
-const { getMonitoredServers, setMonitoredServers } = require('../functions/databaseFunctions');
+const { getKey, setKey } = require('../functions/databaseFunctions');
 const { findDefaultServer, findServerIndex } = require('../functions/findServer');
 
 const data = new SlashCommandBuilder()
@@ -25,9 +25,9 @@ async function execute(interaction) {
 	if (interaction.options.getBoolean('default')) {
 		let server = await findDefaultServer(interaction.guildId);
 		let serverIndex = await findServerIndex(server, interaction.guildId);
-		let monitoredServers = await getMonitoredServers(interaction.guildId);
+		let monitoredServers = await getKey(interaction.guildId);
 		monitoredServers[serverIndex].default = false;
-		await setMonitoredServers(interaction.guildId, monitoredServers);
+		await setKey(interaction.guildId, monitoredServers);
 	}
 
 	// Create the server object
@@ -99,9 +99,9 @@ async function execute(interaction) {
 	}
 
 	// Add the server to the database
-	let monitoredServers = await getMonitoredServers(interaction.guildId);
+	let monitoredServers = await getKey(interaction.guildId);
 	monitoredServers.push(server);
-	await setMonitoredServers(interaction.guildId, monitoredServers);
+	await setKey(interaction.guildId, monitoredServers);
 
 	console.log(`${server.ip} was monitored for guild ${interaction.guildId}`);
 

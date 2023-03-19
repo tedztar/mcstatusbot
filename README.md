@@ -1,4 +1,4 @@
-![Discord Server Count](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fachiommino.npkn.net%2Fmcstatus-discordbot&label=Servers&query=$.message&color=7289DA&logo=discord&logoColor=white)
+![Discord Server Count](https://img.shields.io/endpoint?url=https%3A%2F%2Frunkit.io%2Fthedjchi%2Fmcstatus-discordbot%2Fbranches%2Fmaster)
 ![Make A Donation](https://img.shields.io/static/v1?label=&message=Donate&color=d9b811&logo=buymeacoffee&logoColor=white&link=https://www.buymeacoffee.com/rahulrao)
 
 # Minecraft Server Status - Discord Bot

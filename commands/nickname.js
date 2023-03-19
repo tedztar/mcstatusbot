@@ -1,7 +1,7 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { sendMessage } = require('../functions/sendMessage');
 const { isMissingPermissions } = require('../functions/botPermissions');
-const { getMonitoredServers, setMonitoredServers } = require('../functions/databaseFunctions');
+const { getKey, setKey } = require('../functions/databaseFunctions');
 const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
 const { noMonitoredServers, isNotMonitored, isNicknameUsed } = require('../functions/inputValidation');
 
@@ -50,10 +50,10 @@ async function execute(interaction) {
 	}
 
 	// Change the server nickname in the database
-	let monitoredServers = await getMonitoredServers(interaction.guildId);
+	let monitoredServers = await getKey(interaction.guildId);
 	const serverIndex = await findServerIndex(server, interaction.guildId);
 	monitoredServers[serverIndex].nickname = interaction.options.getString('nickname');
-	await setMonitoredServers(interaction.guildId, monitoredServers);
+	await setKey(interaction.guildId, monitoredServers);
 
 	console.log(`${server.ip} was given a nickname in guild ${interaction.guildId}`);
 

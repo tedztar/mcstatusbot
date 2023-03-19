@@ -2,18 +2,18 @@ const Keyv = require('keyv');
 
 const database = process.env.DATABASE_URL ? new Keyv(`${process.env.DATABASE_URL}?sslmode=no-verify`) : new Keyv();
 
-async function getMonitoredServers(guildId) {
-    return await database.get(guildId) || [];
+async function getKey(key) {
+    return await database.get(key) || [];
 }
 
-async function setMonitoredServers(guildId, monitoredServers) {
-    await database.set(guildId, monitoredServers);
+async function setKey(key, value) {
+    await database.set(key, value);
     return;
 }
 
-async function deleteFromDatabase(guildId) {
-    await database.delete(guildId);
+async function deleteKey(key) {
+    await database.delete(key);
     return;
 }
 
-module.exports = { database, getMonitoredServers, setMonitoredServers, deleteFromDatabase };
+module.exports = { database, getKey, setKey, deleteKey };

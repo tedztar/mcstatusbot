@@ -25,7 +25,7 @@ for (const file of commandFiles) {
 	if ('data' in command && 'execute' in command) {
 		client.commands.set(command.data.name, command);
 	} else {
-		console.warn(`Error registering /${path.basename(file,'.js')} command: missing a required "data" or "execute" property.`);
+		console.warn(`Error registering /${path.basename(file, '.js')} command: missing a required "data" or "execute" property.`);
 	}
 }
 

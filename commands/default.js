@@ -1,5 +1,5 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { getMonitoredServers, setMonitoredServers } = require('../functions/databaseFunctions');
+const { getKey, setKey } = require('../functions/databaseFunctions');
 const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
 const { noMonitoredServers, isDefault, isNotMonitored } = require('../functions/inputValidation');
 const { sendMessage } = require('../functions/sendMessage');
@@ -26,12 +26,12 @@ async function execute(interaction) {
 	if (await isNotMonitored(newDefaultServer, interaction)) return;
 	if (await isDefault(newDefaultServer, interaction.guildId, interaction)) return;
 
-	let monitoredServers = await getMonitoredServers(interaction.guildId);
+	let monitoredServers = await getKey(interaction.guildId);
 	const oldDefaultServerIndex = await findServerIndex(oldDefaultServer, interaction.guildId);
 	const newDefaultServerIndex = await findServerIndex(newDefaultServer, interaction.guildId);
 	monitoredServers[oldDefaultServerIndex].default = false;
 	monitoredServers[newDefaultServerIndex].default = true;
-	await setMonitoredServers(interaction.guildId, monitoredServers);
+	await setKey(interaction.guildId, monitoredServers);
 
 	console.log(`${newDefaultServer.ip} was set as the default for guild ${interaction.guildId}`);
 

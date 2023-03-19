@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const { getMonitoredServers, setMonitoredServers } = require('../functions/databaseFunctions');
+const { getKey, setKey } = require('../functions/databaseFunctions');
 const { findServer, findServerIndex } = require('../functions/findServer');
 const { isNotMonitored } = require('../functions/inputValidation');
 
@@ -16,10 +16,10 @@ async function execute(_, newChannel) {
 		if (newChannel.name == server.nickname || newChannel.name == server.ip) return;
 
 		// Set the nickname listed in the database to the channel name
-		let monitoredServers = await getMonitoredServers(newChannel.guildId);
+		let monitoredServers = await getKey(newChannel.guildId);
 		const serverIndex = await findServerIndex(server, newChannel.guildId);
 		monitoredServers[serverIndex].nickname = newChannel.name;
-		await setMonitoredServers(newChannel.guildId, monitoredServers);
+		await setKey(newChannel.guildId, monitoredServers);
 	}
 	catch (error) {
 		console.warn(
