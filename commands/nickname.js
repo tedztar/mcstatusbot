@@ -49,12 +49,6 @@ async function execute(interaction) {
 		return;
 	}
 
-	// Change the server nickname in the database
-	let monitoredServers = await getKey(interaction.guildId);
-	const serverIndex = await findServerIndex(server, interaction.guildId);
-	monitoredServers[serverIndex].nickname = interaction.options.getString('nickname');
-	await setKey(interaction.guildId, monitoredServers);
-
 	console.log(`${server.ip} was given a nickname in guild ${interaction.guildId}`);
 
 	await sendMessage(interaction, 'The server has successfully been renamed.');
