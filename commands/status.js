@@ -15,7 +15,7 @@ async function execute(interaction) {
 
 	if (interaction.options.getString('server')) {
 		let server = await findServer(interaction.options.getString('server'), ['nickname'], interaction.guildId);
-		serverIp = server ? server.ip : interaction.options.getString('server');
+		serverIp = (server) ? server.ip : interaction.options.getString('server');
 	} else {
 		if (await noMonitoredServers(interaction.guildId, interaction, true)) return;
 		let server = await findDefaultServer(interaction.guildId);

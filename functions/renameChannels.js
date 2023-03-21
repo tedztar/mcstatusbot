@@ -3,8 +3,8 @@ const { logWarning, logSuccess } = require('./consoleLogging');
 
 async function renameChannels(channels, serverStatus) {
     const channelNames = {
-        statusName: serverStatus.isOnline ? 'Status: Online' : 'Status: Offline',
-        playersName: serverStatus.isOnline ? `Players: ${serverStatus.players?.online ?? '?'} / ${serverStatus.players?.max ?? '?'}` : 'Players: 0'
+        statusName: (serverStatus.isOnline) ? 'Status: Online' : 'Status: Offline',
+        playersName: (serverStatus.isOnline) ? `Players: ${serverStatus.players?.online ?? '?'} / ${serverStatus.players?.max ?? '?'}` : 'Players: 0'
     }
 
     for (const channel of channels) {

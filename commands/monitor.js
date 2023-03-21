@@ -35,7 +35,7 @@ async function execute(interaction) {
 	let server = {
 		ip: interaction.options.getString('ip'),
 		nickname: interaction.options.getString('nickname') || null,
-		default: await noMonitoredServers(interaction.guildId) ? true : interaction.options.getBoolean('default') || false
+		default: (await noMonitoredServers(interaction.guildId)) ? true : interaction.options.getBoolean('default') || false
 	};
 
 	// Create the server category

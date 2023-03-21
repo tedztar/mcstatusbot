@@ -12,8 +12,7 @@ async function noMonitoredServers(guildId, interaction, isStatusCommand) {
             `There are no monitored servers${isStatusCommand ? ', and no IP address was specified!' : '!'}`
         ) : null;
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -23,8 +22,7 @@ async function isDefault(server, guildId, interaction) {
     if (JSON.stringify(server) == JSON.stringify(defaultServer)) {
         interaction ? await sendMessage(interaction, 'This server is already the default server!') : null;
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -43,8 +41,7 @@ async function isMonitored(ip, guildId, interaction) {
     if (reservedNames.includes(ip)) {
         interaction ? await sendMessage(interaction, 'This IP address is a restricted keyword!') : null;
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -53,8 +50,7 @@ async function isNotMonitored(server, interaction) {
     if (!server) {
         interaction ? await sendMessage(interaction, 'This server is not being monitored!') : null;
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -73,8 +69,7 @@ async function isNicknameUsed(nickname, guildId, interaction) {
     if (reservedNames.includes(nickname)) {
         interaction ? await sendMessage(interaction, 'This nickname is a restricted keyword!') : null;
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -83,8 +78,7 @@ async function isServerUnspecified(server, guildId, interaction) {
     if (await multipleMonitoredServers(guildId) && !server) {
         interaction ? await sendMessage(interaction, 'There are multiple monitored servers, and no server was specified!') : null;
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -93,8 +87,7 @@ async function removingDefaultServer(server, guildId, interaction) {
     if (await multipleMonitoredServers(guildId) && await isDefault(server, guildId)) {
         interaction ? await sendMessage(interaction, 'There are multiple monitored servers, and this server is the default server!') : null;
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -103,8 +96,7 @@ async function multipleMonitoredServers(guildId) {
     const monitoredServers = await getKey(guildId);
     if (monitoredServers.length > 1) {
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }

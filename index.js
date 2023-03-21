@@ -30,8 +30,7 @@ try {
 			throw new Error();
 		}
 	}
-}
-catch (error) {
+} catch (error) {
 	logWarning(`Error registering /${path.basename(file, '.js')} command: missing a required "data" or "execute" property.`, error);
 }
 

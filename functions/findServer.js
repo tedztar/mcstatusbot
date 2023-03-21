@@ -18,7 +18,7 @@ async function findServer(query, fields, guildId) {
 async function findDefaultServer(guildId) {
     const monitoredServers = await getKey(guildId);
     const serverIndex = monitoredServers.findIndex((server) => server.default);
-    server = serverIndex != -1 ? monitoredServers[serverIndex] : monitoredServers[0];
+    server = (serverIndex != -1) ? monitoredServers[serverIndex] : monitoredServers[0];
     return server;
 }
 

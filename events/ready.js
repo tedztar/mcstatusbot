@@ -27,8 +27,7 @@ async function updateServers(client) {
 			let serverStatus;
 			try {
 				serverStatus = await getServerStatus(server.ip, 30 * 1000);
-			}
-			catch {
+			} catch {
 				logWarning(
 					`Error pinging Minecraft server while updating servers
 						Guild ID: ${guild.id}
