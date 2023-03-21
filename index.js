@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const express = require('express');
 const { database } = require('./functions/databaseFunctions');
+const { logWarning, logError } = require('./functions/consoleLogging');
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds],
@@ -13,20 +14,25 @@ const client = new Client({
 express().listen(process.env.PORT || 5000);
 
 // Database Handler
-database.on('error', (error) => console.error('Keyv connection error: ', error));
+database.on('error', (error) => logError('Keyv connection error: ', error));
 
 // Command Handler
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
-for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
-	if ('data' in command && 'execute' in command) {
-		client.commands.set(command.data.name, command);
-	} else {
-		console.warn(`Error registering /${path.basename(file, '.js')} command: missing a required "data" or "execute" property.`);
+try {
+	for (const file of commandFiles) {
+		const filePath = path.join(commandsPath, file);
+		const command = require(filePath);
+		if ('data' in command && 'execute' in command) {
+			client.commands.set(command.data.name, command);
+		} else {
+			throw new Error();
+		}
 	}
+}
+catch (error) {
+	logWarning(`Error registering /${path.basename(file, '.js')} command: missing a required "data" or "execute" property.`, error);
 }
 
 // Event Handler

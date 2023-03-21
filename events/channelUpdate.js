@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const { logWarning } = require('../functions/consoleLogging');
 const { getKey, setKey } = require('../functions/databaseFunctions');
 const { findServer, findServerIndex } = require('../functions/findServer');
 const { isNotMonitored } = require('../functions/inputValidation');
@@ -22,10 +23,11 @@ async function execute(_, newChannel) {
 		await setKey(newChannel.guildId, monitoredServers);
 	}
 	catch (error) {
-		console.warn(
-			`Error setting nickname while renaming channel
+		logWarning(
+			`Error setting nickname during channel rename
                 Channel ID: ${newChannel.id}
-                Guild ID: ${newChannel.guildId}`
+                Guild ID: ${newChannel.guildId}`,
+			error
 		);
 	}
 }

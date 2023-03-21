@@ -3,6 +3,7 @@ const { embedColor, sendMessage } = require('../functions/sendMessage');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { findServer, findDefaultServer } = require('../functions/findServer');
 const { noMonitoredServers } = require('../functions/inputValidation');
+const { logWarning, logSuccess } = require('../functions/consoleLogging');
 
 const data = new SlashCommandBuilder()
 	.setName('status')
@@ -26,10 +27,11 @@ async function execute(interaction) {
 	try {
 		serverStatus = await getServerStatus(serverIp, 5 * 1000);
 	} catch (error) {
-		console.warn(
+		logWarning(
 			`Error pinging Minecraft server while running status command
-							Guild ID: ${interaction.guildId}
-							Server IP: ${serverIp}`
+				Guild ID: ${interaction.guildId}
+				Server IP: ${serverIp}`,
+			error
 		)
 		await sendMessage(interaction, 'This IP address could not be pinged!');
 		return;
@@ -38,7 +40,7 @@ async function execute(interaction) {
 	// Message if server is offline
 	if (!serverStatus.isOnline) {
 		await sendMessage(interaction, `*The server is offline!*`, `Status for ${serverIp}:`);
-		console.log(`${serverIp} was pinged with the status command by a user in guild ${interaction.guildId}`);
+		logSuccess(`${serverIp} was pinged with the status command by a user in guild ${interaction.guildId}`);
 		return;
 	}
 
@@ -66,7 +68,7 @@ async function execute(interaction) {
 
 	await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 
-	console.log(`${serverIp} was pinged with the status command by a user in guild ${interaction.guildId}`);
+	logSuccess(`${serverIp} was pinged with the status command by a user in guild ${interaction.guildId}`);
 }
 
 module.exports = { data, execute };

@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const { logWarning } = require('../functions/consoleLogging');
 
 const name = Events.InteractionCreate;
 const once = false;
@@ -14,26 +15,27 @@ async function execute(interaction) {
         await interaction.deferReply({ ephemeral: true });
         await command.execute(interaction);
     } catch (error) {
+        let commandOptions = getCommandOptions(interaction);
         if (interaction.replied || interaction.deferred) {
-            let commandOptions = getCommandOptions(interaction);
-
-            console.warn(
+            logWarning(
                 `Error executing command
-                        Guild ID: ${interaction.guildId}
-                        Command: /${interaction.commandName}
-                        Command Options: ${commandOptions ? JSON.stringify(commandOptions) : 'None'}`
+                    Guild ID: ${interaction.guildId}
+                    Command: /${interaction.commandName}
+                    Command Options: ${commandOptions ? JSON.stringify(commandOptions) : 'None'}`,
+                error
             );
-            console.log(error);
 
             await interaction.editReply({
                 content: 'There was an error while executing this command!',
                 ephemeral: true
             });
         } else {
-            console.warn(
+            logWarning(
                 `Error deferring reply to command
-                        Guild ID: ${interaction.guildId}
-                        Command: /${interaction.commandName}`
+                    Guild ID: ${interaction.guildId}
+                    Command: /${interaction.commandName}
+                    Command Options: ${commandOptions ? JSON.stringify(commandOptions) : 'None'}`,
+                error
             );
 
             await interaction.reply({

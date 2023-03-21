@@ -4,6 +4,7 @@ const { isMissingPermissions, getMissingPermissions } = require('../functions/bo
 const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
 const { getKey, setKey } = require('../functions/databaseFunctions');
 const { noMonitoredServers, isServerUnspecified, removingDefaultServer, isNotMonitored } = require('../functions/inputValidation');
+const { logWarning, logSuccess } = require('../functions/consoleLogging');
 
 const data = new SlashCommandBuilder()
 	.setName('unmonitor')
@@ -26,9 +27,9 @@ async function execute(interaction) {
 
 			// Check if the bot has the required permissions
 			const channels = [
-				{id: server.categoryId, type: 'Category'},
-				{id: server.statusId, type: 'Status Channel'},
-				{id: server.playersId, type: 'Players Channel'}
+				{ id: server.categoryId, type: 'Category' },
+				{ id: server.statusId, type: 'Status Channel' },
+				{ id: server.playersId, type: 'Players Channel' }
 			];
 			for (const channel of channels) {
 				if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id))) {
@@ -51,7 +52,7 @@ async function execute(interaction) {
 			}
 		}
 
-		console.log(`All servers were unmonitored for guild ${interaction.guildId}`);
+		logSuccess(`All servers were unmonitored for guild ${interaction.guildId}`);
 
 		if (!notUnmonitored.length && !notDeleted.length) {
 			await sendMessage(interaction, 'The channels have successfully been removed.');
@@ -88,9 +89,9 @@ async function execute(interaction) {
 
 	// Check if the bot has the required permissions
 	const channels = [
-		{id: server.categoryId, type: 'Category'},
-		{id: server.statusId, type: 'Status Channel'},
-		{id: server.playersId, type: 'Players Channel'}
+		{ id: server.categoryId, type: 'Category' },
+		{ id: server.statusId, type: 'Status Channel' },
+		{ id: server.playersId, type: 'Players Channel' }
 	];
 	for (const channel of channels) {
 		if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id), interaction)) return;
@@ -104,7 +105,7 @@ async function execute(interaction) {
 		return;
 	}
 
-	console.log(`${server.ip} was unmonitored for guild ${interaction.guildId}`);
+	logSuccess(`${server.ip} was unmonitored for guild ${interaction.guildId}`);
 
 	await sendMessage(interaction, 'The server has successfully been unmonitored.');
 }
@@ -126,11 +127,12 @@ async function removeServer(server, guild) {
 		try {
 			channel?.delete();
 		} catch (error) {
-			console.warn(
+			logWarning(
 				`Error deleting channel while removing server from guild
-                        Channel ID: ${channel.id}
-                        Guild ID: ${guild.id}
-                        Server IP: ${server.ip}`
+                    Channel ID: ${channel.id}
+                    Guild ID: ${guild.id}
+                    Server IP: ${server.ip}`,
+				error
 			);
 			throw error;
 		}
