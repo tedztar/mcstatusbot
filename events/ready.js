@@ -1,4 +1,5 @@
 const { Events } = require('discord.js');
+const { logSuccess, logWarning } = require('../functions/consoleLogging');
 const { getKey, setKey } = require('../functions/databaseFunctions');
 const { deployCommands } = require('../functions/deployCommands');
 const { getServerStatus } = require('../functions/getServerStatus');
@@ -10,7 +11,7 @@ const once = true;
 async function execute(client) {
 	await deployCommands();
 	await client.user.setActivity('/help', { type: 'WATCHING' });
-	console.log('Ready!');
+	logSuccess('Ready!');
 	await updateServers(client);
 	setInterval(updateServers, 6 * 60 * 1000, client);
 }
@@ -19,19 +20,19 @@ async function execute(client) {
 async function updateServers(client) {
 	let serverCount = client.guilds.cache.size;
 	await setKey('serverCount', serverCount);
-	
+
 	await client.guilds.cache.forEach(async (guild) => {
 		let serverList = await getKey(guild.id);
 		for (const server of serverList) {
 			let serverStatus;
 			try {
 				serverStatus = await getServerStatus(server.ip, 30 * 1000);
-			}
-			catch {
-				console.warn(
+			} catch {
+				logWarning(
 					`Error pinging Minecraft server while updating servers
 						Guild ID: ${guild.id}
-						Server IP: ${server.ip}`
+						Server IP: ${server.ip}`,
+					error
 				)
 			}
 			const channels = [
@@ -41,7 +42,7 @@ async function updateServers(client) {
 			await renameChannels(channels, serverStatus);
 		}
 	});
-	console.log('Servers updated');
+	logSuccess('Servers updated');
 }
 
 module.exports = { name, once, execute };

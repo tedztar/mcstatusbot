@@ -1,9 +1,10 @@
 const { getMissingPermissions } = require('./botPermissions');
+const { logWarning, logSuccess } = require('./consoleLogging');
 
 async function renameChannels(channels, serverStatus) {
     const channelNames = {
-        statusName: serverStatus.isOnline ? 'Status: Online' : 'Status: Offline',
-        playersName: serverStatus.isOnline ? `Players: ${serverStatus.players?.online ?? '?'} / ${serverStatus.players?.max ?? '?'}` : 'Players: 0'
+        statusName: (serverStatus.isOnline) ? 'Status: Online' : 'Status: Offline',
+        playersName: (serverStatus.isOnline) ? `Players: ${serverStatus.players?.online ?? '?'} / ${serverStatus.players?.max ?? '?'}` : 'Players: 0'
     }
 
     for (const channel of channels) {
@@ -16,24 +17,26 @@ async function renameChannels(channels, serverStatus) {
                     });
                 } catch (error) {
                     let permissions = getMissingPermissions('channel', channel.object);
-                    console.warn(
+                    logWarning(
                         `Error updating channel visibility while updating server status
                                 Channel ID: ${channel.object.id}
                                 Permissions: ${permissions}
-                                Guild ID: ${channel.object.guildId}`
+                                Guild ID: ${channel.object.guildId}`,
+                        error
                     )
                 }
             }
         } catch (error) {
             if (error.name.includes('RateLimitError')) {
-                console.log(`Reached the rate limit while renaming channel ${channel.object.id} in guild ${channel.object.guildId}`);
+                logSuccess(`Reached the rate limit while renaming channel ${channel.object.id} in guild ${channel.object.guildId}`);
             } else {
                 let permissions = getMissingPermissions('channel', channel.object);
-                console.warn(
+                logWarning(
                     `Error renaming channels while updating server status
                         Channel ID: ${channel.object.id}
                         Permissions: ${permissions}
-                        Guild ID: ${channel.object.guildId}`
+                        Guild ID: ${channel.object.guildId}`,
+                    error
                 )
             }
         }

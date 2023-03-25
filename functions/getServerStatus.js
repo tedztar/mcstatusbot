@@ -10,7 +10,7 @@ function getServerStatus(serverIp, timeout) {
 
     return new Promise((resolve) => {
         mcserver.ping(timeout, 47, (error, response) => {
-            let results = Object.assign({ isOnline: !error ? true : false }, response);
+            let results = Object.assign({ isOnline: (!error) ? true : false }, response);
             resolve(results);
         });
     })

@@ -6,6 +6,7 @@ const { isMissingPermissions } = require('../functions/botPermissions');
 const { noMonitoredServers, isMonitored, isNicknameUsed } = require('../functions/inputValidation');
 const { getKey, setKey } = require('../functions/databaseFunctions');
 const { findDefaultServer, findServerIndex } = require('../functions/findServer');
+const { logWarning, logSuccess } = require('../functions/consoleLogging');
 
 const data = new SlashCommandBuilder()
 	.setName('monitor')
@@ -34,7 +35,7 @@ async function execute(interaction) {
 	let server = {
 		ip: interaction.options.getString('ip'),
 		nickname: interaction.options.getString('nickname') || null,
-		default: await noMonitoredServers(interaction.guildId) ? true : interaction.options.getBoolean('default') || false
+		default: (await noMonitoredServers(interaction.guildId)) ? true : interaction.options.getBoolean('default') || false
 	};
 
 	// Create the server category
@@ -55,9 +56,10 @@ async function execute(interaction) {
 		});
 		server.categoryId = category.id;
 	} catch (error) {
-		console.warn(
+		logWarning(
 			`Error creating category channel
-						Guild ID: ${interaction.guildId}`
+				Guild ID: ${interaction.guildId}`,
+			error
 		);
 		await sendMessage(interaction, 'There was an error while creating the channels!');
 		return;
@@ -82,16 +84,18 @@ async function execute(interaction) {
 					await interaction.guild.channels.cache.get(server[channelId])?.delete();
 				}
 			} catch (error) {
-				console.warn(
+				logWarning(
 					`Error deleting channel while aborting monitor command
-								Guild ID: ${interaction.guildId}
-								Server IP: ${server.ip}`
+						Guild ID: ${interaction.guildId}
+						Server IP: ${server.ip}`,
+					error
 				);
 				throw error;
 			}
-			console.warn(
+			logWarning(
 				`Error creating voice channel
-							Guild ID: ${interaction.guildId}`
+					Guild ID: ${interaction.guildId}`,
+				error
 			);
 			await sendMessage(interaction, 'There was an error while creating the channels!');
 			return;
@@ -103,7 +107,7 @@ async function execute(interaction) {
 	monitoredServers.push(server);
 	await setKey(interaction.guildId, monitoredServers);
 
-	console.log(`${server.ip} was monitored for guild ${interaction.guildId}`);
+	logSuccess(`${server.ip} was monitored for guild ${interaction.guildId}`);
 
 	await sendMessage(interaction,
 		`The server has successfully been monitored${interaction.options.getBoolean('default') ? ' and set as the default server.' : '.'}`

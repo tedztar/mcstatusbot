@@ -39,11 +39,11 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - [ ] Rework status, nickname, and unmonitor commands to include dropdown menus
 - [ ] Rework monitor and nickname commands to include modal workflow
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
-- [ ] Support compatibility with bedrock servers
+- [ ] Support compatibility with bedrock servers (see [thid](https://www.npmjs.com/package/minecraft-server-util?activeTab=readme) package)
 
 ### Backend Updates
 - [ ] Update readme with screenshots
 - [ ] Fix async/await and for vs forEach usage
-- [ ] Implement optional success and error message pass-through in console
-- [ ] Move error logging to own file 
+- [x] Implement optional success and error message pass-through in console
+- [x] Move error logging to own file 
 - [ ] IP address validation

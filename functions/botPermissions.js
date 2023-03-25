@@ -19,8 +19,7 @@ async function isMissingPermissions(type, object, interaction) {
             ${missingPermissions}`
         ) : null;
         return true;
-    }
-    else {
+    } else {
         return false;
     }
 }
@@ -38,7 +37,7 @@ function getMissingPermissions(type, object) {
 }
 
 function getBotPermissions(type, object) {
-    let botPermissions = type == 'server' ? object.members.me.permissions.serialize() : object.guild.members.me.permissionsIn(object.id).serialize();
+    let botPermissions = (type == 'server') ? object.members.me.permissions.serialize() : object.guild.members.me.permissionsIn(object.id).serialize();
     let requiredPermissionsFlags = requiredPermissions.map(permission => { return permission['flag'] });
     let filteredBotPermissions = Object.keys(botPermissions)
         .filter(permission => requiredPermissionsFlags.includes(permission))

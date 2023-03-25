@@ -1,9 +1,9 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { sendMessage } = require('../functions/sendMessage');
 const { isMissingPermissions } = require('../functions/botPermissions');
-const { getKey, setKey } = require('../functions/databaseFunctions');
 const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
 const { noMonitoredServers, isNotMonitored, isNicknameUsed } = require('../functions/inputValidation');
+const { logWarning, logSuccess } = require('../functions/consoleLogging');
 
 const data = new SlashCommandBuilder()
 	.setName('nickname')
@@ -23,8 +23,7 @@ async function execute(interaction) {
 	if (interaction.options.getString('server')) {
 		server = await findServer(interaction.options.getString('server'), ['ip', 'nickname'], interaction.guildId);
 		if (await isNotMonitored(server, interaction)) return;
-	}
-	else {
+	} else {
 		server = await findDefaultServer(interaction.guildId);
 	}
 
@@ -36,20 +35,21 @@ async function execute(interaction) {
 		await channel?.setName(interaction.options.getString('nickname'));
 	} catch (error) {
 		if (error.name.includes('RateLimitError')) {
-			console.log(`Reached the rate limit while renaming channel ${server.categoryId} in guild ${interaction.guildId}`);
+			logSuccess(`Reached the rate limit while renaming channel ${server.categoryId} in guild ${interaction.guildId}`);
 			await sendMessage(interaction, 'The rate limit for this channel has been reached, please try renaming this server in a few minutes!');
 		} else {
-			console.warn(
+			logWarning(
 				`Error renaming channel while setting nickname
                     Channel ID: ${server.categoryId}
-                    Guild ID: ${interaction.guildId}`
+                    Guild ID: ${interaction.guildId}`,
+				error
 			);
 			await sendMessage(interaction, 'There was an error while renaming the channel!');
 		}
 		return;
 	}
 
-	console.log(`${server.ip} was given a nickname in guild ${interaction.guildId}`);
+	logSuccess(`${server.ip} was given a nickname in guild ${interaction.guildId}`);
 
 	await sendMessage(interaction, 'The server has successfully been renamed.');
 }

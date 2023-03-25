@@ -1,6 +1,7 @@
 const { REST, Routes } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
+const { logSuccess, logError } = require('./consoleLogging');
 
 async function deployCommands() {
 	const commands = [];
@@ -17,9 +18,9 @@ async function deployCommands() {
 
 	try {
 		await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands });
-		console.log('Successfully registered application commands');
+		logSuccess('Successfully registered application commands');
 	} catch (error) {
-		console.error(error);
+		logError(error);
 	}
 }
 
