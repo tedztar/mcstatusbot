@@ -1,12 +1,11 @@
-const Discord = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 
-module.exports = {
-	async newBasicMessage(interaction, message) {
-		const responseEmbed = new Discord.EmbedBuilder().setDescription(message).setColor(embedColor);
-		await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
-	},
-	async newMessageWithTitle(interaction, message, title) {
-		const responseEmbed = new Discord.EmbedBuilder().setTitle(title).setDescription(message).setColor(embedColor);
-		await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
-	}
-};
+const embedColor = '#7289DA';
+
+async function sendMessage(interaction, message, title) {
+	const responseEmbed = new EmbedBuilder().setDescription(message).setColor(embedColor);
+	title ? responseEmbed.setTitle(title) : null;
+	await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
+}
+
+module.exports = { embedColor, sendMessage };

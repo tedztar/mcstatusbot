@@ -1,30 +1,64 @@
-module.exports = {
-	name: 'interactionCreate',
-	once: false,
-	async execute(interaction, client) {
-		if (!interaction.isChatInputCommand()) return;
+const { Events } = require('discord.js');
+const { logWarning } = require('../functions/consoleLogging');
 
-		const command = await client.commands.get(interaction.commandName);
+const name = Events.InteractionCreate;
+const once = false;
 
-		if (!command) return;
+async function execute(interaction) {
+    if (!interaction.isChatInputCommand()) return;
 
-		await interaction
-			.deferReply({ ephemeral: true })
-			.then(async () => {
-				try {
-					await command.execute(interaction);
-				} catch (error) {
-					console.log(error);
+    const command = interaction.client.commands.get(interaction.commandName);
 
-					await interaction.editReply({
-						content: 'There was an error while executing this command!',
-						ephemeral: true
-					});
-				}
-			})
-			.catch(async (error) => {
-				console.log(error);
-				console.log('Could not defer reply!');
-			});
-	}
-};
+    if (!command) return;
+
+    try {
+        await interaction.deferReply({ ephemeral: true });
+        await command.execute(interaction);
+    } catch (error) {
+        let commandOptions = getCommandOptions(interaction);
+        if (interaction.replied || interaction.deferred) {
+            logWarning(
+                `Error executing command
+                    Guild ID: ${interaction.guildId}
+                    Command: /${interaction.commandName}
+                    Command Options: ${commandOptions ? JSON.stringify(commandOptions) : 'None'}`,
+                error
+            );
+
+            await interaction.editReply({
+                content: 'There was an error while executing this command!',
+                ephemeral: true
+            });
+        } else {
+            logWarning(
+                `Error deferring reply to command
+                    Guild ID: ${interaction.guildId}
+                    Command: /${interaction.commandName}
+                    Command Options: ${commandOptions ? JSON.stringify(commandOptions) : 'None'}`,
+                error
+            );
+
+            await interaction.reply({
+                content: 'There was an error while executing this command!',
+                ephemeral: true
+            });
+        }
+    }
+}
+
+function getCommandOptions(interaction) {
+    let commandOptions = [];
+    for (option of interaction.options.data) {
+        const filteredData = ['name', 'value'];
+        let filteredOption = Object.keys(option)
+            .filter(data => filteredData.includes(data))
+            .reduce((obj, key) => {
+                obj[key] = option[key];
+                return obj;
+            }, {});
+        commandOptions.push(filteredOption);
+    }
+    return commandOptions.length ? commandOptions : null;
+}
+
+module.exports = { name, once, execute };
