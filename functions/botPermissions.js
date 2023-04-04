@@ -33,7 +33,7 @@ function getMissingPermissions(type, object) {
         if (!botPermissions[permission.flag]) missingPermissions.push(permission[basicType]);
     }
     const missingPermissionsList = missingPermissions.join(', ');
-    return missingPermissionsList;
+    return missingPermissions.length ? missingPermissionsList : null;
 }
 
 function getBotPermissions(type, object) {
