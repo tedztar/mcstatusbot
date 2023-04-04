@@ -22,16 +22,15 @@ async function execute(interaction) {
 		let notUnmonitored = [];
 		let notDeleted = [];
 		let monitoredServers = await getKey(interaction.guild.id);
-		for (const server of monitoredServers) {
-			let skipServer = false;
-
-			// Check if the bot has the required permissions
+		await Promise.allSettled(monitoredServers.map(async (server) => {
+			// Check if the bot has the required permissions'
+			let missingPermissions = false;
 			const channels = [
 				{ id: server.categoryId, type: 'Category' },
 				{ id: server.statusId, type: 'Status Channel' },
 				{ id: server.playersId, type: 'Players Channel' }
 			];
-			for (const channel of channels) {
+			await Promise.all(channels.map(async (channel) => {
 				if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id))) {
 					let missingPermissions = getMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id));
 					notUnmonitored.push({
@@ -39,18 +38,17 @@ async function execute(interaction) {
 						type: channel.type,
 						missingPermissions
 					})
-					skipServer = true;
-					break;
+					throw new Error();
 				}
-			}
-			if (skipServer) continue;
+			})).catch(() => missingPermissions = true);
+			if (missingPermissions) return;
 
 			try {
 				await removeServer(server, interaction.guild);
 			} catch (error) {
 				notDeleted.push(server.nickname || server.ip);
 			}
-		}
+		}));
 
 		logSuccess(`All servers were unmonitored for guild ${interaction.guildId}`);
 
@@ -62,11 +60,10 @@ async function execute(interaction) {
 			}).join('\n');
 			let notDeletedList = notDeleted.join(', ');
 			await sendMessage(interaction,
-				`There was an error while unmonitoring some of the servers!	
+				`There was an error while unmonitoring some of the servers!
 				${notUnmonitored.length ? `
 				The following servers need the required category and/or channel permissions before you can unmonitor them:\n
-				${notUnmonitoredList}` : ''}
-				${notDeleted.length ? `
+				${notUnmonitoredList}` : ''} ${notDeleted.length ? `
 				The following servers were unmonitored, but the channels need to be removed manually:\n
 				${notDeletedList}` : ''}`
 			);
@@ -86,14 +83,16 @@ async function execute(interaction) {
 	if (await removingDefaultServer(server, interaction.guildId, interaction)) return;
 
 	// Check if the bot has the required permissions
+	let missingPermissions = false;
 	const channels = [
 		{ id: server.categoryId, type: 'Category' },
 		{ id: server.statusId, type: 'Status Channel' },
 		{ id: server.playersId, type: 'Players Channel' }
 	];
-	for (const channel of channels) {
-		if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id), interaction)) return;
-	}
+	await Promise.all(channels.map(async (channel) => {
+		if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id), interaction)) throw new Error();
+	})).catch(() => missingPermissions = true);
+	if (missingPermissions) return;
 
 	// Unmonitor the server
 	try {
@@ -121,9 +120,10 @@ async function removeServer(server, guild) {
 		await guild.channels.cache.get(server.playersId),
 		await guild.channels.cache.get(server.categoryId)
 	];
-	for (const channel of channels) {
+
+	await Promise.allSettled(channels.map(async (channel) => {
 		try {
-			channel?.delete();
+			await channel?.delete();
 		} catch (error) {
 			logWarning(
 				`Error deleting channel while removing server from guild
@@ -134,7 +134,11 @@ async function removeServer(server, guild) {
 			);
 			throw error;
 		}
-	}
+	})).then((promises) => {
+		promises.forEach((promise) => {
+			if (promise.status == "rejected") throw new Error();
+		});
+	});
 }
 
 module.exports = { data, execute };

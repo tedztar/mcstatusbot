@@ -10,8 +10,7 @@ const once = true;
 
 async function execute(client) {
 	await deployCommands();
-	await client.user.setActivity('/help', { type: 'WATCHING' });
-	logSuccess('Ready!');
+	console.log('Ready!');
 	await updateServers(client);
 	setInterval(updateServers, 6 * 60 * 1000, client);
 }
@@ -21,13 +20,13 @@ async function updateServers(client) {
 	let serverCount = client.guilds.cache.size;
 	await setKey('serverCount', serverCount);
 
-	await client.guilds.cache.forEach(async (guild) => {
+	await Promise.allSettled(client.guilds.cache.map(async (guild) => {
 		let serverList = await getKey(guild.id);
-		for (const server of serverList) {
+		await Promise.allSettled(serverList.map(async (server) => {
 			let serverStatus;
 			try {
 				serverStatus = await getServerStatus(server.ip, 30 * 1000);
-			} catch {
+			} catch (error) {
 				logWarning(
 					`Error pinging Minecraft server while updating servers
 						Guild ID: ${guild.id}
@@ -40,8 +39,8 @@ async function updateServers(client) {
 				{ object: await guild.channels.cache.get(server.playersId), name: 'playersName' }
 			];
 			await renameChannels(channels, serverStatus);
-		}
-	});
+		}));
+	}));
 	logSuccess('Servers updated');
 }
 

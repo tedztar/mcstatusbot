@@ -43,7 +43,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ### Backend Updates
 - [ ] Update readme with screenshots
-- [ ] Fix async/await and for vs forEach usage
+- [x] Fix async/await usage and parallelize for loops
 - [x] Implement optional success and error message pass-through in console
 - [x] Move error logging to own file 
 - [ ] IP address validation

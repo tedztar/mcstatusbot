@@ -1,13 +1,14 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
 const express = require('express');
 const { database } = require('./functions/databaseFunctions');
-const { logWarning, logError } = require('./functions/consoleLogging');
+const { logError } = require('./functions/consoleLogging');
 
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds],
+	presence: { activities: [{ name: '/help', type: ActivityType.Watching }] },
 	rest: { rejectOnRateLimit: ['/channels'] }
 });
 
@@ -20,18 +21,14 @@ database.on('error', (error) => logError('Keyv connection error: ', error));
 client.commands = new Collection();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
-try {
-	for (const file of commandFiles) {
-		const filePath = path.join(commandsPath, file);
-		const command = require(filePath);
-		if ('data' in command && 'execute' in command) {
-			client.commands.set(command.data.name, command);
-		} else {
-			throw new Error();
-		}
+for (const file of commandFiles) {
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	if ('data' in command && 'execute' in command) {
+		client.commands.set(command.data.name, command);
+	} else {
+		logError(`Error registering /${path.basename(file, '.js')} command: missing a required "data" or "execute" property.`);
 	}
-} catch (error) {
-	logWarning(`Error registering /${path.basename(file, '.js')} command: missing a required "data" or "execute" property.`, error);
 }
 
 // Event Handler
