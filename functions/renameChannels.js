@@ -28,7 +28,7 @@ async function renameChannels(channels, serverStatus) {
             }
         } catch (error) {
             if (error.name.includes('RateLimitError')) {
-                logSuccess(`Reached the rate limit while renaming channel ${channel.object.id} in guild ${channel.object.guildId}`);
+                // logSuccess(`Reached the rate limit while renaming channel ${channel.object.id} in guild ${channel.object.guildId}`);
             } else {
                 let permissions = getMissingPermissions('channel', channel.object);
                 logWarning(
