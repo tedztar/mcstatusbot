@@ -37,18 +37,13 @@ async function execute(interaction) {
                     Command Options: ${commandOptions ? JSON.stringify(commandOptions) : 'None'}`,
                 error
             );
-
-            await interaction.reply({
-                content: 'There was an error while executing this command!',
-                ephemeral: true
-            });
         }
     }
 }
 
 function getCommandOptions(interaction) {
     let commandOptions = [];
-    for (option of interaction.options.data) {
+    for (const option of interaction.options.data) {
         const filteredData = ['name', 'value'];
         let filteredOption = Object.keys(option)
             .filter(data => filteredData.includes(data))

@@ -79,25 +79,25 @@ async function execute(interaction) {
 			server[voiceChannel.idType] = channel.id;
 			await channel.setParent(server.categoryId);
 		} catch (error) {
-			try {
-				for (const channelId of [categoryId, statusId, playersId]) {
+			const channelIds = ['categoryId', 'statusId', 'playersId'];
+			await Promise.allSettled(channelIds.map(async (channelId) => {
+				try {
 					await interaction.guild.channels.cache.get(server[channelId])?.delete();
+				} catch (error) {
+					logWarning(
+						`Error deleting channel while aborting monitor command
+								Guild ID: ${interaction.guildId}
+								Server IP: ${server.ip}`,
+						error
+					);
 				}
-			} catch (error) {
-				logWarning(
-					`Error deleting channel while aborting monitor command
-						Guild ID: ${interaction.guildId}
-						Server IP: ${server.ip}`,
-					error
-				);
-				throw error;
-			}
+			}));
 			logWarning(
 				`Error creating voice channel
 					Guild ID: ${interaction.guildId}`,
 				error
 			);
-			await sendMessage(interaction, 'There was an error while creating the channels!');
+			await sendMessage(interaction, 'There was an error while creating the channels, please manually delete any channels that were created!');
 			return;
 		}
 	}

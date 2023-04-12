@@ -35,7 +35,7 @@ async function execute(interaction) {
 		await channel?.setName(interaction.options.getString('nickname'));
 	} catch (error) {
 		if (error.name.includes('RateLimitError')) {
-			logSuccess(`Reached the rate limit while renaming channel ${server.categoryId} in guild ${interaction.guildId}`);
+			// logSuccess(`Reached the rate limit while renaming channel ${server.categoryId} in guild ${interaction.guildId}`);
 			await sendMessage(interaction, 'The rate limit for this channel has been reached, please try renaming this server in a few minutes!');
 		} else {
 			logWarning(

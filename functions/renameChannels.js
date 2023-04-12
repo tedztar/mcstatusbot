@@ -7,7 +7,7 @@ async function renameChannels(channels, serverStatus) {
         playersName: (serverStatus.isOnline) ? `Players: ${serverStatus.players?.online ?? '?'} / ${serverStatus.players?.max ?? '?'}` : 'Players: 0'
     }
 
-    for (const channel of channels) {
+    await Promise.allSettled(channels.map(async (channel) => {
         try {
             await channel.object?.setName(channelNames[channel.name]);
             if (channel.name == 'playersName') {
@@ -20,7 +20,7 @@ async function renameChannels(channels, serverStatus) {
                     logWarning(
                         `Error updating channel visibility while updating server status
                                 Channel ID: ${channel.object.id}
-                                Permissions: ${permissions}
+                                Missing Permissions: ${permissions || 'None'}
                                 Guild ID: ${channel.object.guildId}`,
                         error
                     )
@@ -28,19 +28,19 @@ async function renameChannels(channels, serverStatus) {
             }
         } catch (error) {
             if (error.name.includes('RateLimitError')) {
-                logSuccess(`Reached the rate limit while renaming channel ${channel.object.id} in guild ${channel.object.guildId}`);
+                // logSuccess(`Reached the rate limit while renaming channel ${channel.object.id} in guild ${channel.object.guildId}`);
             } else {
                 let permissions = getMissingPermissions('channel', channel.object);
                 logWarning(
                     `Error renaming channels while updating server status
                         Channel ID: ${channel.object.id}
-                        Permissions: ${permissions}
+                        Missing Permissions: ${permissions || 'None'}
                         Guild ID: ${channel.object.guildId}`,
                     error
                 )
             }
         }
-    }
+    }));
 }
 
 module.exports = { renameChannels };
