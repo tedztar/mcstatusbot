@@ -10,15 +10,21 @@ const once = true;
 
 async function execute(client) {
 	await deployCommands();
-	console.log('Ready!');
+	console.log('Ready!\n');
 	await updateServers(client);
 	setInterval(updateServers, 6 * 60 * 1000, client);
 }
 
 // Fix await/async to speed up fucntion
 async function updateServers(client) {
-	let serverCount = client.shard.fetchClientValues('guilds.cache.size').then((results) => results.reduce((acc, guildCount) => acc + guildCount, 0));
-	await setKey('serverCount', serverCount);
+	try {
+		let shardCount = await client.shard.fetchClientValues('guilds.cache.size');
+		let serverCount = shardCount.reduce((acc, guildCount) => acc + guildCount, 0);
+
+		await setKey('serverCount', serverCount);
+	} catch (error) {
+		logWarning('Error setting server count', error);
+	}
 
 	await Promise.allSettled(
 		client.guilds.cache.map(async (guild) => {
