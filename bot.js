@@ -1,7 +1,6 @@
 const { Client, GatewayIntentBits, Collection, ActivityType } = require("discord.js");
 const fs = require("node:fs");
 const path = require("node:path");
-const express = require("express");
 const { database } = require("./functions/databaseFunctions");
 const { logError } = require("./functions/consoleLogging");
 
@@ -10,8 +9,6 @@ const client = new Client({
   presence: { activities: [{ name: "/help", type: ActivityType.Watching }] },
   rest: { rejectOnRateLimit: ["/channels"] },
 });
-
-express().listen(process.env.PORT || 5000);
 
 // Database Handler
 database.on("error", (error) => logError("Keyv connection error: ", error));
