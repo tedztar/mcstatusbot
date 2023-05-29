@@ -11,9 +11,10 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## Now Updated!!
 
-- Updated Feb 2023
-- Default server option has been implemented! Set a monitored server to be the default for all commands so that you don't have to constantly type in the nickname or IP address
-- Nicknames have been implemented! Set a nickname for your server with the `/nickname` command. You can refer to the server using its nickname in all commands!
+- Updated May 2023
+- Various backend updates have been made to make the bot run smoother.
+- Broken server count badge fixed.
+- Stay tuned for large front end changes coming over summer.
 
 ## Features
 
@@ -36,14 +37,16 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 ## To-Do
 
 ### Feature Updates
+
 - [ ] Rework status, nickname, and unmonitor commands to include dropdown menus
 - [ ] Rework monitor and nickname commands to include modal workflow
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
 - [ ] Support compatibility with bedrock servers (see [thid](https://www.npmjs.com/package/minecraft-server-util?activeTab=readme) package)
 
 ### Backend Updates
+
 - [ ] Update readme with screenshots
 - [x] Fix async/await usage and parallelize for loops
 - [x] Implement optional success and error message pass-through in console
-- [x] Move error logging to own file 
+- [x] Move error logging to own file
 - [ ] IP address validation
