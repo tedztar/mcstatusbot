@@ -17,9 +17,14 @@ async function execute(client) {
 
 // Fix await/async to speed up fucntion
 async function updateServers(client) {
-	let shardCount = await client.shard.fetchClientValues('guilds.cache.size');
-	let serverCount = shardCount.reduce((acc, guildCount) => acc + guildCount, 0);
-	await setKey('serverCount', serverCount);
+	try {
+		let shardCount = await client.shard.fetchClientValues('guilds.cache.size');
+		let serverCount = shardCount.reduce((acc, guildCount) => acc + guildCount, 0);
+
+		await setKey('serverCount', serverCount);
+	} catch (error) {
+		logWarning('Error setting server count', error);
+	}
 
 	await Promise.allSettled(
 		client.guilds.cache.map(async (guild) => {
