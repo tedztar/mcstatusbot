@@ -17,30 +17,34 @@ async function execute(client) {
 
 // Fix await/async to speed up fucntion
 async function updateServers(client) {
-	let serverCount = client.guilds.cache.size;
+	let serverCount = client.shard.fetchClientValues('guilds.cache.size').then((results) => results.reduce((acc, guildCount) => acc + guildCount, 0));
 	await setKey('serverCount', serverCount);
 
-	await Promise.allSettled(client.guilds.cache.map(async (guild) => {
-		let serverList = await getKey(guild.id);
-		await Promise.allSettled(serverList.map(async (server) => {
-			let serverStatus;
-			try {
-				serverStatus = await getServerStatus(server.ip, 30 * 1000);
-			} catch (error) {
-				logWarning(
-					`Error pinging Minecraft server while updating servers
+	await Promise.allSettled(
+		client.guilds.cache.map(async (guild) => {
+			let serverList = await getKey(guild.id);
+			await Promise.allSettled(
+				serverList.map(async (server) => {
+					let serverStatus;
+					try {
+						serverStatus = await getServerStatus(server.ip, 30 * 1000);
+					} catch (error) {
+						logWarning(
+							`Error pinging Minecraft server while updating servers
 						Guild ID: ${guild.id}
 						Server IP: ${server.ip}`,
-					error
-				)
-			}
-			const channels = [
-				{ object: await guild.channels.cache.get(server.statusId), name: 'statusName' },
-				{ object: await guild.channels.cache.get(server.playersId), name: 'playersName' }
-			];
-			await renameChannels(channels, serverStatus);
-		}));
-	}));
+							error
+						);
+					}
+					const channels = [
+						{ object: await guild.channels.cache.get(server.statusId), name: 'statusName' },
+						{ object: await guild.channels.cache.get(server.playersId), name: 'playersName' }
+					];
+					await renameChannels(channels, serverStatus);
+				})
+			);
+		})
+	);
 	logSuccess('Servers updated');
 }
 
