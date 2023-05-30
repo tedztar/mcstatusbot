@@ -22,12 +22,11 @@ async function execute(_, newChannel) {
 		monitoredServers[serverIndex].nickname = newChannel.name;
 		await setKey(newChannel.guildId, monitoredServers);
 	} catch (error) {
-		logWarning(
-			`Error setting nickname during channel rename
-                Channel ID: ${newChannel.id}
-                Guild ID: ${newChannel.guildId}`,
-			error
-		);
+		logWarning('Error setting nickname during channel rename', {
+			'Channel ID': newChannel.id,
+			'Guild ID': newChannel.guildId,
+			Error: error
+		});
 	}
 }
 

@@ -6,7 +6,7 @@ const { isMissingPermissions } = require('../functions/botPermissions');
 const { noMonitoredServers, isMonitored, isNicknameUsed } = require('../functions/inputValidation');
 const { getKey, setKey } = require('../functions/databaseFunctions');
 const { findDefaultServer, findServerIndex } = require('../functions/findServer');
-const { logWarning, logSuccess } = require('../functions/consoleLogging');
+const { logWarning } = require('../functions/consoleLogging');
 
 const data = new SlashCommandBuilder()
 	.setName('monitor')
@@ -56,11 +56,10 @@ async function execute(interaction) {
 		});
 		server.categoryId = category.id;
 	} catch (error) {
-		logWarning(
-			`Error creating category channel
-				Guild ID: ${interaction.guildId}`,
-			error
-		);
+		logWarning('Error creating category channel', {
+			'Guild ID': interaction.guildId,
+			Error: error
+		});
 		await sendMessage(interaction, 'There was an error while creating the channels!');
 		return;
 	}
@@ -80,23 +79,24 @@ async function execute(interaction) {
 			await channel.setParent(server.categoryId);
 		} catch (error) {
 			const channelIds = ['categoryId', 'statusId', 'playersId'];
-			await Promise.allSettled(channelIds.map(async (channelId) => {
-				try {
-					await interaction.guild.channels.cache.get(server[channelId])?.delete();
-				} catch (error) {
-					logWarning(
-						`Error deleting channel while aborting monitor command
-								Guild ID: ${interaction.guildId}
-								Server IP: ${server.ip}`,
-						error
-					);
-				}
-			}));
-			logWarning(
-				`Error creating voice channel
-					Guild ID: ${interaction.guildId}`,
-				error
+			await Promise.allSettled(
+				channelIds.map(async (channelId) => {
+					try {
+						await interaction.guild.channels.cache.get(server[channelId])?.delete();
+					} catch (error) {
+						logWarning('Error deleting channel while aborting monitor command', {
+							'Channel ID': server[channelId],
+							'Guild ID': interaction.guildId,
+							'Server IP': server.ip,
+							Error: error
+						});
+					}
+				})
 			);
+			logWarning('Error creating voice channel', {
+				'Guild ID': interaction.guildId,
+				Error: error
+			});
 			await sendMessage(interaction, 'There was an error while creating the channels, please manually delete any channels that were created!');
 			return;
 		}
@@ -107,9 +107,8 @@ async function execute(interaction) {
 	monitoredServers.push(server);
 	await setKey(interaction.guildId, monitoredServers);
 
-	logSuccess(`${server.ip} was monitored for guild ${interaction.guildId}`);
-
-	await sendMessage(interaction,
+	await sendMessage(
+		interaction,
 		`The server has successfully been monitored${interaction.options.getBoolean('default') ? ' and set as the default server.' : '.'}`
 	);
 

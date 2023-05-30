@@ -1,16 +1,25 @@
-const chalk = require('chalk');
+const pino = require('pino');
+
+const logger = pino({
+	transport: {
+		target: 'pino-pretty',
+		options: {
+			translateTime: 'SYS:dd-mm-yyyy, HH:MM:ss',
+			ignore: 'pid,hostname'
+		}
+	}
+});
 
 function logSuccess(message) {
-	if (process.env.LOG_SUCCESSES == 'TRUE') console.log(message + '\n');
+	logger.info(message);
 }
 
 function logWarning(message, error) {
-	console.log(chalk.yellow(message));
-	if (process.env.LOG_ERRORS == 'TRUE') console.log(chalk.yellow(error + '\n'));
+	logger.warn({ details: error }, message);
 }
 
 function logError(message, error) {
-	console.error(chalk.red(message, error));
+	logger.fatal({ details: error }, message);
 }
 
 module.exports = { logSuccess, logWarning, logError };

@@ -4,7 +4,7 @@ const { isMissingPermissions, getMissingPermissions } = require('../functions/bo
 const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
 const { getKey, setKey } = require('../functions/databaseFunctions');
 const { noMonitoredServers, isServerUnspecified, removingDefaultServer, isNotMonitored } = require('../functions/inputValidation');
-const { logWarning, logSuccess } = require('../functions/consoleLogging');
+const { logWarning } = require('../functions/consoleLogging');
 
 const data = new SlashCommandBuilder()
 	.setName('unmonitor')
@@ -22,50 +22,63 @@ async function execute(interaction) {
 		let notUnmonitored = [];
 		let notDeleted = [];
 		let monitoredServers = await getKey(interaction.guild.id);
-		await Promise.allSettled(monitoredServers.map(async (server) => {
-			// Check if the bot has the required permissions'
-			let missingPermissions = false;
-			const channels = [
-				{ id: server.categoryId, type: 'Category' },
-				{ id: server.statusId, type: 'Status Channel' },
-				{ id: server.playersId, type: 'Players Channel' }
-			];
-			await Promise.all(channels.map(async (channel) => {
-				if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id))) {
-					let missingPermissions = getMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id));
-					notUnmonitored.push({
-						name: server.nickname || server.ip,
-						type: channel.type,
-						missingPermissions
+		await Promise.allSettled(
+			monitoredServers.map(async (server) => {
+				// Check if the bot has the required permissions'
+				let missingPermissions = false;
+				const channels = [
+					{ id: server.categoryId, type: 'Category' },
+					{ id: server.statusId, type: 'Status Channel' },
+					{ id: server.playersId, type: 'Players Channel' }
+				];
+				await Promise.all(
+					channels.map(async (channel) => {
+						if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id))) {
+							let missingPermissions = getMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id));
+							notUnmonitored.push({
+								name: server.nickname || server.ip,
+								type: channel.type,
+								missingPermissions
+							});
+							throw new Error();
+						}
 					})
-					throw new Error();
+				).catch(() => (missingPermissions = true));
+				if (missingPermissions) return;
+
+				try {
+					await removeServer(server, interaction.guild);
+				} catch (error) {
+					notDeleted.push(server.nickname || server.ip);
 				}
-			})).catch(() => missingPermissions = true);
-			if (missingPermissions) return;
-
-			try {
-				await removeServer(server, interaction.guild);
-			} catch (error) {
-				notDeleted.push(server.nickname || server.ip);
-			}
-		}));
-
-		logSuccess(`All servers were unmonitored for guild ${interaction.guildId}`);
+			})
+		);
 
 		if (!notUnmonitored.length && !notDeleted.length) {
 			await sendMessage(interaction, 'The channels have successfully been removed.');
 		} else {
-			let notUnmonitoredList = notUnmonitored.map((server) => {
-				return `${server.name} // ${server.type}: ${server.missingPermissions}`;
-			}).join('\n');
+			let notUnmonitoredList = notUnmonitored
+				.map((server) => {
+					return `${server.name} // ${server.type}: ${server.missingPermissions}`;
+				})
+				.join('\n');
 			let notDeletedList = notDeleted.join(', ');
-			await sendMessage(interaction,
+			await sendMessage(
+				interaction,
 				`There was an error while unmonitoring some of the servers!
-				${notUnmonitored.length ? `
+				${
+					notUnmonitored.length
+						? `
 				The following servers need the required category and/or channel permissions before you can unmonitor them:\n
-				${notUnmonitoredList}` : ''} ${notDeleted.length ? `
+				${notUnmonitoredList}`
+						: ''
+				} ${
+					notDeleted.length
+						? `
 				The following servers were unmonitored, but the channels need to be removed manually:\n
-				${notDeletedList}` : ''}`
+				${notDeletedList}`
+						: ''
+				}`
 			);
 		}
 		return;
@@ -89,9 +102,11 @@ async function execute(interaction) {
 		{ id: server.statusId, type: 'Status Channel' },
 		{ id: server.playersId, type: 'Players Channel' }
 	];
-	await Promise.all(channels.map(async (channel) => {
-		if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id), interaction)) throw new Error();
-	})).catch(() => missingPermissions = true);
+	await Promise.all(
+		channels.map(async (channel) => {
+			if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id), interaction)) throw new Error();
+		})
+	).catch(() => (missingPermissions = true));
 	if (missingPermissions) return;
 
 	// Unmonitor the server
@@ -101,8 +116,6 @@ async function execute(interaction) {
 		await sendMessage(interaction, 'There was an error while deleting some of the channels. Please delete them manually!');
 		return;
 	}
-
-	logSuccess(`${server.ip} was unmonitored for guild ${interaction.guildId}`);
 
 	await sendMessage(interaction, 'The server has successfully been unmonitored.');
 }
@@ -121,22 +134,23 @@ async function removeServer(server, guild) {
 		await guild.channels.cache.get(server.categoryId)
 	];
 
-	await Promise.allSettled(channels.map(async (channel) => {
-		try {
-			await channel?.delete();
-		} catch (error) {
-			logWarning(
-				`Error deleting channel while removing server from guild
-                    Channel ID: ${channel.id}
-                    Guild ID: ${guild.id}
-                    Server IP: ${server.ip}`,
-				error
-			);
-			throw error;
-		}
-	})).then((promises) => {
+	await Promise.allSettled(
+		channels.map(async (channel) => {
+			try {
+				await channel?.delete();
+			} catch (error) {
+				logWarning('Error deleting channel while removing server from guild', {
+					'Channel ID': channel.id,
+					'Guild ID': guild.id,
+					'Server IP': server.ip,
+					Error: error
+				});
+				throw error;
+			}
+		})
+	).then((promises) => {
 		promises.forEach((promise) => {
-			if (promise.status == "rejected") throw new Error();
+			if (promise.status == 'rejected') throw new Error();
 		});
 	});
 }

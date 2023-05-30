@@ -10,7 +10,7 @@ const once = true;
 
 async function execute(client) {
 	await deployCommands();
-	console.log('Ready!\n');
+	logSuccess('Ready');
 	await updateServers(client);
 	setInterval(updateServers, 6 * 60 * 1000, client);
 }
@@ -35,12 +35,11 @@ async function updateServers(client) {
 					try {
 						serverStatus = await getServerStatus(server.ip, 30 * 1000);
 					} catch (error) {
-						logWarning(
-							`Error pinging Minecraft server while updating servers
-						Guild ID: ${guild.id}
-						Server IP: ${server.ip}`,
-							error
-						);
+						logWarning('Error pinging Minecraft server while updating servers', {
+							'Server IP': server.ip,
+							'Guild ID': guild.id,
+							Error: error
+						});
 					}
 					const channels = [
 						{ object: await guild.channels.cache.get(server.statusId), name: 'statusName' },
@@ -51,7 +50,6 @@ async function updateServers(client) {
 			);
 		})
 	);
-	logSuccess('Servers updated');
 }
 
 module.exports = { name, once, execute };
