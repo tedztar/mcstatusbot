@@ -6,7 +6,7 @@ const { logError } = require('./consoleLogging');
 async function deployCommands() {
 	const commands = [];
 	const commandsPath = path.join(__dirname, '..', 'commands');
-	const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
 
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
@@ -18,7 +18,6 @@ async function deployCommands() {
 
 	try {
 		await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands });
-		console.log('Successfully registered application commands');
 	} catch (error) {
 		logError(error);
 	}

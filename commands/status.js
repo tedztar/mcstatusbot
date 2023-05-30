@@ -3,7 +3,7 @@ const { embedColor, sendMessage } = require('../functions/sendMessage');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { findServer, findDefaultServer } = require('../functions/findServer');
 const { noMonitoredServers } = require('../functions/inputValidation');
-const { logWarning, logSuccess } = require('../functions/consoleLogging');
+const { logWarning } = require('../functions/consoleLogging');
 
 const data = new SlashCommandBuilder()
 	.setName('status')
@@ -15,7 +15,7 @@ async function execute(interaction) {
 
 	if (interaction.options.getString('server')) {
 		let server = await findServer(interaction.options.getString('server'), ['nickname'], interaction.guildId);
-		serverIp = (server) ? server.ip : interaction.options.getString('server');
+		serverIp = server ? server.ip : interaction.options.getString('server');
 	} else {
 		if (await noMonitoredServers(interaction.guildId, interaction, true)) return;
 		let server = await findDefaultServer(interaction.guildId);
@@ -27,12 +27,11 @@ async function execute(interaction) {
 	try {
 		serverStatus = await getServerStatus(serverIp, 5 * 1000);
 	} catch (error) {
-		logWarning(
-			`Error pinging Minecraft server while running status command
-				Guild ID: ${interaction.guildId}
-				Server IP: ${serverIp}`,
-			error
-		)
+		logWarning('Error pinging Minecraft server while running status command', {
+			'Guild ID': interaction.guildId,
+			'Server IP': serverIp,
+			Error: error
+		});
 		await sendMessage(interaction, 'This IP address could not be pinged!');
 		return;
 	}
@@ -40,7 +39,6 @@ async function execute(interaction) {
 	// Message if server is offline
 	if (!serverStatus.isOnline) {
 		await sendMessage(interaction, `*The server is offline!*`, `Status for ${serverIp}:`);
-		logSuccess(`${serverIp} was pinged with the status command by a user in guild ${interaction.guildId}`);
 		return;
 	}
 
@@ -67,8 +65,6 @@ async function execute(interaction) {
 		.setThumbnail(`https://api.mcsrvstat.us/icon/${serverIp}`);
 
 	await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
-
-	logSuccess(`${serverIp} was pinged with the status command by a user in guild ${interaction.guildId}`);
 }
 
 module.exports = { data, execute };

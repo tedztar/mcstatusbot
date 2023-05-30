@@ -1,9 +1,9 @@
 const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 const { sendMessage } = require('../functions/sendMessage');
 const { isMissingPermissions } = require('../functions/botPermissions');
-const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
+const { findServer, findDefaultServer } = require('../functions/findServer');
 const { noMonitoredServers, isNotMonitored, isNicknameUsed } = require('../functions/inputValidation');
-const { logWarning, logSuccess } = require('../functions/consoleLogging');
+const { logWarning } = require('../functions/consoleLogging');
 
 const data = new SlashCommandBuilder()
 	.setName('nickname')
@@ -35,21 +35,17 @@ async function execute(interaction) {
 		await channel?.setName(interaction.options.getString('nickname'));
 	} catch (error) {
 		if (error.name.includes('RateLimitError')) {
-			// logSuccess(`Reached the rate limit while renaming channel ${server.categoryId} in guild ${interaction.guildId}`);
 			await sendMessage(interaction, 'The rate limit for this channel has been reached, please try renaming this server in a few minutes!');
 		} else {
-			logWarning(
-				`Error renaming channel while setting nickname
-                    Channel ID: ${server.categoryId}
-                    Guild ID: ${interaction.guildId}`,
-				error
-			);
+			logWarning('Error renaming channel while setting nickname', {
+				'Channel ID': server.categoryId,
+				'Guild ID': interaction.guildId,
+				Error: error
+			});
 			await sendMessage(interaction, 'There was an error while renaming the channel!');
 		}
 		return;
 	}
-
-	logSuccess(`${server.ip} was given a nickname in guild ${interaction.guildId}`);
 
 	await sendMessage(interaction, 'The server has successfully been renamed.');
 }
