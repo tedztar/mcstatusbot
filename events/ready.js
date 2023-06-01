@@ -34,7 +34,7 @@ async function updateServers(client) {
 					let serverStatus;
 
 					try {
-						serverStatus = await getServerStatus(server.ip, 10 * 1000);
+						serverStatus = await getServerStatus(server.ip, 1000);
 					} catch (error) {
 						logWarning('Error pinging Minecraft server while updating servers', {
 							'Server IP': server.ip,
@@ -55,7 +55,7 @@ async function updateServers(client) {
 	);
 
 	// Much better way of doing than setInterval
-	setTimeout(updateServers, 6 * 60 * 1000, client);
+	setTimeout(updateServers, 5 * 60 * 1000, client);
 }
 
 module.exports = { name, once, execute };
