@@ -34,7 +34,7 @@ async function updateServers(client) {
 					let serverStatus;
 
 					try {
-						serverStatus = await getServerStatus(server.ip, 1000);
+						serverStatus = await getServerStatus(server.ip, 10 * 1000);
 					} catch (error) {
 						logWarning('Error pinging Minecraft server while updating servers', {
 							'Server IP': server.ip,
