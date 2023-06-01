@@ -29,13 +29,11 @@ async function updateServers(client) {
 	await Promise.allSettled(
 		client.guilds.cache.map(async (guild) => {
 			let serverList = await getKey(guild.id);
-
 			await Promise.allSettled(
 				serverList.map(async (server) => {
 					let serverStatus;
-
 					try {
-						serverStatus = await getServerStatus(server.ip, 1000);
+						serverStatus = await getServerStatus(server.ip, 30 * 1000);
 					} catch (error) {
 						logWarning('Error pinging Minecraft server while updating servers', {
 							'Server IP': server.ip,
@@ -43,12 +41,10 @@ async function updateServers(client) {
 							Error: error
 						});
 					}
-
 					const channels = [
 						{ object: await guild.channels.cache.get(server.statusId), name: 'statusName' },
 						{ object: await guild.channels.cache.get(server.playersId), name: 'playersName' }
 					];
-
 					await renameChannels(channels, serverStatus);
 				})
 			);
