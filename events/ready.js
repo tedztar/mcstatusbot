@@ -12,6 +12,7 @@ async function execute(client) {
 	await deployCommands();
 	logSuccess('Ready');
 	await updateServers(client);
+	setInterval(updateServers, 6 * 60 * 1000, client);
 }
 
 // Fix await/async to speed up fucntion
@@ -53,9 +54,6 @@ async function updateServers(client) {
 			);
 		})
 	);
-
-	// Much better way of doing than setInterval
-	setTimeout(updateServers, 5 * 60 * 1000, client);
 }
 
 module.exports = { name, once, execute };
