@@ -27,7 +27,11 @@ async function execute(interaction) {
 		let server = await findDefaultServer(interaction.guildId);
 		let serverIndex = await findServerIndex(server, interaction.guildId);
 		let monitoredServers = await getKey(interaction.guildId);
-		monitoredServers[serverIndex].default = false;
+
+		if (monitoredServers.length > 0 && serverIndex >= 0) {
+			monitoredServers[serverIndex].default = false;
+		}
+
 		await setKey(interaction.guildId, monitoredServers);
 	}
 
