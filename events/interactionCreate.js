@@ -16,7 +16,6 @@ async function execute(interaction) {
 		await command.execute(interaction);
 	} catch (error) {
 		let commandOptions = getCommandOptions(interaction);
-
 		if (interaction.replied || interaction.deferred) {
 			logWarning('Error executing command', {
 				'Guild ID': interaction.guildId,
@@ -42,7 +41,6 @@ async function execute(interaction) {
 
 function getCommandOptions(interaction) {
 	let commandOptions = [];
-
 	for (const option of interaction.options.data) {
 		const filteredData = ['name', 'value'];
 		let filteredOption = Object.keys(option)
@@ -53,7 +51,6 @@ function getCommandOptions(interaction) {
 			}, {});
 		commandOptions.push(filteredOption);
 	}
-
 	return commandOptions.length ? commandOptions : null;
 }
 

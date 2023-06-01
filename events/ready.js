@@ -12,6 +12,7 @@ async function execute(client) {
 	await deployCommands();
 	logSuccess('Ready');
 	await updateServers(client);
+	setInterval(updateServers, 6 * 60 * 1000, client);
 }
 
 // Fix await/async to speed up fucntion
@@ -28,11 +29,9 @@ async function updateServers(client) {
 	await Promise.allSettled(
 		client.guilds.cache.map(async (guild) => {
 			let serverList = await getKey(guild.id);
-
 			await Promise.allSettled(
 				serverList.map(async (server) => {
 					let serverStatus;
-
 					try {
 						serverStatus = await getServerStatus(server.ip, 30 * 1000);
 					} catch (error) {
@@ -42,20 +41,15 @@ async function updateServers(client) {
 							Error: error
 						});
 					}
-
 					const channels = [
 						{ object: await guild.channels.cache.get(server.statusId), name: 'statusName' },
 						{ object: await guild.channels.cache.get(server.playersId), name: 'playersName' }
 					];
-
 					await renameChannels(channels, serverStatus);
 				})
 			);
 		})
 	);
-
-	// Much better way of doing than setInterval
-	setTimeout(updateServers, 6 * 60 * 1000, client);
 }
 
 module.exports = { name, once, execute };
