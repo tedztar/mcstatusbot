@@ -55,7 +55,7 @@ async function updateServers(client) {
 	);
 
 	// Much better way of doing than setInterval
-	setTimeout(updateServers, 5 * 60 * 1000, client);
+	setTimeout(updateServers, 6 * 60 * 1000, client);
 }
 
 module.exports = { name, once, execute };
