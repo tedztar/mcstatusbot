@@ -47,7 +47,7 @@ async function execute(interaction) {
 		message = `*No one is playing!*`;
 	} else {
 		let onlinePlayers = [];
-		for (var i = 0; i < serverStatus.players.sample.length; i++) {
+		for (let i = 0; i < serverStatus.players.sample.length; i++) {
 			onlinePlayers.push(serverStatus.players.sample[i].name);
 		}
 		onlinePlayers = onlinePlayers
