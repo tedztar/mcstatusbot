@@ -50,8 +50,6 @@ async function updateServers(client) {
 			);
 		})
 	);
-
-	logSuccess('Servers updated');
 }
 
 module.exports = { name, once, execute };
