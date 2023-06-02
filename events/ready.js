@@ -1,7 +1,6 @@
 const { Events } = require('discord.js');
 const { logSuccess, logWarning } = require('../functions/consoleLogging');
 const { getKey, setKey } = require('../functions/databaseFunctions');
-const { deployCommands } = require('../functions/deployCommands');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { renameChannels } = require('../functions/renameChannels');
 
@@ -9,8 +8,7 @@ const name = Events.ClientReady;
 const once = true;
 
 async function execute(client) {
-	await deployCommands();
-	logSuccess('Ready');
+	logSuccess(`Shard ${client.shard.ids} READY`);
 	await updateServers(client);
 	setInterval(updateServers, 6 * 60 * 1000, client);
 }
@@ -23,7 +21,7 @@ async function updateServers(client) {
 
 		await setKey('serverCount', serverCount);
 	} catch (error) {
-		logWarning('Error setting server count', error);
+		if (error.name != 'Error [ShardingInProcess]') logWarning('Error setting server count', error);
 	}
 
 	await Promise.allSettled(
