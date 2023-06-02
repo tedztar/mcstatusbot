@@ -5,9 +5,10 @@
   "engines": {
     "node": "18.x"
   },
-  "main": "index.js",
+  "main": "sharding.js",
   "dependencies": {
     "@keyv/postgres": "^1.4.3",
+    "discord-hybrid-sharding": "^2.1.3",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "express": "^4.17.2",

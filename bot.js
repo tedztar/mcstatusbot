@@ -1,14 +1,18 @@
 const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
+const { ClusterClient, getInfo } = require('discord-hybrid-sharding');
 const fs = require('node:fs');
 const path = require('node:path');
 const { database } = require('./functions/databaseFunctions');
 const { logError } = require('./functions/consoleLogging');
 
 const client = new Client({
+	shards: getInfo().SHARD_LIST,
+	shardCount: getInfo().TOTAL_SHARDS,
 	intents: [GatewayIntentBits.Guilds],
 	presence: { activities: [{ name: '/help', type: ActivityType.Watching }] },
 	rest: { rejectOnRateLimit: ['/channels'] }
 });
+client.cluster = new ClusterClient(client)
 
 // Database Handler
 database.on('error', (error) => logError('Keyv connection error:', error));
