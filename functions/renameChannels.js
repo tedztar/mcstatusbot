@@ -19,26 +19,28 @@ async function renameChannels(channels, serverStatus) {
 					} catch (error) {
 						if (!error.name.includes('RateLimitError')) {
 							let permissions = getMissingPermissions('channel', channel.object);
-
-							logWarning('Error updating channel visibility while updating server status', {
-								'Channel ID': channel.object.id,
-								'Guild ID': channel.object.guildId,
-								'Missing Permissions': permissions || 'None',
-								Error: error
-							});
+							if (!permissions) {
+								logWarning('Error changing channel visibility while updating server status', {
+									'Channel ID': channel.object.id,
+									'Guild ID': channel.object.guildId,
+									'Missing Permissions': permissions || 'None',
+									Error: error
+								});
+							}
 						}
 					}
 				}
 			} catch (error) {
-				if (!error.name.include('RateLimitError')) {
+				if (!error.name.includes('RateLimitError')) {
 					let permissions = getMissingPermissions('channel', channel.object);
-
-					logWarning('Error renaming channels while updating server status', {
-						'Channel ID': channel.object.id,
-						'Guild ID': channel.object.guildId,
-						'Missing Permissions': permissions || 'None',
-						Error: error
-					});
+					if (!permissions) {
+						logWarning('Error renaming channels while updating server status', {
+							'Channel ID': channel.object.id,
+							'Guild ID': channel.object.guildId,
+							'Missing Permissions': permissions || 'None',
+							Error: error
+						});
+					}
 				}
 			}
 		})
