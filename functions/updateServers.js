@@ -1,17 +1,7 @@
-const { Events } = require('discord.js');
-const { logSuccess, logWarning } = require('../functions/consoleLogging');
+const { logWarning } = require('../functions/consoleLogging');
 const { getKey, setKey } = require('../functions/databaseFunctions');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { renameChannels } = require('../functions/renameChannels');
-
-const name = Events.ClientReady;
-const once = true;
-
-async function execute(client) {
-	logSuccess(`Shard ${client.cluster.id} READY`);
-	await updateServers(client);
-	setInterval(updateServers, 6 * 60 * 1000, client);
-}
 
 async function updateServers(client) {
 	// Update server count badge
@@ -52,4 +42,4 @@ async function updateServers(client) {
 	);
 }
 
-module.exports = { name, once, execute };
+module.exports = { updateServers };
