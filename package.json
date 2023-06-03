@@ -17,7 +17,8 @@
 		"pg": "^8.7.1",
 		"pino": "^8.14.1",
 		"pino-pretty": "^10.0.0",
-		"unidecode": "^0.1.8"
+		"unidecode": "^0.1.8",
+		"validator": "^13.9.0"
 	},
 	"repository": {
 		"type": "git",

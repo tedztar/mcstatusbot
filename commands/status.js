@@ -2,7 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { embedColor, sendMessage } = require('../functions/sendMessage');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { findServer, findDefaultServer } = require('../functions/findServer');
-const { noMonitoredServers } = require('../functions/inputValidation');
+const { noMonitoredServers, isValidServer } = require('../functions/inputValidation');
 const { logWarning } = require('../functions/consoleLogging');
 
 const data = new SlashCommandBuilder()
@@ -22,6 +22,9 @@ async function execute(interaction) {
 		serverIp = server.ip;
 	}
 
+	// Validate the server IP
+	if (!(await isValidServer(serverIp, interaction))) return;
+
 	//Get the server status
 	let serverStatus;
 	try {
@@ -32,7 +35,7 @@ async function execute(interaction) {
 			'Server IP': serverIp,
 			Error: error
 		});
-		await sendMessage(interaction, 'This IP address could not be pinged!');
+		await sendMessage(interaction, 'The server could not be pinged!');
 		return;
 	}
 

@@ -1,6 +1,7 @@
 const { getKey } = require('./databaseFunctions');
 const { findServer, findDefaultServer } = require('./findServer');
 const { sendMessage } = require('./sendMessage');
+const { validateHost } = require('./validateHost');
 
 const reservedNames = ['all'];
 
@@ -106,4 +107,13 @@ async function multipleMonitoredServers(guildId) {
 	return monitoredServers.length > 1;
 }
 
-module.exports = { noMonitoredServers, isDefault, isMonitored, isNotMonitored, isNicknameUsed, isServerUnspecified, removingDefaultServer };
+async function isValidServer(server, interaction) {
+	if (!validateHost(server)) {
+		interaction && (await sendMessage(interaction, 'This is not a valid IP address or domain name!'));
+		return false;
+	}
+
+	return true;
+}
+
+module.exports = { noMonitoredServers, isDefault, isMonitored, isNotMonitored, isNicknameUsed, isServerUnspecified, removingDefaultServer, isValidServer };

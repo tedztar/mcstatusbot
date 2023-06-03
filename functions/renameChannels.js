@@ -18,7 +18,7 @@ async function renameChannels(channels, serverStatus) {
 						});
 					} catch (error) {
 						if (!error.name.includes('RateLimitError')) {
-							if (process.env.DETAILED_LOGS) {
+							if (process.env.DETAILED_LOGS == 'TRUE') {
 								logWarning('Error changing channel visibility while updating server status', {
 									'Channel ID': channel.object.id,
 									'Guild ID': channel.object.guildId,
@@ -31,7 +31,7 @@ async function renameChannels(channels, serverStatus) {
 				}
 			} catch (error) {
 				if (!error.name.includes('RateLimitError')) {
-					if (process.env.DETAILED_LOGS) {
+					if (process.env.DETAILED_LOGS == 'TRUE') {
 						logWarning('Error renaming channels while updating server status', {
 							'Channel ID': channel.object.id,
 							'Guild ID': channel.object.guildId,

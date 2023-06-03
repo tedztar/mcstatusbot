@@ -9,11 +9,14 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 **Enjoying our bot?** Our bot is completely free to use, and will always remain so. A [donation](https://www.buymeacoffee.com/rahulrao) of any amount helps keep our server running!
 
+> :construction: **Server validation has been added**: Servers that are not valid IP addresses, or FQDNs (domains) can no longer be monitored. On July 1, 2023 all servers in the database will be validated. Any invalid servers will be deleted, and will no longer be monitored by the bot.
+
 ## Now Updated!!
 
-- Updated May 2023
+- Updated June 2023
 - Various backend updates have been made to make the bot run smoother.
-- Broken server count badge fixed.
+- Server validation introduced.
+- Adopted more efficient multi-process optimisation.
 - Stay tuned for large front end changes coming over summer.
 
 ## Features
@@ -41,12 +44,15 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - [ ] Rework status, nickname, and unmonitor commands to include dropdown menus
 - [ ] Rework monitor and nickname commands to include modal workflow
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
-- [ ] Support compatibility with bedrock servers (see [thid](https://www.npmjs.com/package/minecraft-server-util?activeTab=readme) package)
+- [ ] Support compatibility with bedrock servers (see [this](https://www.npmjs.com/package/minecraft-server-util?activeTab=readme) package)
+- [ ] Show ping latency for servers
+- [ ] Add multi-language support and localizations
 
 ### Backend Updates
 
-- [ ] IP address validation
+- [x] Server address validation
 - [ ] Update readme with screenshots
+- [ ] Remove stale rows from db
 - [x] Fix async/await usage and parallelize for loops
 - [x] Implement optional success and error message pass-through in console
 - [x] Move error logging to own file

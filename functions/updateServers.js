@@ -10,8 +10,7 @@ async function updateServers(client) {
 			let serverCountByShard = await client.cluster.broadcastEval('this.guilds.cache.size');
 			let serverCount = serverCountByShard.reduce((totalGuilds, shardGuilds) => totalGuilds + shardGuilds, 0);
 			await setKey('serverCount', serverCount);
-		}
-		catch (error) {
+		} catch (error) {
 			if (error.name != 'Error [ShardingInProcess]') logWarning('Error setting server count', error);
 		}
 	}
@@ -25,11 +24,13 @@ async function updateServers(client) {
 					try {
 						serverStatus = await getServerStatus(server.ip, 30 * 1000);
 					} catch (error) {
-						logWarning('Error pinging Minecraft server while updating servers', {
-							'Server IP': server.ip,
-							'Guild ID': guild.id,
-							Error: error
-						});
+						if (process.env.DETAILED_LOGS == 'TRUE') {
+							logWarning('Error pinging Minecraft server while updating servers', {
+								'Server IP': server.ip,
+								'Guild ID': guild.id,
+								Error: serverStatus.error || error
+							});
+						}
 					}
 					const channels = [
 						{ object: await guild.channels.cache.get(server.statusId), name: 'statusName' },
