@@ -1,27 +1,19 @@
-const { Events } = require('discord.js');
-const { logSuccess, logWarning } = require('../functions/consoleLogging');
+const { logWarning } = require('../functions/consoleLogging');
 const { getKey, setKey } = require('../functions/databaseFunctions');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { renameChannels } = require('../functions/renameChannels');
 
-const name = Events.ClientReady;
-const once = true;
-
-async function execute(client) {
-	logSuccess(`Shard ${client.shard.ids} READY`);
-	await updateServers(client);
-	setInterval(updateServers, 6 * 60 * 1000, client);
-}
-
-// Fix await/async to speed up fucntion
 async function updateServers(client) {
-	try {
-		let shardCount = await client.shard.fetchClientValues('guilds.cache.size');
-		let serverCount = shardCount.reduce((acc, guildCount) => acc + guildCount, 0);
-
-		await setKey('serverCount', serverCount);
-	} catch (error) {
-		if (error.name != 'Error [ShardingInProcess]') logWarning('Error setting server count', error);
+	// Update server count badge
+	if (client.cluster.id == 0) {
+		try {
+			let serverCountByShard = await client.cluster.broadcastEval('this.guilds.cache.size');
+			let serverCount = serverCountByShard.reduce((totalGuilds, shardGuilds) => totalGuilds + shardGuilds, 0);
+			await setKey('serverCount', serverCount);
+		}
+		catch (error) {
+			if (error.name != 'Error [ShardingInProcess]') logWarning('Error setting server count', error);
+		}
 	}
 
 	await Promise.allSettled(
@@ -50,4 +42,4 @@ async function updateServers(client) {
 	);
 }
 
-module.exports = { name, once, execute };
+module.exports = { updateServers };
