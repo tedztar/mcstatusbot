@@ -3,7 +3,7 @@ const { sendMessage } = require('../functions/sendMessage');
 const { renameChannels } = require('../functions/renameChannels');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { isMissingPermissions } = require('../functions/botPermissions');
-const { noMonitoredServers, isMonitored, isNicknameUsed } = require('../functions/inputValidation');
+const { noMonitoredServers, isMonitored, isNicknameUsed, isValidServer } = require('../functions/inputValidation');
 const { getKey, setKey } = require('../functions/databaseFunctions');
 const { findDefaultServer, findServerIndex } = require('../functions/findServer');
 const { logWarning } = require('../functions/consoleLogging');
@@ -21,6 +21,7 @@ async function execute(interaction) {
 	if (await isMissingPermissions('server', interaction.guild, interaction)) return;
 	if (await isMonitored(interaction.options.getString('ip'), interaction.guildId, interaction)) return;
 	if (await isNicknameUsed(interaction.options.getString('nickname'), interaction.guildId, interaction)) return;
+	if (!(await isValidServer(interaction.options.getString('ip'), interaction))) return;
 
 	// Unset the default server if the new server is to be the default
 	if (interaction.options.getBoolean('default')) {
