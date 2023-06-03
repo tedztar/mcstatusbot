@@ -9,7 +9,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 **Enjoying our bot?** Our bot is completely free to use, and will always remain so. A [donation](https://www.buymeacoffee.com/rahulrao) of any amount helps keep our server running!
 
-> :construction: **Server validation has been added**: Servers that are not valid IP addresses, or FQDNs (domains) can no longer be monitored. On July 1, 2023 all servers in the databased will be validated. Any invalid servers will be deleted, and will no longer be monitored by the bot.
+> :construction: **Server validation has been added**: Servers that are not valid IP addresses, or FQDNs (domains) can no longer be monitored. On July 1, 2023 all servers in the database will be validated. Any invalid servers will be deleted, and will no longer be monitored by the bot.
 
 ## Now Updated!!
 
