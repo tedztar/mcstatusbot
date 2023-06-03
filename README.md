@@ -45,8 +45,9 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ### Backend Updates
 
+- [ ] IP address validation
 - [ ] Update readme with screenshots
 - [x] Fix async/await usage and parallelize for loops
 - [x] Implement optional success and error message pass-through in console
 - [x] Move error logging to own file
-- [ ] IP address validation
+- [x] Implement shard reclustering
