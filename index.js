@@ -4,10 +4,9 @@ const express = require('express');
 const { logSuccess } = require('./functions/consoleLogging');
 
 let manager = new ClusterManager('./bot.js', { shardsPerClusters: 10, token: process.env.TOKEN });
-manager.extend(new ReClusterManager())
+manager.extend(new ReClusterManager());
 
-manager.on('debug', console.log)
-manager.on('clusterCreate', (cluster) => logSuccess(`Cluster ${cluster.id} CREATED`));
+manager.on('debug', logSuccess);
 launchShards();
 
 async function launchShards() {

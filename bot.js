@@ -13,10 +13,10 @@ const client = new Client({
 	presence: { activities: [{ name: '/help', type: ActivityType.Watching }] },
 	rest: { rejectOnRateLimit: ['/channels'] }
 });
-client.cluster = new ClusterClient(client)
+client.cluster = new ClusterClient(client);
 
-let clientReady = false
-let clusterReady = false
+let clientReady = false;
+let clusterReady = false;
 
 client.cluster.once('ready', () => {
 	clusterReady = true;
@@ -26,7 +26,7 @@ client.cluster.once('ready', () => {
 client.once('ready', async () => {
 	clientReady = true;
 	if (clusterReady) init();
-})
+});
 
 client.login(process.env.TOKEN);
 
@@ -62,7 +62,6 @@ async function init() {
 	}
 
 	// Update Servers
-	logSuccess(`Cluster ${client.cluster.id} READY`);
 	await updateServers(client);
 	setInterval(updateServers, 6 * 60 * 1000, client);
 }
