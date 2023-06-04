@@ -1,5 +1,5 @@
 const { logWarning } = require('../functions/consoleLogging');
-const { getKey, setKey, deleteKey } = require('../functions/databaseFunctions');
+const { getKey, setKey } = require('../functions/databaseFunctions');
 const { getServerStatus } = require('../functions/getServerStatus');
 const { renameChannels } = require('../functions/renameChannels');
 
