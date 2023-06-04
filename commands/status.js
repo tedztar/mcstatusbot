@@ -28,44 +28,33 @@ async function execute(interaction) {
 	//Get the server status
 	let serverStatus;
 	try {
-		serverStatus = await getServerStatus(serverIp, 5 * 1000);
+		serverStatus = await getServerStatus(serverIp);
 	} catch (error) {
 		logWarning('Error pinging Minecraft server while running status command', {
 			'Guild ID': interaction.guildId,
 			'Server IP': serverIp,
-			Error: error
+			Error: serverStatus.error || error
 		});
 		await sendMessage(interaction, 'The server could not be pinged!');
 		return;
 	}
 
 	// Message if server is offline
-	if (!serverStatus.isOnline) {
+	if (!serverStatus.online) {
 		await sendMessage(interaction, `*The server is offline!*`, `Status for ${serverIp}:`);
 		return;
 	}
 
 	// Message if server is online
-	if (!serverStatus.players.sample) {
-		message = `*No one is playing!*`;
-	} else {
-		let onlinePlayers = [];
-		for (let i = 0; i < serverStatus.players.sample.length; i++) {
-			onlinePlayers.push(serverStatus.players.sample[i].name);
-		}
-		onlinePlayers = onlinePlayers
-			.sort()
-			.join(', ')
-			.replace(/\u00A7[0-9A-FK-OR]|\\n/gi, '');
-		message = `**${serverStatus.players.online || 0}/${serverStatus.players.max}** player(s) online.\n\n${onlinePlayers}`;
-	}
+	message = `**${serverStatus.players.online}/${serverStatus.players.max}** players online.`;
 
 	const responseEmbed = new EmbedBuilder()
 		.setTitle(`Status for ${serverIp}:`)
 		.setColor(embedColor)
 		.setDescription(message)
-		.addFields({ name: 'Server version:', value: serverStatus.version.name })
-		.setThumbnail(`https://api.mcsrvstat.us/icon/${serverIp}`);
+		.addFields({ name: 'MOTD:', value: serverStatus.motd.clean }, { name: 'Server version:', value: serverStatus.version.name_clean })
+		.setThumbnail(`https://api.mcsrvstat.us/icon/${serverIp}`)
+		.setTimestamp();
 
 	await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 }

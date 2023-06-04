@@ -3,8 +3,8 @@ const { logWarning } = require('./consoleLogging');
 
 async function renameChannels(channels, serverStatus) {
 	const channelNames = {
-		statusName: serverStatus.isOnline ? 'Status: Online' : 'Status: Offline',
-		playersName: serverStatus.isOnline ? `Players: ${serverStatus.players?.online ?? '?'} / ${serverStatus.players?.max ?? '?'}` : 'Players: 0'
+		statusName: serverStatus.online ? 'Status: Online' : 'Status: Offline',
+		playersName: serverStatus.players ? `Players: ${serverStatus.players?.online ?? '?'} / ${serverStatus.players?.max ?? '?'}` : 'Players: 0'
 	};
 
 	await Promise.allSettled(
@@ -14,7 +14,7 @@ async function renameChannels(channels, serverStatus) {
 				if (channel.name == 'playersName') {
 					try {
 						await channel.object?.permissionOverwrites.edit(channel.object.guild.roles.everyone, {
-							ViewChannel: serverStatus.isOnline
+							ViewChannel: serverStatus.online
 						});
 					} catch (error) {
 						if (!error.name.includes('RateLimitError')) {

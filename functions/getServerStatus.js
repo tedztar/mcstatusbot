@@ -1,21 +1,22 @@
-const mcping = require('mcping-js');
+const mcping = require('node-mcstatus');
 const unidecode = require('unidecode');
 const { validateHost } = require('./validateHost');
 
-function getServerStatus(serverIp, timeout) {
+function getServerStatus(serverIp) {
 	if (!validateHost(serverIp)) {
 		return { isOnline: false };
 	}
 
 	let [ip, port] = serverIp.split(':');
 
-	const mcserver = new mcping.MinecraftServer(unidecode(ip), parseInt(port) || 25565);
-
-	return new Promise((resolve) => {
-		mcserver.ping(timeout, 47, (error, response) => {
-			resolve({ ...response, isOnline: !error, error: error });
+	return mcping
+		.statusJava(unidecode(ip), parseInt(port) || 25565)
+		.then((response) => {
+			return { ...response, icon: null };
+		})
+		.catch((error) => {
+			return { isOnline: false, error: error };
 		});
-	});
 }
 
 module.exports = { getServerStatus };
