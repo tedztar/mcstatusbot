@@ -118,7 +118,7 @@ async function execute(interaction) {
 	);
 
 	// Get the server status and update the channels
-	const serverStatus = await getServerStatus(server.ip, 5 * 1000);
+	const serverStatus = await getServerStatus(server.ip);
 	const channels = [
 		{ object: await interaction.guild.channels.cache.get(server.statusId), name: 'statusName' },
 		{ object: await interaction.guild.channels.cache.get(server.playersId), name: 'playersName' }
