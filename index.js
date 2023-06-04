@@ -1,12 +1,12 @@
 require('dotenv').config();
 const { ClusterManager, ReClusterManager, fetchRecommendedShards } = require('discord-hybrid-sharding');
 const express = require('express');
-const { logSuccess } = require('./functions/consoleLogging');
+const { logSharding } = require('./functions/consoleLogging');
 
 let manager = new ClusterManager('./bot.js', { shardsPerClusters: 10, token: process.env.TOKEN });
 manager.extend(new ReClusterManager());
 
-manager.on('debug', logSuccess);
+manager.on('debug', logSharding);
 launchShards();
 
 async function launchShards() {
@@ -17,7 +17,6 @@ async function launchShards() {
 async function reclusterShards() {
 	const recommendedShards = await fetchRecommendedShards(process.env.TOKEN);
 	if (recommendedShards != manager.totalShards) {
-		logSuccess(`Reclustering Shards`);
 		manager.recluster.start({ totalShards: recommendedShards, shardsPerClusters: 10, shardList: null, shardClusterList: null });
 	}
 }

@@ -1,4 +1,4 @@
-![Discord Server Count](https://img.shields.io/endpoint?url=https%3A%2F%2Frunkit.io%2Fthedjchi%2Fmcstatus-discordbot%2Fbranches%2Fmaster)
+![Discord Server Count](https://img.shields.io/endpoint?url=https%3A%2F%2Fachiommino.npkn.net%2Fmcstatusbot-servercount%2F)
 [![Make A Donation](https://img.shields.io/static/v1?label=&message=Donate&color=d9b811&logo=buymeacoffee&logoColor=white)](https://www.buymeacoffee.com/rahulrao)
 
 # Minecraft Server Status - Discord Bot
@@ -50,10 +50,11 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ### Backend Updates
 
-- [x] Server address validation
 - [ ] Update readme with screenshots
 - [ ] Remove stale rows from db
+- [ ] Automate deploying commands
 - [x] Fix async/await usage and parallelize for loops
 - [x] Implement optional success and error message pass-through in console
 - [x] Move error logging to own file
 - [x] Implement shard reclustering
+- [x] Server address validation
