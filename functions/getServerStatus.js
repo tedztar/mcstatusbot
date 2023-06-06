@@ -9,14 +9,16 @@ function getServerStatus(serverIp) {
 
 	let [ip, port] = serverIp.split(':');
 
-	return mcping
+	return new Promise((resolve) => {
+		mcping
 		.statusJava(unidecode(ip), parseInt(port) || 25565)
 		.then((response) => {
-			return { ...response, icon: null };
+			resolve({ ...response, icon: null });
 		})
 		.catch((error) => {
-			return { isOnline: false, error: error };
+			resolve({ isOnline: false, error: error });
 		});
+	});
 }
 
 module.exports = { getServerStatus };
