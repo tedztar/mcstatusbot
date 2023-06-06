@@ -13,29 +13,33 @@ async function execute(interaction) {
 
 	try {
 		await interaction.deferReply({ ephemeral: true });
+	} catch (error) {
+		let commandOptions = getCommandOptions(interaction);
+
+		logWarning('Error deferring reply to command', {
+			'Guild ID': interaction.guildId,
+			'Command Name': interaction.commandName,
+			'Command Options': commandOptions || 'None',
+			Error: error
+		});
+	}
+
+	try {
 		await command.execute(interaction);
 	} catch (error) {
 		let commandOptions = getCommandOptions(interaction);
-		if (interaction.replied || interaction.deferred) {
-			logWarning('Error executing command', {
-				'Guild ID': interaction.guildId,
-				'Command Name': interaction.commandName,
-				'Command Options': commandOptions || 'None',
-				Error: error
-			});
 
-			await interaction.editReply({
-				content: 'There was an error while executing this command!',
-				ephemeral: true
-			});
-		} else {
-			logWarning('Error deferring reply to command', {
-				'Guild ID': interaction.guildId,
-				'Command Name': interaction.commandName,
-				'Command Options': commandOptions || 'None',
-				Error: error
-			});
-		}
+		logWarning('Error executing command', {
+			'Guild ID': interaction.guildId,
+			'Command Name': interaction.commandName,
+			'Command Options': commandOptions || 'None',
+			Error: error
+		});
+
+		await interaction.editReply({
+			content: 'There was an error while executing this command!',
+			ephemeral: true
+		});
 	}
 }
 

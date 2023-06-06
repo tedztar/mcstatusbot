@@ -1,0 +1,30 @@
+diff --git a/node_modules/node-mcstatus/dist/enum.d.ts b/node_modules/node-mcstatus/dist/enum.d.ts
+index d345bc1..b071893 100644
+--- a/node_modules/node-mcstatus/dist/enum.d.ts
++++ b/node_modules/node-mcstatus/dist/enum.d.ts
+@@ -1,2 +1,2 @@
+-export declare const BASE_URL = "https://api.mcstatus.io/v2";
++export declare const BASE_URL = "https://mc-ping-server-production.up.railway.app";
+ //# sourceMappingURL=enum.d.ts.map
+\ No newline at end of file
+diff --git a/node_modules/node-mcstatus/dist/enum.js b/node_modules/node-mcstatus/dist/enum.js
+index e921d85..5f24771 100644
+--- a/node_modules/node-mcstatus/dist/enum.js
++++ b/node_modules/node-mcstatus/dist/enum.js
+@@ -1,5 +1,5 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.BASE_URL = void 0;
+-exports.BASE_URL = 'https://api.mcstatus.io/v2';
++exports.BASE_URL = 'https://mc-ping-server-production.up.railway.app';
+ //# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZW51bS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uL3NyYy9lbnVtLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7OztBQUFhLFFBQUEsUUFBUSxHQUFHLDRCQUE0QixDQUFDIn0=
+\ No newline at end of file
+diff --git a/node_modules/node-mcstatus/src/enum.ts b/node_modules/node-mcstatus/src/enum.ts
+index dc2961a..8c9d97c 100644
+--- a/node_modules/node-mcstatus/src/enum.ts
++++ b/node_modules/node-mcstatus/src/enum.ts
+@@ -1 +1 @@
+-export const BASE_URL = 'https://api.mcstatus.io/v2';
+\ No newline at end of file
++export const BASE_URL = 'https://mc-ping-server-production.up.railway.app';
+\ No newline at end of file
