@@ -1,0 +1,9 @@
+diff --git a/node_modules/node-mcstatus/src/enum.ts b/node_modules/node-mcstatus/src/enum.ts
+index dc2961a..8c9d97c 100644
+--- a/node_modules/node-mcstatus/src/enum.ts
++++ b/node_modules/node-mcstatus/src/enum.ts
+@@ -1 +1 @@
+-export const BASE_URL = 'https://api.mcstatus.io/v2';
+\ No newline at end of file
++export const BASE_URL = 'https://mc-ping-server-production.up.railway.app';
+\ No newline at end of file
