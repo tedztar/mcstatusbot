@@ -1,15 +1,15 @@
-const { REST, Routes } = require('discord.js');
-const fs = require('node:fs');
-const path = require('node:path');
-const { logError } = require('./consoleLogging');
+import { REST, Routes } from 'discord.js';
+import { readdirSync } from 'node:fs';
+import { join } from 'node:path';
+import { logError } from './consoleLogging.js';
 
-async function deployCommands() {
+export async function deployCommands() {
 	const commands = [];
-	const commandsPath = path.join(__dirname, '..', 'commands');
-	const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
+	const commandsPath = join(__dirname, '..', 'commands');
+	const commandFiles = readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
 
 	for (const file of commandFiles) {
-		const filePath = path.join(commandsPath, file);
+		const filePath = join(commandsPath, file);
 		const command = require(filePath);
 		commands.push(command.data.toJSON());
 	}
@@ -22,5 +22,3 @@ async function deployCommands() {
 		logError(error);
 	}
 }
-
-module.exports = { deployCommands };

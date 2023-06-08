@@ -1,11 +1,9 @@
-const { Events } = require('discord.js');
-const { deleteKey } = require('../functions/databaseFunctions');
+import { Events } from 'discord.js';
+import { deleteKey } from '../functions/databaseFunctions.js';
 
-const name = Events.GuildDelete;
-const once = false;
+export const name = Events.GuildDelete;
+export const once = false;
 
-async function execute(guild) {
+export async function execute(guild) {
 	await deleteKey(guild.id);
 }
-
-module.exports = { name, once, execute };

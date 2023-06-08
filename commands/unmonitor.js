@@ -1,19 +1,19 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { sendMessage } = require('../functions/sendMessage');
-const { isMissingPermissions, getMissingPermissions } = require('../functions/botPermissions');
-const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
-const { getKey, setKey } = require('../functions/databaseFunctions');
-const { noMonitoredServers, isServerUnspecified, removingDefaultServer, isNotMonitored } = require('../functions/inputValidation');
-const { logWarning } = require('../functions/consoleLogging');
+import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
+import { sendMessage } from '../functions/sendMessage.js';
+import { isMissingPermissions, getMissingPermissions } from '../functions/botPermissions.js';
+import { findServer, findDefaultServer, findServerIndex } from '../functions/findServer.js';
+import { getKey, setKey } from '../functions/databaseFunctions.js';
+import { noMonitoredServers, isServerUnspecified, removingDefaultServer, isNotMonitored } from '../functions/inputValidation.js';
+import { logWarning } from '../functions/consoleLogging.js';
 
-const data = new SlashCommandBuilder()
+export const data = new SlashCommandBuilder()
 	.setName('unmonitor')
 	.setDescription('Unmonitor the specified server or all servers')
 	.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false))
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	.setDMPermission(false);
 
-async function execute(interaction) {
+export async function execute(interaction) {
 	if (await noMonitoredServers(interaction.guildId, interaction)) return;
 	if (await isServerUnspecified(interaction.options.getString('server'), interaction.guildId, interaction)) return;
 
@@ -154,5 +154,3 @@ async function removeServer(server, guild) {
 		});
 	});
 }
-
-module.exports = { data, execute };

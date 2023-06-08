@@ -1,11 +1,9 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { embedColor } = require('../functions/sendMessage');
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { embedColor } from '../functions/sendMessage.js';
 
-const data = new SlashCommandBuilder()
-	.setName('help')
-	.setDescription('List the other commands');
+export const data = new SlashCommandBuilder().setName('help').setDescription('List the other commands');
 
-async function execute(interaction) {
+export async function execute(interaction) {
 	const helpEmbed = new EmbedBuilder().setTitle('Commands:').setColor(embedColor).addFields(
 		{
 			name: '/status [server|ip]',
@@ -34,5 +32,3 @@ async function execute(interaction) {
 	);
 	await interaction.editReply({ embeds: [helpEmbed], ephemeral: true });
 }
-
-module.exports = { data, execute };

@@ -1,13 +1,13 @@
-const { Events } = require('discord.js');
-const { logWarning } = require('../functions/consoleLogging');
-const { getKey, setKey } = require('../functions/databaseFunctions');
-const { findServer, findServerIndex } = require('../functions/findServer');
-const { isNotMonitored } = require('../functions/inputValidation');
+import { Events } from 'discord.js';
+import { logWarning } from '../functions/consoleLogging.js';
+import { getKey, setKey } from '../functions/databaseFunctions.js';
+import { findServer, findServerIndex } from '../functions/findServer.js';
+import { isNotMonitored } from '../functions/inputValidation.js';
 
-const name = Events.ChannelUpdate;
-const once = false;
+export const name = Events.ChannelUpdate;
+export const once = false;
 
-async function execute(_, newChannel) {
+export async function execute(_, newChannel) {
 	try {
 		// Check if the updated channel is in the list of monitored channels
 		let server = await findServer(newChannel.id, ['categoryId'], newChannel.guildId);
@@ -29,5 +29,3 @@ async function execute(_, newChannel) {
 		});
 	}
 }
-
-module.exports = { name, once, execute };

@@ -1,17 +1,17 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { getKey, setKey } = require('../functions/databaseFunctions');
-const { findServer, findDefaultServer, findServerIndex } = require('../functions/findServer');
-const { noMonitoredServers, isDefault, isNotMonitored } = require('../functions/inputValidation');
-const { sendMessage } = require('../functions/sendMessage');
+import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
+import { getKey, setKey } from '../functions/databaseFunctions.js';
+import { findServer, findDefaultServer, findServerIndex } from '../functions/findServer.js';
+import { noMonitoredServers, isDefault, isNotMonitored } from '../functions/inputValidation.js';
+import { sendMessage } from '../functions/sendMessage.js';
 
-const data = new SlashCommandBuilder()
+export const data = new SlashCommandBuilder()
 	.setName('default')
 	.setDescription('Set a server to be the default for all commands')
 	.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false))
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	.setDMPermission(false);
 
-async function execute(interaction) {
+export async function execute(interaction) {
 	if (await noMonitoredServers(interaction.guildId, interaction)) return;
 
 	// List the default server if no server is specified
@@ -34,5 +34,3 @@ async function execute(interaction) {
 
 	await sendMessage(interaction, 'The server has successfully been made the default for all commands.');
 }
-
-module.exports = { data, execute };

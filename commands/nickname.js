@@ -1,11 +1,11 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
-const { sendMessage } = require('../functions/sendMessage');
-const { isMissingPermissions } = require('../functions/botPermissions');
-const { findServer, findDefaultServer } = require('../functions/findServer');
-const { noMonitoredServers, isNotMonitored, isNicknameUsed } = require('../functions/inputValidation');
-const { logWarning } = require('../functions/consoleLogging');
+import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
+import { sendMessage } from '../functions/sendMessage.js';
+import { isMissingPermissions } from '../functions/botPermissions.js';
+import { findServer, findDefaultServer } from '../functions/findServer.js';
+import { noMonitoredServers, isNotMonitored, isNicknameUsed } from '../functions/inputValidation.js';
+import { logWarning } from '../functions/consoleLogging.js';
 
-const data = new SlashCommandBuilder()
+export const data = new SlashCommandBuilder()
 	.setName('nickname')
 	.setDescription('Change the nickname of a monitored Minecraft server')
 	.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(true))
@@ -13,7 +13,7 @@ const data = new SlashCommandBuilder()
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	.setDMPermission(false);
 
-async function execute(interaction) {
+export async function execute(interaction) {
 	if (await noMonitoredServers(interaction.guildId, interaction)) return;
 	if (await isNicknameUsed(interaction.options.getString('nickname'), interaction.guildId, interaction)) return;
 
@@ -49,5 +49,3 @@ async function execute(interaction) {
 
 	await sendMessage(interaction, 'The server has successfully been renamed.');
 }
-
-module.exports = { data, execute };

@@ -1,16 +1,15 @@
-const mcping = require('node-mcstatus');
-const unidecode = require('unidecode');
-const { validateHost } = require('./validateHost');
+import { statusJava } from 'node-mcstatus';
+import unidecode from 'unidecode';
+import { validateHost } from './validateHost.js';
 
-async function getServerStatus(serverIp) {
+export async function getServerStatus(serverIp) {
 	if (!validateHost(serverIp)) {
 		return { isOnline: false };
 	}
 
 	let [ip, port] = serverIp.split(':');
 
-	return mcping
-		.statusJava(unidecode(ip), parseInt(port) || 25565)
+	return statusJava(unidecode(ip), parseInt(port) || 25565)
 		.then((response) => {
 			return { ...response, icon: null };
 		})
@@ -18,5 +17,3 @@ async function getServerStatus(serverIp) {
 			return { isOnline: false, error: error };
 		});
 }
-
-module.exports = { getServerStatus };
