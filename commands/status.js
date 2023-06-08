@@ -1,16 +1,16 @@
-const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const { embedColor, sendMessage } = require('../functions/sendMessage');
-const { getServerStatus } = require('../functions/getServerStatus');
-const { findServer, findDefaultServer } = require('../functions/findServer');
-const { noMonitoredServers, isValidServer } = require('../functions/inputValidation');
-const { logWarning } = require('../functions/consoleLogging');
+import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
+import { embedColor, sendMessage } from '../functions/sendMessage.js';
+import { getServerStatus } from '../functions/getServerStatus.js';
+import { findServer, findDefaultServer } from '../functions/findServer.js';
+import { noMonitoredServers, isValidServer } from '../functions/inputValidation.js';
+import { logWarning } from '../functions/consoleLogging.js';
 
-const data = new SlashCommandBuilder()
+export const data = new SlashCommandBuilder()
 	.setName('status')
 	.setDescription('Displays the current status and active players for any server')
 	.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false));
 
-async function execute(interaction) {
+export async function execute(interaction) {
 	let serverIp;
 
 	if (interaction.options.getString('server')) {
@@ -58,5 +58,3 @@ async function execute(interaction) {
 
 	await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 }
-
-module.exports = { data, execute };

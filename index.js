@@ -1,6 +1,6 @@
-require('dotenv').config();
-const { ClusterManager, ReClusterManager, fetchRecommendedShards } = require('discord-hybrid-sharding');
-const { logSharding, logError } = require('./functions/consoleLogging');
+import 'dotenv/config';
+import { ClusterManager, ReClusterManager, fetchRecommendedShards } from 'discord-hybrid-sharding';
+import { logSharding, logError } from './functions/consoleLogging.js';
 
 const shardsPerClusters = 2;
 

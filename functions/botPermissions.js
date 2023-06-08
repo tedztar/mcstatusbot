@@ -1,4 +1,4 @@
-const { sendMessage } = require('./sendMessage');
+import { sendMessage } from './sendMessage.js';
 
 const requiredPermissions = [
 	{ flag: 'ViewChannel', category: 'View Channels', channel: 'View Channel', server: 'View Channels' },
@@ -7,7 +7,7 @@ const requiredPermissions = [
 	{ flag: 'Connect', category: 'Connect', channel: 'Connect', server: 'Connect' }
 ];
 
-async function isMissingPermissions(type, object, interaction) {
+export async function isMissingPermissions(type, object, interaction) {
 	if (!object) return false;
 
 	const missingPermissions = getMissingPermissions(type, object);
@@ -25,7 +25,7 @@ async function isMissingPermissions(type, object, interaction) {
 	return false;
 }
 
-function getMissingPermissions(type, object) {
+export function getMissingPermissions(type, object) {
 	type = type.toLowerCase();
 	basicType = type == 'status channel' || type == 'players channel' ? 'channel' : type;
 	const botPermissions = getBotPermissions(type, object);
@@ -50,5 +50,3 @@ function getBotPermissions(type, object) {
 		}, {});
 	return filteredBotPermissions;
 }
-
-module.exports = { isMissingPermissions, getMissingPermissions };

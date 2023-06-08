@@ -1,14 +1,14 @@
-const { SlashCommandBuilder, ChannelType, PermissionFlagsBits } = require('discord.js');
-const { sendMessage } = require('../functions/sendMessage');
-const { renameChannels } = require('../functions/renameChannels');
-const { getServerStatus } = require('../functions/getServerStatus');
-const { isMissingPermissions } = require('../functions/botPermissions');
-const { noMonitoredServers, isMonitored, isNicknameUsed, isValidServer } = require('../functions/inputValidation');
-const { getKey, setKey } = require('../functions/databaseFunctions');
-const { findDefaultServer, findServerIndex } = require('../functions/findServer');
-const { logWarning } = require('../functions/consoleLogging');
+import { SlashCommandBuilder, ChannelType, PermissionFlagsBits } from 'discord.js';
+import { sendMessage } from '../functions/sendMessage.js';
+import { renameChannels } from '../functions/renameChannels.js';
+import { getServerStatus } from '../functions/getServerStatus.js';
+import { isMissingPermissions } from '../functions/botPermissions.js';
+import { noMonitoredServers, isMonitored, isNicknameUsed, isValidServer } from '../functions/inputValidation.js';
+import { getKey, setKey } from '../functions/databaseFunctions.js';
+import { findDefaultServer, findServerIndex } from '../functions/findServer.js';
+import { logWarning } from '../functions/consoleLogging.js';
 
-const data = new SlashCommandBuilder()
+export const data = new SlashCommandBuilder()
 	.setName('monitor')
 	.setDescription('Create 2 voice channels that display the status of a Minecraft server')
 	.addStringOption((option) => option.setName('ip').setDescription('IP address').setRequired(true))
@@ -17,7 +17,7 @@ const data = new SlashCommandBuilder()
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	.setDMPermission(false);
 
-async function execute(interaction) {
+export async function execute(interaction) {
 	if (await isMissingPermissions('server', interaction.guild, interaction)) return;
 	if (await isMonitored(interaction.options.getString('ip'), interaction.guildId, interaction)) return;
 	if (await isNicknameUsed(interaction.options.getString('nickname'), interaction.guildId, interaction)) return;
@@ -125,5 +125,3 @@ async function execute(interaction) {
 	];
 	await renameChannels(channels, serverStatus);
 }
-
-module.exports = { data, execute };

@@ -1,11 +1,11 @@
-const { getKey } = require('./databaseFunctions');
-const { findServer, findDefaultServer } = require('./findServer');
-const { sendMessage } = require('./sendMessage');
-const { validateHost } = require('./validateHost');
+import { getKey } from './databaseFunctions.js';
+import { findServer, findDefaultServer } from './findServer.js';
+import { sendMessage } from './sendMessage.js';
+import { validateHost } from './validateHost.js';
 
 const reservedNames = ['all'];
 
-async function noMonitoredServers(guildId, interaction, isStatusCommand) {
+export async function noMonitoredServers(guildId, interaction, isStatusCommand) {
 	const monitoredServers = await getKey(guildId);
 
 	if (!monitoredServers.length) {
@@ -16,7 +16,7 @@ async function noMonitoredServers(guildId, interaction, isStatusCommand) {
 	return false;
 }
 
-async function isDefault(server, guildId, interaction) {
+export async function isDefault(server, guildId, interaction) {
 	let defaultServer = await findDefaultServer(guildId);
 
 	if (JSON.stringify(server) == JSON.stringify(defaultServer)) {
@@ -27,7 +27,7 @@ async function isDefault(server, guildId, interaction) {
 	return false;
 }
 
-async function isMonitored(ip, guildId, interaction) {
+export async function isMonitored(ip, guildId, interaction) {
 	let server = await findServer(ip, ['ip'], guildId);
 	if (server) {
 		interaction && (await sendMessage(interaction, 'This IP address is already being monitored!'));
@@ -48,7 +48,7 @@ async function isMonitored(ip, guildId, interaction) {
 	return false;
 }
 
-async function isNotMonitored(server, interaction) {
+export async function isNotMonitored(server, interaction) {
 	if (!server) {
 		interaction && (await sendMessage(interaction, 'This server is not being monitored!'));
 		return true;
@@ -57,7 +57,7 @@ async function isNotMonitored(server, interaction) {
 	return false;
 }
 
-async function isNicknameUsed(nickname, guildId, interaction) {
+export async function isNicknameUsed(nickname, guildId, interaction) {
 	let server = await findServer(nickname, ['nickname'], guildId);
 	if (nickname && server) {
 		interaction && (await sendMessage(interaction, 'This nickname is already being used!'));
@@ -78,7 +78,7 @@ async function isNicknameUsed(nickname, guildId, interaction) {
 	return false;
 }
 
-async function isServerUnspecified(server, guildId, interaction) {
+export async function isServerUnspecified(server, guildId, interaction) {
 	if ((await multipleMonitoredServers(guildId)) && !server) {
 		interaction &&
 			(await sendMessage(interaction, 'There are multiple monitored servers, and no server was specified! Use `/unmonitor all` to unmonitor all servers.'));
@@ -88,7 +88,7 @@ async function isServerUnspecified(server, guildId, interaction) {
 	return false;
 }
 
-async function removingDefaultServer(server, guildId, interaction) {
+export async function removingDefaultServer(server, guildId, interaction) {
 	if ((await multipleMonitoredServers(guildId)) && (await isDefault(server, guildId))) {
 		interaction &&
 			(await sendMessage(
@@ -101,13 +101,13 @@ async function removingDefaultServer(server, guildId, interaction) {
 	return false;
 }
 
-async function multipleMonitoredServers(guildId) {
+export async function multipleMonitoredServers(guildId) {
 	const monitoredServers = await getKey(guildId);
 
 	return monitoredServers.length > 1;
 }
 
-async function isValidServer(server, interaction) {
+export async function isValidServer(server, interaction) {
 	if (!validateHost(server)) {
 		interaction && (await sendMessage(interaction, 'This is not a valid IP address or domain name!'));
 		return false;
@@ -115,5 +115,3 @@ async function isValidServer(server, interaction) {
 
 	return true;
 }
-
-module.exports = { noMonitoredServers, isDefault, isMonitored, isNotMonitored, isNicknameUsed, isServerUnspecified, removingDefaultServer, isValidServer };

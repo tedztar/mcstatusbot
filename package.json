@@ -9,6 +9,7 @@
 		"start": "node index.js",
 		"postinstall": "npx patch-package"
 	},
+	"type": "module",
 	"main": "index.js",
 	"dependencies": {
 		"@keyv/postgres": "^1.4.3",

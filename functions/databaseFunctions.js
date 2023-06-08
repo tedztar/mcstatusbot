@@ -1,19 +1,17 @@
-const Keyv = require('keyv');
+import Keyv from 'keyv';
 
-const database = (process.env.DATABASE_URL) ? new Keyv(`${process.env.DATABASE_URL}?sslmode=no-verify`) : new Keyv();
+export const database = process.env.DATABASE_URL ? new Keyv(process.env.DATABASE_URL) : new Keyv();
 
-async function getKey(key) {
-    return await database.get(key) || [];
+export async function getKey(key) {
+	return (await database.get(key)) || [];
 }
 
-async function setKey(key, value) {
-    await database.set(key, value);
-    return;
+export async function setKey(key, value) {
+	await database.set(key, value);
+	return;
 }
 
-async function deleteKey(key) {
-    await database.delete(key);
-    return;
+export async function deleteKey(key) {
+	await database.delete(key);
+	return;
 }
-
-module.exports = { database, getKey, setKey, deleteKey };

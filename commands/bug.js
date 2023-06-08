@@ -1,12 +1,8 @@
-const { SlashCommandBuilder } = require('discord.js');
-const { sendMessage } = require('../functions/sendMessage');
+import { SlashCommandBuilder } from 'discord.js';
+import { sendMessage } from '../functions/sendMessage.js';
 
-const data = new SlashCommandBuilder()
-	.setName('bug')
-	.setDescription('Send a bug report to maintainers');
+export const data = new SlashCommandBuilder().setName('bug').setDescription('Send a bug report to maintainers');
 
-async function execute(interaction) {
+export async function execute(interaction) {
 	await sendMessage(interaction, 'Report a bug by opening an issue in our [GitHub repository](https://github.com/RahulR100/mcstatusbot/issues).');
 }
-
-module.exports = { data, execute };

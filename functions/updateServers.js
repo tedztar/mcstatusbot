@@ -1,9 +1,9 @@
-const { logWarning } = require('../functions/consoleLogging');
-const { getKey, setKey } = require('../functions/databaseFunctions');
-const { getServerStatus } = require('../functions/getServerStatus');
-const { renameChannels } = require('../functions/renameChannels');
+import { logWarning } from '../functions/consoleLogging.js';
+import { getKey, setKey } from '../functions/databaseFunctions.js';
+import { getServerStatus } from '../functions/getServerStatus.js';
+import { renameChannels } from '../functions/renameChannels.js';
 
-async function updateServers(client) {
+export async function updateServers(client) {
 	// Update server count badge
 	if (client.cluster.id == 0) {
 		try {
@@ -40,5 +40,3 @@ async function updateServers(client) {
 		})
 	);
 }
-
-module.exports = { updateServers };

@@ -1,7 +1,7 @@
-const { getMissingPermissions } = require('./botPermissions');
-const { logWarning } = require('./consoleLogging');
+import { getMissingPermissions } from './botPermissions.js';
+import { logWarning } from './consoleLogging.js';
 
-async function renameChannels(channels, serverStatus) {
+export async function renameChannels(channels, serverStatus) {
 	const channelNames = {
 		statusName: serverStatus.online ? 'Status: Online' : 'Status: Offline',
 		playersName: serverStatus.players ? `Players: ${serverStatus.players.online} / ${serverStatus.players.max}` : 'Players: 0'
@@ -46,5 +46,3 @@ async function renameChannels(channels, serverStatus) {
 		})
 	);
 }
-
-module.exports = { renameChannels };

@@ -1,13 +1,11 @@
-const validator = require('validator');
+import { isIP, isFQDN, isEmpty, isPort } from 'validator';
 
-function validateHost(host) {
+export function validateHost(host) {
 	let [ip, port] = host.split(':');
 
 	if (host.includes(':')) {
-		return (validator.isIP(ip) || validator.isFQDN(ip)) && (!validator.isEmpty(port) || validator.isPort(port));
+		return (isIP(ip) || isFQDN(ip)) && (!isEmpty(port) || isPort(port));
 	}
 
-	return validator.isIP(ip) || validator.isFQDN(ip);
+	return isIP(ip) || isFQDN(ip);
 }
-
-module.exports = { validateHost };

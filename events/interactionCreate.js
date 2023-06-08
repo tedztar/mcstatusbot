@@ -1,10 +1,10 @@
-const { Events } = require('discord.js');
-const { logWarning } = require('../functions/consoleLogging');
+import { Events } from 'discord.js';
+import { logWarning } from '../functions/consoleLogging.js';
 
-const name = Events.InteractionCreate;
-const once = false;
+export const name = Events.InteractionCreate;
+export const once = false;
 
-async function execute(interaction) {
+export async function execute(interaction) {
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
@@ -57,5 +57,3 @@ function getCommandOptions(interaction) {
 	}
 	return commandOptions.length ? commandOptions : null;
 }
-
-module.exports = { name, once, execute };
