@@ -1,4 +1,5 @@
-import { isIP, isFQDN, isEmpty, isPort } from 'validator';
+import validator from 'validator';
+const { isIP, isFQDN, isEmpty, isPort } = validator;
 
 export function validateHost(host) {
 	let [ip, port] = host.split(':');

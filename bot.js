@@ -1,10 +1,13 @@
-import { Client, GatewayIntentBits, Collection, ActivityType } from 'discord.js';
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
+import { ActivityType, Client, Collection, GatewayIntentBits } from 'discord.js';
 import { readdirSync } from 'node:fs';
-import { join, basename } from 'node:path';
+import { basename, dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { logError } from './functions/consoleLogging.js';
 import { database } from './functions/databaseFunctions.js';
 import { updateServers } from './functions/updateServers.js';
-import { logError } from './functions/consoleLogging.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const client = new Client({
 	shards: getInfo().SHARD_LIST,
@@ -40,7 +43,7 @@ async function init() {
 	const commandFiles = readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
 	for (const file of commandFiles) {
 		const filePath = join(commandsPath, file);
-		const command = require(filePath);
+		const command = await import(filePath);
 		if ('data' in command && 'execute' in command) {
 			client.commands.set(command.data.name, command);
 		} else {
@@ -53,7 +56,7 @@ async function init() {
 	const eventFiles = readdirSync(eventsPath).filter((file) => file.endsWith('.js'));
 	for (const file of eventFiles) {
 		const filePath = join(eventsPath, file);
-		const event = require(filePath);
+		const event = await import(filePath);
 		if (event.once) {
 			client.once(event.name, (...args) => event.execute(...args));
 		} else {
