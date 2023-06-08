@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { database } = require('./functions/databaseFunctions');
 const { updateServers } = require('./functions/updateServers');
-const { logError, logSuccess } = require('./functions/consoleLogging');
+const { logError } = require('./functions/consoleLogging');
 
 const client = new Client({
 	shards: getInfo().SHARD_LIST,
@@ -18,7 +18,7 @@ client.cluster = new ClusterClient(client);
 let clientReady = false;
 let clusterReady = false;
 
-client.cluster.once('ready', () => {
+client.cluster.once('ready', async () => {
 	clusterReady = true;
 	if (clientReady) init();
 });
