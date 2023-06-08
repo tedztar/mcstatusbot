@@ -4,7 +4,11 @@ const { logSharding, logError } = require('./functions/consoleLogging');
 
 const shardsPerClusters = 2;
 
-let manager = new ClusterManager('./bot.js', { shardsPerClusters: shardsPerClusters, token: process.env.TOKEN });
+let manager = new ClusterManager('./bot.js', {
+	shardsPerClusters: shardsPerClusters,
+	token: process.env.TOKEN,
+	mode: 'process'
+});
 manager.extend(new ReClusterManager());
 
 manager.on('debug', logSharding);
