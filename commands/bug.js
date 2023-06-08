@@ -1,3 +1,4 @@
+'use strict';
 import { SlashCommandBuilder } from 'discord.js';
 import { sendMessage } from '../functions/sendMessage.js';
 

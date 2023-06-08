@@ -1,3 +1,4 @@
+'use strict';
 import { Events } from 'discord.js';
 import { logWarning } from '../functions/consoleLogging.js';
 

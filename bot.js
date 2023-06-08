@@ -1,3 +1,4 @@
+'use strict';
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { ActivityType, Client, Collection, GatewayIntentBits } from 'discord.js';
 import { readdirSync } from 'node:fs';

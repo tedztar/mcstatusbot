@@ -1,3 +1,4 @@
+'use strict';
 import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
 import { getKey, setKey } from '../functions/databaseFunctions.js';
 import { findServer, findDefaultServer, findServerIndex } from '../functions/findServer.js';

@@ -1,3 +1,4 @@
+'use strict';
 import { getKey } from './databaseFunctions.js';
 
 export async function findServer(query, fields, guildId) {
@@ -18,7 +19,7 @@ export async function findServer(query, fields, guildId) {
 export async function findDefaultServer(guildId) {
 	const monitoredServers = await getKey(guildId);
 	const serverIndex = monitoredServers.findIndex((server) => server.default);
-	server = serverIndex != -1 ? monitoredServers[serverIndex] : monitoredServers[0];
+	const server = serverIndex != -1 ? monitoredServers[serverIndex] : monitoredServers[0];
 	return server;
 }
 

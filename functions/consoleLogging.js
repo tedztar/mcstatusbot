@@ -1,3 +1,4 @@
+'use strict';
 import pino from 'pino';
 
 const logger = pino({

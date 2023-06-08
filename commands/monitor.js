@@ -1,3 +1,4 @@
+'use strict';
 import { SlashCommandBuilder, ChannelType, PermissionFlagsBits } from 'discord.js';
 import { sendMessage } from '../functions/sendMessage.js';
 import { renameChannels } from '../functions/renameChannels.js';

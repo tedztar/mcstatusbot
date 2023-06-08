@@ -1,3 +1,4 @@
+'use strict';
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { embedColor } from '../functions/sendMessage.js';
 
