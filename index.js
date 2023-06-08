@@ -11,8 +11,8 @@ let manager = new ClusterManager('./bot.js', {
 	mode: 'process'
 });
 manager.extend(new ReClusterManager());
-
 manager.on('debug', logSharding);
+
 try {
 	spawnShards();
 } catch (error) {

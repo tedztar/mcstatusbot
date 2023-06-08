@@ -9,7 +9,7 @@ export function validateHost(host) {
 		return validateAddress(ip) && !isEmpty(port) && isPort(port);
 	}
 
-	return isIP(ip) || isFQDN(ip);
+	return validateAddress(ip);
 }
 
 function validateAddress(ip) {
