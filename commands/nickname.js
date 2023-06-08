@@ -1,3 +1,4 @@
+'use strict';
 import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
 import { sendMessage } from '../functions/sendMessage.js';
 import { isMissingPermissions } from '../functions/botPermissions.js';

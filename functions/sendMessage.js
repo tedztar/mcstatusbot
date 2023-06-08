@@ -1,3 +1,4 @@
+'use strict';
 import { EmbedBuilder } from 'discord.js';
 
 export const embedColor = '#7289DA';

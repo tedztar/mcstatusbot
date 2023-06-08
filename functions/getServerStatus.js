@@ -1,3 +1,4 @@
+'use strict';
 import { statusJava } from 'node-mcstatus';
 import unidecode from 'unidecode';
 import { validateHost } from './validateHost.js';

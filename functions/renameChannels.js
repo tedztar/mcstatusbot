@@ -1,3 +1,4 @@
+'use strict';
 import { getMissingPermissions } from './botPermissions.js';
 import { logWarning } from './consoleLogging.js';
 

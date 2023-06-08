@@ -1,3 +1,4 @@
+'use strict';
 import { logWarning } from '../functions/consoleLogging.js';
 import { getKey, setKey } from '../functions/databaseFunctions.js';
 import { getServerStatus } from '../functions/getServerStatus.js';

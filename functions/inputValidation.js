@@ -1,3 +1,4 @@
+'use strict';
 import { getKey } from './databaseFunctions.js';
 import { findServer, findDefaultServer } from './findServer.js';
 import { sendMessage } from './sendMessage.js';
