@@ -28,6 +28,7 @@ export async function execute(interaction) {
 	try {
 		await command.execute(interaction);
 	} catch (error) {
+		console.error(error);
 		let commandOptions = getCommandOptions(interaction);
 
 		logWarning('Error executing command', {

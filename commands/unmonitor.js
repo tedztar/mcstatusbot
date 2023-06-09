@@ -1,11 +1,11 @@
 'use strict';
-import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
-import { sendMessage } from '../functions/sendMessage.js';
-import { isMissingPermissions, getMissingPermissions } from '../functions/botPermissions.js';
-import { findServer, findDefaultServer, findServerIndex } from '../functions/findServer.js';
-import { getKey, setKey } from '../functions/databaseFunctions.js';
-import { noMonitoredServers, isServerUnspecified, removingDefaultServer, isNotMonitored } from '../functions/inputValidation.js';
+import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { getMissingPermissions, isMissingPermissions } from '../functions/botPermissions.js';
 import { logWarning } from '../functions/consoleLogging.js';
+import { deleteServer, getServers } from '../functions/databaseFunctions.js';
+import { findDefaultServer, findServer } from '../functions/findServer.js';
+import { isNotMonitored, isServerUnspecified, noMonitoredServers, removingDefaultServer } from '../functions/inputValidation.js';
+import { sendMessage } from '../functions/sendMessage.js';
 
 export const data = new SlashCommandBuilder()
 	.setName('unmonitor')
@@ -22,7 +22,7 @@ export async function execute(interaction) {
 	if (interaction.options.getString('server') == 'all') {
 		let notUnmonitored = [];
 		let notDeleted = [];
-		let monitoredServers = await getKey(interaction.guild.id);
+		let monitoredServers = await getServers(interaction.guild.id);
 		await Promise.allSettled(
 			monitoredServers.map(async (server) => {
 				// Check if the bot has the required permissions'
@@ -123,10 +123,7 @@ export async function execute(interaction) {
 
 async function removeServer(server, guild) {
 	// Remove server from database
-	let monitoredServers = await getKey(guild.id);
-	let serverIndex = await findServerIndex(server, guild.id);
-	monitoredServers.splice(serverIndex, 1);
-	await setKey(guild.id, monitoredServers);
+	await deleteServer(guild.id, server);
 
 	// Remove channels and server category
 	const channels = [

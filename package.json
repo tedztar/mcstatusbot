@@ -12,11 +12,10 @@
 	"type": "module",
 	"main": "index.js",
 	"dependencies": {
-		"@keyv/mongo": "^2.2.8",
 		"discord-hybrid-sharding": "^2.1.3",
 		"discord.js": "^14.7.1",
 		"dotenv": "^16.0.3",
-		"keyv": "^4.5.2",
+		"mongoose": "^7.2.2",
 		"node-mcstatus": "1.0.2",
 		"patch-package": "^7.0.0",
 		"pino": "^8.14.1",
