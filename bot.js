@@ -2,13 +2,10 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { ActivityType, Client, Collection, GatewayIntentBits } from 'discord.js';
 import { readdirSync } from 'node:fs';
-import { basename, dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { basename, join } from 'node:path';
 import { logError } from './functions/consoleLogging.js';
 import { database } from './functions/databaseFunctions.js';
 import { updateServers } from './functions/updateServers.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const client = new Client({
 	shards: getInfo().SHARD_LIST,
@@ -40,7 +37,7 @@ async function init() {
 
 	// Command Handler
 	client.commands = new Collection();
-	const commandsPath = join(__dirname, 'commands');
+	const commandsPath = decodeURI(new URL('./commands', import.meta.url).pathname);
 	const commandFiles = readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
 	for (const file of commandFiles) {
 		const filePath = join(commandsPath, file);
@@ -53,7 +50,7 @@ async function init() {
 	}
 
 	// Event Handler
-	const eventsPath = join(__dirname, 'events');
+	const eventsPath = decodeURI(new URL('./events', import.meta.url).pathname);
 	const eventFiles = readdirSync(eventsPath).filter((file) => file.endsWith('.js'));
 	for (const file of eventFiles) {
 		const filePath = join(eventsPath, file);
