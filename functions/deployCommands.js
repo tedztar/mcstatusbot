@@ -1,17 +1,17 @@
 'use strict';
 import { REST, Routes } from 'discord.js';
 import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import path from 'node:path';
 import { logError } from './consoleLogging.js';
 
 export async function deployCommands() {
 	const commands = [];
-	const commandsPath = decodeURI(new URL('../commands', import.meta.url).pathname);
+	const commandsPath = path.resolve(process.cwd(), '../commands');
 	const commandFiles = readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
 
 	for (const file of commandFiles) {
-		const filePath = join(commandsPath, file);
-		const command = await import(filePath);
+		const filePath = path.resolve(commandsPath, file);
+		const command = await import(pathToFileURL(filePath).toString());
 		commands.push(command.data.toJSON());
 	}
 

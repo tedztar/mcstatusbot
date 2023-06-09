@@ -2,7 +2,8 @@
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { ActivityType, Client, Collection, GatewayIntentBits } from 'discord.js';
 import { readdirSync } from 'node:fs';
-import { basename, join } from 'node:path';
+import path, { basename } from 'node:path';
+import { pathToFileURL } from 'node:url';
 import { logError } from './functions/consoleLogging.js';
 import { database } from './functions/databaseFunctions.js';
 import { updateServers } from './functions/updateServers.js';
@@ -37,11 +38,11 @@ async function init() {
 
 	// Command Handler
 	client.commands = new Collection();
-	const commandsPath = decodeURI(new URL('./commands', import.meta.url).pathname);
+	const commandsPath = path.resolve(process.cwd(), './commands');
 	const commandFiles = readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
 	for (const file of commandFiles) {
-		const filePath = join(commandsPath, file);
-		const command = await import(filePath);
+		const filePath = path.resolve(commandsPath, file);
+		const command = await import(pathToFileURL(filePath).toString());
 		if ('data' in command && 'execute' in command) {
 			client.commands.set(command.data.name, command);
 		} else {
@@ -50,11 +51,11 @@ async function init() {
 	}
 
 	// Event Handler
-	const eventsPath = decodeURI(new URL('./events', import.meta.url).pathname);
+	const eventsPath = path.resolve(process.cwd(), './events');
 	const eventFiles = readdirSync(eventsPath).filter((file) => file.endsWith('.js'));
 	for (const file of eventFiles) {
-		const filePath = join(eventsPath, file);
-		const event = await import(filePath);
+		const filePath = path.resolve(eventsPath, file);
+		const event = await import(pathToFileURL(filePath).toString());
 		if (event.once) {
 			client.once(event.name, (...args) => event.execute(...args));
 		} else {
