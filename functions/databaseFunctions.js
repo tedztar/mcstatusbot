@@ -87,5 +87,5 @@ export async function numberOfServers(key) {
 }
 
 export async function deleteGuild(key) {
-	Guild.findOneAndDelete({ guildId: key }).lean().exec().catch(databaseError);
+	Guild.findOneAndDelete({ guildId: key }).exec().catch(databaseError);
 }
