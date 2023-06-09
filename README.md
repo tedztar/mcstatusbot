@@ -21,9 +21,8 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## Features
 
-- Self-updating voice channels to display the server's status and the number of players online
+- Auto-updating voice channels to display the server's status and the number of players online
 - Support for monitoring multiple Minecraft servers at once
-- See the usernames of the players on the server
 - Check the status of non-monitored servers
 - Slash command support with ephemeral responses to prevent channels from being cluttered with commands
 
@@ -52,7 +51,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 - [ ] Update readme with screenshots
 - [ ] Remove stale rows from db
-- [ ] Automate deploying commands
+- [x] Automate deploying commands
 - [x] Fix async/await usage and parallelize for loops
 - [x] Implement optional success and error message pass-through in console
 - [x] Move error logging to own file
