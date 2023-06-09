@@ -1,8 +1,11 @@
 'use strict';
 import { REST, Routes } from 'discord.js';
 import { readdirSync } from 'node:fs';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { logError } from './consoleLogging.js';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export async function deployCommands() {
 	const commands = [];
@@ -11,7 +14,7 @@ export async function deployCommands() {
 
 	for (const file of commandFiles) {
 		const filePath = join(commandsPath, file);
-		const command = require(filePath);
+		const command = await import(filePath);
 		commands.push(command.data.toJSON());
 	}
 

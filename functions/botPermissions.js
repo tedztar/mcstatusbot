@@ -27,7 +27,7 @@ export async function isMissingPermissions(type, object, interaction) {
 }
 
 export function getMissingPermissions(type, object) {
-	const type = type.toLowerCase();
+	type = type.toLowerCase();
 	const basicType = type == 'status channel' || type == 'players channel' ? 'channel' : type;
 	const botPermissions = getBotPermissions(type, object);
 	let missingPermissions = [];

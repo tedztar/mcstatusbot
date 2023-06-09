@@ -1,4 +1,5 @@
 'use strict';
+import unidecode from 'unidecode';
 import validator from 'validator';
 const { isIP, isFQDN, isEmpty, isPort } = validator;
 

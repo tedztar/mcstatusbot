@@ -1,10 +1,10 @@
 'use strict';
-import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
-import { embedColor, sendMessage } from '../functions/sendMessage.js';
-import { getServerStatus } from '../functions/getServerStatus.js';
-import { findServer, findDefaultServer } from '../functions/findServer.js';
-import { noMonitoredServers, isValidServer } from '../functions/inputValidation.js';
+import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { logWarning } from '../functions/consoleLogging.js';
+import { findDefaultServer, findServer } from '../functions/findServer.js';
+import { getServerStatus } from '../functions/getServerStatus.js';
+import { isValidServer, noMonitoredServers } from '../functions/inputValidation.js';
+import { embedColor, sendMessage } from '../functions/sendMessage.js';
 
 export const data = new SlashCommandBuilder()
 	.setName('status')
@@ -47,7 +47,7 @@ export async function execute(interaction) {
 	}
 
 	// Message if server is online
-	message = `**${serverStatus.players.online}/${serverStatus.players.max}** players online.`;
+	const message = `**${serverStatus.players.online}/${serverStatus.players.max}** players online.`;
 
 	const responseEmbed = new EmbedBuilder()
 		.setTitle(`Status for ${serverIp}:`)
