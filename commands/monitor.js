@@ -1,13 +1,13 @@
 'use strict';
-import { SlashCommandBuilder, ChannelType, PermissionFlagsBits } from 'discord.js';
-import { sendMessage } from '../functions/sendMessage.js';
-import { renameChannels } from '../functions/renameChannels.js';
-import { getServerStatus } from '../functions/getServerStatus.js';
+import { ChannelType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { isMissingPermissions } from '../functions/botPermissions.js';
-import { noMonitoredServers, isMonitored, isNicknameUsed, isValidServer } from '../functions/inputValidation.js';
-import { getKey, setKey } from '../functions/databaseFunctions.js';
-import { findDefaultServer, findServerIndex } from '../functions/findServer.js';
 import { logWarning } from '../functions/consoleLogging.js';
+import { addServer, getServers, setServers } from '../functions/databaseFunctions.js';
+import { findDefaultServer, findServerIndex } from '../functions/findServer.js';
+import { getServerStatus } from '../functions/getServerStatus.js';
+import { isMonitored, isNicknameUsed, isValidServer, noMonitoredServers } from '../functions/inputValidation.js';
+import { renameChannels } from '../functions/renameChannels.js';
+import { sendMessage } from '../functions/sendMessage.js';
 
 export const data = new SlashCommandBuilder()
 	.setName('monitor')
@@ -28,13 +28,13 @@ export async function execute(interaction) {
 	if (interaction.options.getBoolean('default')) {
 		let server = await findDefaultServer(interaction.guildId);
 		let serverIndex = await findServerIndex(server, interaction.guildId);
-		let monitoredServers = await getKey(interaction.guildId);
+		let monitoredServers = await getServers(interaction.guildId);
 
 		if (monitoredServers.length > 0 && serverIndex >= 0) {
 			monitoredServers[serverIndex].default = false;
 		}
 
-		await setKey(interaction.guildId, monitoredServers);
+		await setServers(interaction.guildId, monitoredServers);
 	}
 
 	// Create the server object
@@ -109,9 +109,7 @@ export async function execute(interaction) {
 	}
 
 	// Add the server to the database
-	let monitoredServers = await getKey(interaction.guildId);
-	monitoredServers.push(server);
-	await setKey(interaction.guildId, monitoredServers);
+	await addServer(interaction.guildId, server);
 
 	await sendMessage(
 		interaction,

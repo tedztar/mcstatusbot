@@ -1,15 +1,13 @@
 'use strict';
-import { getKey } from './databaseFunctions.js';
-import { findServer, findDefaultServer } from './findServer.js';
+import { numberOfServers } from './databaseFunctions.js';
+import { findDefaultServer, findServer } from './findServer.js';
 import { sendMessage } from './sendMessage.js';
 import { validateHost } from './validateHost.js';
 
 const reservedNames = ['all'];
 
 export async function noMonitoredServers(guildId, interaction, isStatusCommand) {
-	const monitoredServers = await getKey(guildId);
-
-	if (!monitoredServers.length) {
+	if ((await numberOfServers(guildId)) == 0) {
 		interaction && (await sendMessage(interaction, `There are no monitored servers${isStatusCommand ? ', and no IP address was specified!' : '!'}`));
 		return true;
 	}
@@ -103,9 +101,7 @@ export async function removingDefaultServer(server, guildId, interaction) {
 }
 
 export async function multipleMonitoredServers(guildId) {
-	const monitoredServers = await getKey(guildId);
-
-	return monitoredServers.length > 1;
+	return (await numberOfServers(guildId)) > 1;
 }
 
 export async function isValidServer(server, interaction) {

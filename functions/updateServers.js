@@ -1,16 +1,23 @@
 'use strict';
 import { logWarning } from '../functions/consoleLogging.js';
-import { getKey, setKey } from '../functions/databaseFunctions.js';
+import { getServers } from '../functions/databaseFunctions.js';
 import { getServerStatus } from '../functions/getServerStatus.js';
 import { renameChannels } from '../functions/renameChannels.js';
 
 export async function updateServers(client) {
-	// Update server count badge
+	// Update server count badge on remote
 	if (client.cluster.id == 0) {
 		try {
 			let serverCountByShard = await client.cluster.fetchClientValues('guilds.cache.size');
 			let serverCount = serverCountByShard.reduce((totalGuilds, shardGuilds) => totalGuilds + shardGuilds, 0);
-			await setKey('discordServers', serverCount);
+
+			await fetch(process.env.DELEGATE_URL + '/api/updateServerCount', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ serverCount: serverCount, delegateToken: process.env.DELEGATE_TOKEN })
+			});
 		} catch (error) {
 			if (error.name != 'Error [ShardingInProcess]') logWarning('Error setting server count', error);
 		}
@@ -18,7 +25,7 @@ export async function updateServers(client) {
 
 	await Promise.allSettled(
 		client.guilds.cache.map(async (guild) => {
-			let serverList = await getKey(guild.id);
+			let serverList = await getServers(guild.id);
 			await Promise.allSettled(
 				serverList.map(async (server) => {
 					let serverStatus;

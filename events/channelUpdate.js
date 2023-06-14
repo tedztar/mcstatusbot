@@ -1,7 +1,7 @@
 'use strict';
 import { Events } from 'discord.js';
 import { logWarning } from '../functions/consoleLogging.js';
-import { getKey, setKey } from '../functions/databaseFunctions.js';
+import { getServers, setServers } from '../functions/databaseFunctions.js';
 import { findServer, findServerIndex } from '../functions/findServer.js';
 import { isNotMonitored } from '../functions/inputValidation.js';
 
@@ -18,10 +18,10 @@ export async function execute(_, newChannel) {
 		if (newChannel.name == server.nickname || newChannel.name == server.ip) return;
 
 		// Set the nickname listed in the database to the channel name
-		let monitoredServers = await getKey(newChannel.guildId);
+		let monitoredServers = await getServers(newChannel.guildId);
 		const serverIndex = await findServerIndex(server, newChannel.guildId);
 		monitoredServers[serverIndex].nickname = newChannel.name;
-		await setKey(newChannel.guildId, monitoredServers);
+		await setServers(newChannel.guildId, monitoredServers);
 	} catch (error) {
 		logWarning('Error setting nickname during channel rename', {
 			'Channel ID': newChannel.id,

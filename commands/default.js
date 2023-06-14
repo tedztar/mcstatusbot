@@ -1,8 +1,8 @@
 'use strict';
-import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
-import { getKey, setKey } from '../functions/databaseFunctions.js';
-import { findServer, findDefaultServer, findServerIndex } from '../functions/findServer.js';
-import { noMonitoredServers, isDefault, isNotMonitored } from '../functions/inputValidation.js';
+import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
+import { getServers, setServers } from '../functions/databaseFunctions.js';
+import { findDefaultServer, findServer, findServerIndex } from '../functions/findServer.js';
+import { isDefault, isNotMonitored, noMonitoredServers } from '../functions/inputValidation.js';
 import { sendMessage } from '../functions/sendMessage.js';
 
 export const data = new SlashCommandBuilder()
@@ -26,12 +26,12 @@ export async function execute(interaction) {
 	if (await isNotMonitored(newDefaultServer, interaction)) return;
 	if (await isDefault(newDefaultServer, interaction.guildId, interaction)) return;
 
-	let monitoredServers = await getKey(interaction.guildId);
+	let monitoredServers = await getServers(interaction.guildId);
 	const oldDefaultServerIndex = await findServerIndex(oldDefaultServer, interaction.guildId);
 	const newDefaultServerIndex = await findServerIndex(newDefaultServer, interaction.guildId);
 	monitoredServers[oldDefaultServerIndex].default = false;
 	monitoredServers[newDefaultServerIndex].default = true;
-	await setKey(interaction.guildId, monitoredServers);
+	await setServers(interaction.guildId, monitoredServers);
 
 	await sendMessage(interaction, 'The server has successfully been made the default for all commands.');
 }

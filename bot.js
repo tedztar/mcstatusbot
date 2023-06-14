@@ -1,11 +1,11 @@
 'use strict';
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { ActivityType, Client, Collection, GatewayIntentBits } from 'discord.js';
+import mongoose from 'mongoose';
 import { readdirSync } from 'node:fs';
 import path, { basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { logError } from './functions/consoleLogging.js';
-import { database } from './functions/databaseFunctions.js';
 import { updateServers } from './functions/updateServers.js';
 
 const client = new Client({
@@ -34,7 +34,14 @@ client.login(process.env.TOKEN);
 
 async function init() {
 	// Database Handler
-	database.on('error', (error) => logError('Keyv connection error:', error));
+	mongoose.set('strictQuery', true);
+
+	try {
+		await mongoose.connect(process.env.DATABASE_URL);
+	} catch (error) {
+		logError('Error connecting to database', error);
+		return;
+	}
 
 	// Command Handler
 	client.commands = new Collection();
