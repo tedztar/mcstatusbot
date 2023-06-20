@@ -12,9 +12,26 @@ import { sendMessage } from '../functions/sendMessage.js';
 export const data = new SlashCommandBuilder()
 	.setName('monitor')
 	.setDescription('Create 2 voice channels that display the status of a Minecraft server')
-	.addStringOption((option) => option.setName('ip').setDescription('IP address').setRequired(true))
-	.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(false))
-	.addBooleanOption((option) => option.setName('default').setDescription('Set this server to be the default for all commands').setRequired(false))
+	.addStringOption((option) => option
+		.setName('ip')
+		.setDescription('IP address')
+		.setRequired(true))
+	.addStringOption((option) => option
+		.setName('nickname')
+		.setDescription('Server nickname')
+		.setRequired(false))
+	.addBooleanOption((option) => option
+		.setName('default')
+		.setDescription('Set this server to be the default for all commands')
+		.setRequired(false))
+	.addStringOption((option) => option
+		.setName('platform')
+		.setDescription('Server platform')
+		.setRequired(false)
+		.setChoices(
+			{ name: 'Java', value: 'java' },
+			{ name: 'Bedrock', value: 'bedrock' }
+		))
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	.setDMPermission(false);
 
@@ -41,7 +58,8 @@ export async function execute(interaction) {
 	let server = {
 		ip: interaction.options.getString('ip'),
 		nickname: interaction.options.getString('nickname') || null,
-		default: (await noMonitoredServers(interaction.guildId)) ? true : interaction.options.getBoolean('default') || false
+		default: (await noMonitoredServers(interaction.guildId)) ? true : interaction.options.getBoolean('default') || false,
+		platform: interaction.options.getString('platform') || 'java'
 	};
 
 	// Create the server category
@@ -117,7 +135,7 @@ export async function execute(interaction) {
 	);
 
 	// Get the server status and update the channels
-	const serverStatus = await getServerStatus(server.ip);
+	const serverStatus = await getServerStatus(server);
 	const channels = [
 		{ object: await interaction.guild.channels.cache.get(server.statusId), name: 'statusName' },
 		{ object: await interaction.guild.channels.cache.get(server.playersId), name: 'playersName' }

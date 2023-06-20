@@ -9,31 +9,46 @@ import { embedColor, sendMessage } from '../functions/sendMessage.js';
 export const data = new SlashCommandBuilder()
 	.setName('status')
 	.setDescription('Displays the current status and active players for any server')
-	.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false));
+	.addStringOption((option) => option
+		.setName('server')
+		.setDescription('Server IP address or nickname')
+		.setRequired(false))
+	.addStringOption((option) => option
+		.setName('platform')
+		.setDescription('Server platform')
+		.setRequired(false)
+		.setChoices(
+			{ name: 'Java', value: 'java' },
+			{ name: 'Bedrock', value: 'bedrock' }
+		));
 
 export async function execute(interaction) {
-	let serverIp;
+	let server;
 
 	if (interaction.options.getString('server')) {
-		let server = await findServer(interaction.options.getString('server'), ['nickname'], interaction.guildId);
-		serverIp = server ? server.ip : interaction.options.getString('server');
+		server = await findServer(interaction.options.getString('server'), ['nickname'], interaction.guildId);
+		if (!server) {
+			server = {
+				ip: interaction.options.getString('server'),
+				platform: interaction.options.getString('platform') || 'java'
+			};
+		};
 	} else {
 		if (await noMonitoredServers(interaction.guildId, interaction, true)) return;
-		let server = await findDefaultServer(interaction.guildId);
-		serverIp = server.ip;
+		server = await findDefaultServer(interaction.guildId);
 	}
 
 	// Validate the server IP
-	if (!(await isValidServer(serverIp, interaction))) return;
+	if (!(await isValidServer(server.ip, interaction))) return;
 
 	//Get the server status
 	let serverStatus;
 	try {
-		serverStatus = await getServerStatus(serverIp);
+		serverStatus = await getServerStatus(server);
 	} catch (error) {
 		logWarning('Error pinging Minecraft server while running status command', {
 			'Guild ID': interaction.guildId,
-			'Server IP': serverIp,
+			'Server IP': server.ip,
 			Error: serverStatus.error || error
 		});
 		await sendMessage(interaction, 'The server could not be pinged!');
@@ -42,7 +57,7 @@ export async function execute(interaction) {
 
 	// Message if server is offline
 	if (!serverStatus.online) {
-		await sendMessage(interaction, `*The server is offline!*`, `Status for ${serverIp}:`);
+		await sendMessage(interaction, `*The server is offline!*`, `Status for ${server.ip}:`);
 		return;
 	}
 
@@ -50,11 +65,15 @@ export async function execute(interaction) {
 	const message = `**${serverStatus.players.online}/${serverStatus.players.max}** players online.`;
 
 	const responseEmbed = new EmbedBuilder()
-		.setTitle(`Status for ${serverIp}:`)
+		.setTitle(`Status for ${server.ip}:`)
 		.setColor(embedColor)
 		.setDescription(message)
-		.addFields({ name: 'MOTD:', value: serverStatus.motd.clean }, { name: 'Server version:', value: serverStatus.version.name_clean })
-		.setThumbnail(`https://api.mcsrvstat.us/icon/${serverIp}`)
+		.addFields(
+			{ name: 'MOTD:', value: serverStatus.motd.clean },
+			{ name: 'Server version:', value: serverStatus.version.name || 'Not specified' },
+			{ name: 'Latency:', value: serverStatus.latency }
+		)
+		.setThumbnail(`https://api.mcsrvstat.us/icon/${server.ip}`)
 		.setTimestamp();
 
 	await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });

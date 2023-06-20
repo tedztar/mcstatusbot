@@ -43,9 +43,8 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - [ ] Rework status, nickname, and unmonitor commands to include dropdown menus
 - [ ] Rework monitor and nickname commands to include modal workflow
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
-- [ ] Support compatibility with bedrock servers (see [this](https://www.npmjs.com/package/minecraft-server-util?activeTab=readme) package)
-- [ ] Show ping latency for servers
-- [ ] Add multi-language support and localizations
+- [x] Support compatibility with bedrock servers (see [this](https://www.npmjs.com/package/minecraft-server-util?activeTab=readme) package)
+- [x] Show ping latency for servers
 
 ### Backend Updates
 
