@@ -7,7 +7,7 @@ import { deployCommands } from './functions/deployCommands.js';
 const shardsPerClusters = 2;
 
 if (process.env.MODE == 'PRODUCTION') {
-	logSuccess('Deploying commands...');
+	logSuccess('Deploying commands');
 	deployCommands();
 }
 

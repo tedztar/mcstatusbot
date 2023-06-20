@@ -1,12 +1,14 @@
 'use strict';
+import 'dotenv/config';
+import path from 'node:path';
 import { REST, Routes } from 'discord.js';
 import { readdirSync } from 'node:fs';
-import path from 'node:path';
-import { logError } from './consoleLogging.js';
+import { logSuccess, logError } from './consoleLogging.js';
+import { pathToFileURL } from 'node:url';
 
 export async function deployCommands() {
 	const commands = [];
-	const commandsPath = path.resolve(process.cwd(), '../commands');
+	const commandsPath = path.resolve(process.cwd(), './commands');
 	const commandFiles = readdirSync(commandsPath).filter((file) => file.endsWith('.js'));
 
 	for (const file of commandFiles) {
@@ -15,10 +17,11 @@ export async function deployCommands() {
 		commands.push(command.data.toJSON());
 	}
 
-	const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
+	const rest = new REST().setToken(process.env.TOKEN);
 
 	try {
 		await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands });
+		logSuccess('Commands deployed');
 	} catch (error) {
 		logError(error);
 	}

@@ -30,7 +30,7 @@ export async function updateServers(client) {
 				serverList.map(async (server) => {
 					let serverStatus;
 					try {
-						serverStatus = await getServerStatus(server.ip);
+						serverStatus = await getServerStatus(server);
 					} catch (error) {
 						logWarning('Error pinging Minecraft server while updating servers', {
 							'Server IP': server.ip,
