@@ -62,7 +62,20 @@ export async function execute(interaction) {
 	}
 
 	// Message if server is online
-	const message = `**${serverStatus.players.online}/${serverStatus.players.max}** players online.`;
+	let message;
+	if (!serverStatus.players.online) {
+		message = `*No one is playing!*`;
+	} else {
+		let onlinePlayers = [];
+		for (const player of serverStatus.players.list) {
+			onlinePlayers.push(player.name_clean);
+		}
+		onlinePlayers = onlinePlayers.sort().join(', ');
+		message = `**${serverStatus.players.online || 0}/${serverStatus.players.max}** player(s) online.`;
+		if (onlinePlayers) message += `\n\n ${onlinePlayers}`;
+	}
+
+	console.log(serverStatus.players.sample)
 
 	const responseEmbed = new EmbedBuilder()
 		.setTitle(`Status for ${server.ip}:`)
@@ -70,11 +83,10 @@ export async function execute(interaction) {
 		.setDescription(message)
 		.addFields(
 			{ name: 'MOTD:', value: serverStatus.motd.clean },
-			{ name: 'Server version:', value: serverStatus.version.name || 'Not specified' },
-			{ name: 'Latency:', value: serverStatus.latency }
+			{ name: 'Server version:', value: serverStatus.version.name || 'Not specified', inline: true },
+			{ name: 'Latency:', value: serverStatus.latency, inline: true }
 		)
-		.setThumbnail(`https://api.mcsrvstat.us/icon/${server.ip}`)
-		.setTimestamp();
+		.setThumbnail(`https://api.mcsrvstat.us/icon/${server.ip}`);
 
 	await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
 }
