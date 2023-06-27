@@ -62,13 +62,16 @@ export async function execute(interaction) {
 	if (!serverStatus.players.online) {
 		message = `*No one is playing!*`;
 	} else {
-		let playerList = serverStatus.players.list.map((player) => player.name_clean);
+		let playerList = serverStatus.players?.list?.map((player) => player.name_clean) || [];
 
 		message = `**${serverStatus.players.online || 0}/${serverStatus.players.max}** player(s) online.`;
 		if (playerList.length > 0) message += `\n\n ${playerList.sort().join(', ')}`;
 	}
 
-	let iconBuffer = new Buffer.from(serverStatus.icon.split(',')[1], 'base64');
+	let iconBuffer = new Buffer.from(
+		serverStatus.icon?.split(',')[1] || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=',
+		'base64'
+	);
 	let serverIcon = new AttachmentBuilder(iconBuffer, { name: 'icon.jpg' });
 
 	const responseEmbed = new EmbedBuilder()

@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import { readdirSync } from 'node:fs';
 import path, { basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { logError } from './functions/consoleLogging.js';
+import { logError, logWarning } from './functions/consoleLogging.js';
 import { updateServers } from './functions/updateServers.js';
 
 const client = new Client({
@@ -29,6 +29,8 @@ client.once('ready', async () => {
 	clientReady = true;
 	if (clusterReady) init();
 });
+
+client.on('error', logWarning);
 
 client.login(process.env.TOKEN);
 
