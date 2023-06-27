@@ -62,7 +62,7 @@ export async function execute(interaction) {
 	if (!serverStatus.players.online) {
 		message = `*No one is playing!*`;
 	} else {
-		let playerList = serverStatus.players.list.map((player) => player.name_clean);
+		let playerList = serverStatus.players?.list?.map((player) => player.name_clean) || [];
 
 		message = `**${serverStatus.players.online || 0}/${serverStatus.players.max}** player(s) online.`;
 		if (playerList.length > 0) message += `\n\n ${playerList.sort().join(', ')}`;
