@@ -1,4 +1,4 @@
-![Discord Server Count](https://img.shields.io/endpoint?url=https%3A%2F%2Fachiommino.npkn.net%2Fmcstatusbot-servercount%2F)
+![Discord Server Count](https://img.shields.io/endpoint?url=https%3A%2F%2Fmcstatusbot-delegate-production.up.railway.app%2Fcount%2FgetFormatted)
 [![Make A Donation](https://img.shields.io/static/v1?label=&message=Donate&color=d9b811&logo=buymeacoffee&logoColor=white)](https://www.buymeacoffee.com/rahulrao)
 
 # Minecraft Server Status - Discord Bot
@@ -14,7 +14,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 ## Now Updated!!
 
 - Updated June 2023
-- Various backend updates have been made to make the bot run smoother.
+- Transitioned to new backend providers
 - Server validation introduced.
 - Adopted more efficient multi-process optimisation.
 - Stay tuned for large front end changes coming over summer.
