@@ -9,18 +9,14 @@ import { embedColor, sendMessage } from '../functions/sendMessage.js';
 export const data = new SlashCommandBuilder()
 	.setName('status')
 	.setDescription('Displays the current status and active players for any server')
-	.addStringOption((option) => option
-		.setName('server')
-		.setDescription('Server IP address or nickname')
-		.setRequired(false))
-	.addStringOption((option) => option
-		.setName('platform')
-		.setDescription('Server platform')
-		.setRequired(false)
-		.setChoices(
-			{ name: 'Java', value: 'java' },
-			{ name: 'Bedrock', value: 'bedrock' }
-		));
+	.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false))
+	.addStringOption((option) =>
+		option
+			.setName('platform')
+			.setDescription('Server platform')
+			.setRequired(false)
+			.setChoices({ name: 'Java', value: 'java' }, { name: 'Bedrock', value: 'bedrock' })
+	);
 
 export async function execute(interaction) {
 	let server;
@@ -32,7 +28,7 @@ export async function execute(interaction) {
 				ip: interaction.options.getString('server'),
 				platform: interaction.options.getString('platform') || 'java'
 			};
-		};
+		}
 	} else {
 		if (await noMonitoredServers(interaction.guildId, interaction, true)) return;
 		server = await findDefaultServer(interaction.guildId);
@@ -66,16 +62,13 @@ export async function execute(interaction) {
 	if (!serverStatus.players.online) {
 		message = `*No one is playing!*`;
 	} else {
-		let playerList = [];
-		for (const player of serverStatus.players.list) {
-			playerList.push(player.name_clean);
-		}
-		playerList = playerList.sort().join(', ');
+		let playerList = serverStatus.players.list.map((player) => player.name_clean);
+
 		message = `**${serverStatus.players.online || 0}/${serverStatus.players.max}** player(s) online.`;
-		if (playerList) message += `\n\n ${playerList}`;
+		if (playerList.length > 0) message += `\n\n ${playerList.sort().join(', ')}`;
 	}
 
-	let iconBuffer = new Buffer.from(serverStatus.icon.split(",")[1], "base64")
+	let iconBuffer = new Buffer.from(serverStatus.icon.split(',')[1], 'base64');
 	let serverIcon = new AttachmentBuilder(iconBuffer, { name: 'icon.jpg' });
 
 	const responseEmbed = new EmbedBuilder()
