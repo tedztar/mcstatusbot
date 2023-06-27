@@ -1,6 +1,6 @@
 'use strict';
-import { ClusterManager, ReClusterManager, fetchRecommendedShards } from 'discord-hybrid-sharding';
 import 'dotenv/config';
+import { ClusterManager, ReClusterManager, fetchRecommendedShards } from 'discord-hybrid-sharding';
 import { logError, logSharding, logSuccess } from './functions/consoleLogging.js';
 import { deployCommands } from './functions/deployCommands.js';
 
