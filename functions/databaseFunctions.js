@@ -8,7 +8,8 @@ const server = mongoose.Schema({
 	statusId: { type: String, required: true },
 	playersId: { type: String, required: true },
 	nickname: { type: String, required: false, default: null },
-	default: { type: Boolean, required: false, default: false }
+	default: { type: Boolean, required: false, default: false },
+	platform: { type: String, required: false, default: 'java'}
 });
 
 const guild = mongoose.Schema({

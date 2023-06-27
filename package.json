@@ -7,7 +7,8 @@
 	},
 	"scripts": {
 		"start": "node index.js",
-		"postinstall": "npx patch-package"
+		"postinstall": "npx patch-package",
+		"deployCommands": "npx run-func ./functions/deployCommands.js deployCommands"
 	},
 	"type": "module",
 	"main": "index.js",
