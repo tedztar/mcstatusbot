@@ -68,7 +68,10 @@ export async function execute(interaction) {
 		if (playerList.length > 0) message += `\n\n ${playerList.sort().join(', ')}`;
 	}
 
-	let iconBuffer = new Buffer.from(serverStatus.icon.split(',')[1], 'base64');
+	let iconBuffer = new Buffer.from(
+		serverStatus.icon?.split(',')[1] || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=',
+		'base64'
+	);
 	let serverIcon = new AttachmentBuilder(iconBuffer, { name: 'icon.jpg' });
 
 	const responseEmbed = new EmbedBuilder()
