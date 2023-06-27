@@ -43,6 +43,8 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - [ ] Rework status, nickname, and unmonitor commands to include dropdown menus
 - [ ] Rework monitor and nickname commands to include modal workflow
 - [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
+- [ ] Link Discord usernames to Minecraft accounts for player list in status command (see [this](https://github.com/dommilosz/minecraft-auth) repository)
+- [ ] Add option to monitor server with message embed instead of voice channels
 - [x] Support compatibility with bedrock servers (see [this](https://www.npmjs.com/package/minecraft-server-util?activeTab=readme) package)
 - [x] Show ping latency for servers
 
@@ -50,6 +52,9 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 - [ ] Update readme with screenshots
 - [ ] Remove stale rows from db
+- [ ] Error logging rework
+- [ ] Network request retry wrapper
+- [x] Retrieve server icon from ping package instead of external API
 - [x] Automate deploying commands
 - [x] Fix async/await usage and parallelize for loops
 - [x] Implement optional success and error message pass-through in console

@@ -11,23 +11,16 @@ const logger = pino({
 	}
 });
 
-function formatError(error) {
-	if (process.env.DETAILED_LOGS == 'FALSE') {
-		delete error['Error'];
-	}
-	return error;
-}
-
 export function logSuccess(message) {
 	logger.info(message);
 }
 
 export function logWarning(message, error) {
-	logger.warn({ details: formatError(error) }, message);
+	logger.warn(process.env.DETAILED_LOGS == 'TRUE' ? error : null, message);
 }
 
 export function logError(message, error) {
-	logger.fatal({ details: formatError(error) }, message);
+	logger.error(process.env.DETAILED_LOGS == 'TRUE' ? error : null, message);
 }
 
 export function logSharding(message) {
