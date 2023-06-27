@@ -1,5 +1,5 @@
 'use strict';
-import { EmbedBuilder, SlashCommandBuilder } from 'discord.js';
+import { AttachmentBuilder, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
 import { logWarning } from '../functions/consoleLogging.js';
 import { findDefaultServer, findServer } from '../functions/findServer.js';
 import { getServerStatus } from '../functions/getServerStatus.js';
@@ -66,16 +66,17 @@ export async function execute(interaction) {
 	if (!serverStatus.players.online) {
 		message = `*No one is playing!*`;
 	} else {
-		let onlinePlayers = [];
+		let playerList = [];
 		for (const player of serverStatus.players.list) {
-			onlinePlayers.push(player.name_clean);
+			playerList.push(player.name_clean);
 		}
-		onlinePlayers = onlinePlayers.sort().join(', ');
+		playerList = playerList.sort().join(', ');
 		message = `**${serverStatus.players.online || 0}/${serverStatus.players.max}** player(s) online.`;
-		if (onlinePlayers) message += `\n\n ${onlinePlayers}`;
+		if (playerList) message += `\n\n ${playerList}`;
 	}
 
-	console.log(serverStatus.players.sample)
+	let iconBuffer = new Buffer.from(serverStatus.icon.split(",")[1], "base64")
+	let serverIcon = new AttachmentBuilder(iconBuffer, { name: 'icon.jpg' });
 
 	const responseEmbed = new EmbedBuilder()
 		.setTitle(`Status for ${server.ip}:`)
@@ -86,7 +87,7 @@ export async function execute(interaction) {
 			{ name: 'Server version:', value: serverStatus.version.name || 'Not specified', inline: true },
 			{ name: 'Latency:', value: serverStatus.latency, inline: true }
 		)
-		.setThumbnail(`https://api.mcsrvstat.us/icon/${server.ip}`);
+		.setThumbnail('attachment://icon.jpg');
 
-	await interaction.editReply({ embeds: [responseEmbed], ephemeral: true });
+	await interaction.editReply({ embeds: [responseEmbed], files: [serverIcon], ephemeral: true });
 }

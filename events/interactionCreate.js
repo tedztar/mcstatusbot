@@ -14,6 +14,7 @@ export async function execute(interaction) {
 
 	try {
 		await interaction.deferReply({ ephemeral: true });
+		if (!interaction.deferred) throw new Error('Reply was unsuccessfully deferred');
 	} catch (error) {
 		let commandOptions = getCommandOptions(interaction);
 
