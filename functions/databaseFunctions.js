@@ -9,7 +9,7 @@ const server = mongoose.Schema({
 	playersId: { type: String, required: true },
 	nickname: { type: String, required: false, default: null },
 	default: { type: Boolean, required: false, default: false },
-	platform: { type: String, required: false, default: 'java'}
+	platform: { type: String, required: false, default: 'java' }
 });
 
 const guild = mongoose.Schema({
@@ -35,7 +35,10 @@ export async function getServers(key) {
 	return Guild.findOne({ guildId: key })
 		.exec()
 		.then((guild) => {
-			return guild?.servers ? guild.servers : [];
+			if (guild) {
+				return guild.servers;
+			}
+			return [];
 		})
 		.catch(databaseError);
 }
@@ -58,8 +61,24 @@ export async function deleteServer(key, server) {
 	Guild.findOne({ guildId: key })
 		.exec()
 		.then((guild) => {
-			guild?.servers && (guild.servers = guild.servers.filter((s) => s.ip != server.ip));
-			guild.save();
+			if (guild) {
+				guild.servers = guild.servers.filter((s) => s.ip != server.ip);
+				guild.save();
+			}
+		})
+		.catch(databaseError);
+}
+
+export async function deleteServers(key, servers) {
+	const serverIPs = servers.map((s) => s.ip);
+
+	Guild.findOne({ guildId: key })
+		.exec()
+		.then((guild) => {
+			if (guild) {
+				guild.servers = guild.servers.filter((s) => !serverIPs.includes(s.ip));
+				guild.save();
+			}
 		})
 		.catch(databaseError);
 }
@@ -82,7 +101,10 @@ export async function numberOfServers(key) {
 	return Guild.findOne({ guildId: key })
 		.exec()
 		.then((guild) => {
-			return guild?.servers ? guild.servers.length : 0;
+			if (guild) {
+				return guild.servers.length;
+			}
+			return 0;
 		})
 		.catch(databaseError);
 }

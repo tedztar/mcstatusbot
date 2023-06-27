@@ -9,15 +9,17 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 **Enjoying our bot?** Our bot is completely free to use, and will always remain so. A [donation](https://www.buymeacoffee.com/rahulrao) of any amount helps keep our server running!
 
-> :construction: **Server validation has been added**: Servers that are not valid IP addresses, or FQDNs (domains) can no longer be monitored. On July 1, 2023 all servers in the database will be validated. Any invalid servers will be deleted, and will no longer be monitored by the bot.
+> :warning: **Server validation has been added**: Servers that are not valid IP addresses, or FQDNs (domains) can no longer be monitored. The database has now been cleaned of any invalid server addresses. Large backend changes have also taken place. Please read the new pinned issue (FAQ) if you run into problems.
 
-## Now Updated!!
+## New Version released!!
 
-- Updated June 2023
-- Transitioned to new backend providers
-- Server validation introduced.
+- Updated 27 June 2023
+- Bedrock support added!! See usage below.
+- Transitioned to new backend providers for database and api.
+- Server validation introduced and database scrubbed.
 - Adopted more efficient multi-process optimisation.
-- Stay tuned for large front end changes coming over summer.
+- Added server latency to status command.
+- Updated icon handling to improve performance.
 
 ## Features
 
@@ -28,8 +30,8 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ## Usage
 
-- `/status [server|ip]` - Displays the current status and active players for any server
-- `/monitor ip [nickname]` - Create 2 voice channels that display the status of a Minecraft server and optionally set a nickname
+- `/status [server|ip] [type]` - Displays the current status and active players for any server. Optionally specify if the server type is bedrock / java
+- `/monitor ip [nickname] [type]` - Create 2 voice channels that display the status of a Minecraft server and optionally set a nickname or a server type (bedrock / java)
 - `/nickname nickname [server]` - Change the nickname of a monitored Minecraft server
 - `/default server` - Set a server to be the default for all commands
 - `/unmonitor [server|all]` - Unmonitor the specified server or all servers
@@ -51,7 +53,7 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 ### Backend Updates
 
 - [ ] Update readme with screenshots
-- [ ] Remove stale rows from db
+- [x] Remove stale rows from db
 - [ ] Error logging rework
 - [ ] Network request retry wrapper
 - [x] Retrieve server icon from ping package instead of external API
