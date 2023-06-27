@@ -52,7 +52,9 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 - [ ] Update readme with screenshots
 - [ ] Remove stale rows from db
-- [ ] Retrieve server icon from ping package instead of external API
+- [ ] Error logging rework
+- [ ] Network request retry wrapper
+- [x] Retrieve server icon from ping package instead of external API
 - [x] Automate deploying commands
 - [x] Fix async/await usage and parallelize for loops
 - [x] Implement optional success and error message pass-through in console
