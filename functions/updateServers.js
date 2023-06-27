@@ -11,12 +11,12 @@ export async function updateServers(client) {
 			let serverCountByShard = await client.cluster.fetchClientValues('guilds.cache.size');
 			let serverCount = serverCountByShard.reduce((totalGuilds, shardGuilds) => totalGuilds + shardGuilds, 0);
 
-			await fetch(process.env.DELEGATE_URL + '/api/updateServerCount', {
+			await fetch(process.env.DELEGATE_URL + '/count/set', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({ serverCount: serverCount, delegateToken: process.env.DELEGATE_TOKEN })
+				body: JSON.stringify({ count: serverCount, token: process.env.DELEGATE_TOKEN })
 			});
 		} catch (error) {
 			if (error.name != 'Error [ShardingInProcess]') logWarning('Error setting server count', error);
