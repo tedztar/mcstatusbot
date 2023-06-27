@@ -15,5 +15,11 @@ export function validateHost(host) {
 
 function validateAddress(ip) {
 	const decoded = unidecode(ip);
-	return isIP(decoded) || isFQDN(decoded);
+	return (
+		isIP(decoded) ||
+		isFQDN(decoded, {
+			allow_underscores: true,
+			allow_numeric_tld: true
+		})
+	);
 }
