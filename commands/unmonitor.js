@@ -2,7 +2,7 @@
 import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { getMissingPermissions, isMissingPermissions } from '../functions/botPermissions.js';
 import { logWarning } from '../functions/consoleLogging.js';
-import { deleteServer, getServers } from '../functions/databaseFunctions.js';
+import { deleteServer, deleteServers, getServers } from '../functions/databaseFunctions.js';
 import { findDefaultServer, findServer } from '../functions/findServer.js';
 import { isNotMonitored, isServerUnspecified, noMonitoredServers, removingDefaultServer } from '../functions/inputValidation.js';
 import { sendMessage } from '../functions/sendMessage.js';
@@ -48,12 +48,16 @@ export async function execute(interaction) {
 				if (missingPermissions) return;
 
 				try {
-					await removeServer(server, interaction.guild);
+					await removeChannels(server, interaction.guild);
 				} catch (error) {
 					notDeleted.push(server.nickname || server.ip);
 				}
 			})
 		);
+		const unmonitoredServers = monitoredServers.filter((server1) => {
+			return !notUnmonitored.some((server2) => server1.ip == server2.ip);
+		});
+		deleteServers(interaction.guildId, unmonitoredServers);
 
 		if (!notUnmonitored.length && !notDeleted.length) {
 			await sendMessage(interaction, 'The channels have successfully been removed.');
@@ -67,18 +71,16 @@ export async function execute(interaction) {
 			await sendMessage(
 				interaction,
 				`There was an error while unmonitoring some of the servers!
-				${
-					notUnmonitored.length
-						? `
+				${notUnmonitored.length
+					? `
 				The following servers need the required category and/or channel permissions before you can unmonitor them:\n
 				${notUnmonitoredList}`
-						: ''
-				} ${
-					notDeleted.length
-						? `
+					: ''
+				} ${notDeleted.length
+					? `
 				The following servers were unmonitored, but the channels need to be removed manually:\n
 				${notDeletedList}`
-						: ''
+					: ''
 				}`
 			);
 		}
@@ -112,7 +114,20 @@ export async function execute(interaction) {
 
 	// Unmonitor the server
 	try {
-		await removeServer(server, interaction.guild);
+		await deleteServer(interaction.guildId, server);
+	}
+	catch {
+		logWarning('Error removing server from database', {
+			'Guild ID': interaction.guildId,
+			'Server IP': server.ip,
+			Error: error
+		});
+		await sendMessage(interaction, 'There was an error while unmonitoring the server. Please try again later!');
+		return;
+	}
+	
+	try {
+		await removeChannels(server, interaction.guild);
 	} catch (error) {
 		await sendMessage(interaction, 'There was an error while deleting some of the channels. Please delete them manually!');
 		return;
@@ -121,11 +136,7 @@ export async function execute(interaction) {
 	await sendMessage(interaction, 'The server has successfully been unmonitored.');
 }
 
-async function removeServer(server, guild) {
-	// Remove server from database
-	await deleteServer(guild.id, server);
-
-	// Remove channels and server category
+async function removeChannels(server, guild) {
 	const channels = [
 		await guild.channels.cache.get(server.statusId),
 		await guild.channels.cache.get(server.playersId),

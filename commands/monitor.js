@@ -101,6 +101,7 @@ export async function execute(interaction) {
 			});
 			server[voiceChannel.idType] = channel.id;
 			await channel.setParent(server.categoryId);
+			await channel.lockPermissions();
 		} catch (error) {
 			const channelIds = ['categoryId', 'statusId', 'playersId'];
 			await Promise.allSettled(
