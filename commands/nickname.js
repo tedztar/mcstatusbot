@@ -1,10 +1,10 @@
 'use strict';
-import { SlashCommandBuilder, PermissionFlagsBits } from 'discord.js';
-import { sendMessage } from '../functions/sendMessage.js';
+import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { isMissingPermissions } from '../functions/botPermissions.js';
-import { findServer, findDefaultServer } from '../functions/findServer.js';
-import { noMonitoredServers, isNotMonitored, isNicknameUsed } from '../functions/inputValidation.js';
 import { logWarning } from '../functions/consoleLogging.js';
+import { findDefaultServer, findServer } from '../functions/findServer.js';
+import { isNicknameUsed, isNotMonitored, noMonitoredServers } from '../functions/inputValidation.js';
+import { sendMessage } from '../functions/sendMessage.js';
 
 export const data = new SlashCommandBuilder()
 	.setName('nickname')
@@ -48,5 +48,5 @@ export async function execute(interaction) {
 		return;
 	}
 
-	await sendMessage(interaction, 'The server has successfully been renamed.');
+	await sendMessage(interaction, "The server has successfully been renamed. It might take a few seconds to show up due to Disrcord's API limitations.");
 }
