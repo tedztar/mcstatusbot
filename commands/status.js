@@ -62,17 +62,11 @@ export async function execute(interaction) {
 	if (!serverStatus.players.online) {
 		message = `*No one is playing!*`;
 	} else {
-		let playerList = serverStatus.players?.list?.map((player) => player.name_clean) || [];
+		let playerList = serverStatus.players.list?.map((player) => player.name_clean) || [];
 
 		message = `**${serverStatus.players.online || 0}/${serverStatus.players.max}** player(s) online.`;
-		if (playerList.length > 0) message += `\n\n ${playerList.sort().join(', ')}`;
+		if (playerList.length) message += `\n\n ${playerList.sort().join(', ')}`;
 	}
-
-	let iconBuffer = new Buffer.from(
-		serverStatus.icon?.split(',')[1] || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=',
-		'base64'
-	);
-	let serverIcon = new AttachmentBuilder(iconBuffer, { name: 'icon.jpg' });
 
 	const responseEmbed = new EmbedBuilder()
 		.setTitle(`Status for ${server.ip}:`)
@@ -83,7 +77,14 @@ export async function execute(interaction) {
 			{ name: 'Server version:', value: serverStatus.version.name || 'Not specified', inline: true },
 			{ name: 'Latency:', value: serverStatus.latency, inline: true }
 		)
-		.setThumbnail('attachment://icon.jpg');
 
-	await interaction.editReply({ embeds: [responseEmbed], files: [serverIcon], ephemeral: true });
+	// Set thumbnail to server icon
+	let files = [];
+	if (serverStatus.icon) {
+		let iconBuffer = new Buffer.from(serverStatus.icon.split(",")[1], "base64");
+		files.push(new AttachmentBuilder(iconBuffer, { name: 'icon.jpg' }));
+		responseEmbed.setThumbnail('attachment://icon.jpg');
+	}
+
+	await interaction.editReply({ embeds: [responseEmbed], files, ephemeral: true });
 }
