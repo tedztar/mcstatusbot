@@ -37,6 +37,7 @@ export async function execute(interaction) {
 						if (await isMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id))) {
 							let missingPermissions = getMissingPermissions(channel.type, interaction.guild.channels.cache.get(channel.id));
 							notUnmonitored.push({
+								ip: server.ip,
 								name: server.nickname || server.ip,
 								type: channel.type,
 								missingPermissions
@@ -54,9 +55,7 @@ export async function execute(interaction) {
 				}
 			})
 		);
-		const unmonitoredServers = monitoredServers.filter((server1) => {
-			return !notUnmonitored.some((server2) => server1.ip == server2.ip);
-		});
+		const unmonitoredServers = monitoredServers.filter((server1) => !notUnmonitored.some((server2) => server1.ip == server2.ip));
 		deleteServers(interaction.guildId, unmonitoredServers);
 
 		if (!notUnmonitored.length && !notDeleted.length) {
