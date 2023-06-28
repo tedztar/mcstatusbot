@@ -25,6 +25,6 @@ export async function findDefaultServer(guildId) {
 
 export async function findServerIndex(query, guildId) {
 	const monitoredServers = await getServers(guildId);
-	const serverIndex = monitoredServers.findIndex((server) => JSON.stringify(server) === JSON.stringify(query));
+	const serverIndex = monitoredServers.findIndex((server) => server.ip == query.ip);
 	return serverIndex;
 }

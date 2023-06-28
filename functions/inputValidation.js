@@ -18,7 +18,7 @@ export async function noMonitoredServers(guildId, interaction, isStatusCommand) 
 export async function isDefault(server, guildId, interaction) {
 	let defaultServer = await findDefaultServer(guildId);
 
-	if (JSON.stringify(server) == JSON.stringify(defaultServer)) {
+	if (server.ip == defaultServer.ip) {
 		interaction && (await sendMessage(interaction, 'This server is already the default server!'));
 		return true;
 	}
