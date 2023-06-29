@@ -1,15 +1,14 @@
 'use strict';
 import { ClusterManager, ReClusterManager, fetchRecommendedShards } from 'discord-hybrid-sharding';
 import 'dotenv/config';
-import { logError, logSharding, logSuccess } from './functions/consoleLogging.js';
-import { deployCommands } from './functions/deployCommands.js';
+import { logError, logSharding } from './functions/consoleLogging.js';
 
-const shardsPerClusters = 1;
+const shardsPerClusters = 5;
 
-if (process.env.MODE == 'PRODUCTION') {
-	logSuccess('Deploying commands');
-	deployCommands();
-}
+// if (process.env.MODE == 'PRODUCTION') {
+// 	logSuccess('Deploying commands');
+// 	deployCommands();
+// }
 
 let manager = new ClusterManager('./bot.js', {
 	shardsPerClusters: shardsPerClusters,
