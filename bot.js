@@ -13,8 +13,7 @@ const client = new Client({
 	shardCount: getInfo().TOTAL_SHARDS,
 	intents: [GatewayIntentBits.Guilds],
 	presence: { activities: [{ name: '/help', type: ActivityType.Watching }] },
-	rest: { api: `${process.env.PROXY_URL}/api` }
-	// rest: { rejectOnRateLimit: ['/channels'] }
+	rest: { api: `${process.env.PROXY_URL}/api`, globalRequestsPerSecond: Infinity }
 });
 client.cluster = new ClusterClient(client);
 

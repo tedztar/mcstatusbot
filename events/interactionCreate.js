@@ -9,29 +9,31 @@ export async function execute(interaction) {
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
+	const commandOptions = getCommandOptions(interaction);
 
 	if (!command) return;
 
 	try {
 		await interaction.deferReply({ ephemeral: true });
-		if (!interaction.deferred) throw new Error('Reply was unsuccessfully deferred');
+		if (!interaction.deferred) throw new Error('Interaction was not deferred');
 	} catch (error) {
-		let commandOptions = getCommandOptions(interaction);
-
 		logWarning('Error deferring reply to command', {
 			'Guild ID': interaction.guildId,
 			'Command Name': interaction.commandName,
 			'Command Options': commandOptions || 'None',
 			Error: error
 		});
+
+		interaction.reply({
+			content: 'There was an error while processing your request. The bot could be overloaded at the moment. Please try again in a few seconds.',
+			ephemeral: true
+		});
+		return;
 	}
 
 	try {
 		await command.execute(interaction);
 	} catch (error) {
-		console.error(error);
-		let commandOptions = getCommandOptions(interaction);
-
 		logWarning('Error executing command', {
 			'Guild ID': interaction.guildId,
 			'Command Name': interaction.commandName,
