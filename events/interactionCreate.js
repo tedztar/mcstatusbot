@@ -24,10 +24,15 @@ export async function execute(interaction) {
 			Error: error
 		});
 
-		interaction.reply({
-			content: 'There was an error while processing your request. The bot could be overloaded at the moment. Please try again in a few seconds.',
-			ephemeral: true
-		});
+		try {
+			interaction.reply({
+				content: 'There was an error while processing your request. The bot could be overloaded at the moment. Please try again in a few seconds.',
+				ephemeral: true
+			});
+		} catch (error) {
+			logWarning('Error replying to command', error);
+		}
+
 		return;
 	}
 
