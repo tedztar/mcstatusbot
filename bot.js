@@ -73,6 +73,6 @@ async function init() {
 	}
 
 	// Update Servers
-	await updateServers(client);
+	// await updateServers(client);
 	setInterval(updateServers, 6 * 60 * 1000, client);
 }
