@@ -2,7 +2,7 @@
 import { getMissingPermissions } from './botPermissions.js';
 import { logWarning } from './consoleLogging.js';
 
-export async function renameChannels(channels, serverStatus, priority = null) {
+export async function renameChannels(channels, serverStatus, priority = 'high_priority') {
 	const channelNames = {
 		status: serverStatus.online ? 'Status: Online' : 'Status: Offline',
 		players: serverStatus.players ? `Players: ${serverStatus.players.online} / ${serverStatus.players.max}` : 'Players: 0'

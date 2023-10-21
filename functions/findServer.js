@@ -8,7 +8,7 @@ export async function findServer(query, fields, guildId) {
 
 	for (const field of fields) {
 		serverIndex = monitoredServers.findIndex((server) => {
-			return server[field]?.toLowerCase() == query.toLowerCase();
+			return server[field]?.toLowerCase() == query?.toLowerCase();
 		});
 		if (serverIndex != -1) {
 			matchingServer = monitoredServers[serverIndex];
