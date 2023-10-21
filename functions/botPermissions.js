@@ -6,48 +6,37 @@ const requiredPermissions = [
 	{ flag: 'ManageChannels', category: 'Manage Channels', channel: 'Manage Channel', server: 'Manage Channels' },
 	{ flag: 'ManageRoles', category: 'Manage Permissions', channel: 'Manage Permissions', server: 'Manage Roles' },
 	{ flag: 'Connect', category: 'Connect', channel: 'Connect', server: 'Connect' }
-];
-
-export async function isMissingPermissions(type, object, interaction) {
+  ];
+  
+  export async function isMissingPermissions(type, object, interaction) {
 	if (!object) return false;
-
+  
 	const missingPermissions = getMissingPermissions(type, object);
 	if (missingPermissions) {
-		interaction &&
-			(await sendMessage(
-				interaction,
-				`The bot needs the following permissions in the ${type.toLowerCase()} to use this command:
-
-            ${missingPermissions}`
-			));
-		return true;
+	  interaction &&
+		(await sendMessage(
+		  interaction,
+		  `The bot needs the following permissions in the ${type.toLowerCase()} to use this command:
+  
+			  ${missingPermissions}`
+		));
+	  return true;
 	}
-
+  
 	return false;
-}
-
-export function getMissingPermissions(type, object) {
+  }
+  
+  export function getMissingPermissions(type, object) {
 	type = type.toLowerCase();
-	const basicType = type == 'status channel' || type == 'players channel' ? 'channel' : type;
-	const botPermissions = getBotPermissions(type, object);
-	let missingPermissions = [];
-	for (const permission of requiredPermissions) {
-		if (!botPermissions[permission.flag]) missingPermissions.push(permission[basicType]);
-	}
+	const basicType = (type == 'status channel' || type == 'players channel') ? 'channel' : type;
+  
+	const botPermissions = (type == 'server') ? object.members.me.permissions.toArray() : object.guild.members.me.permissionsIn(object.id).toArray();
+	const missingPermissions = requiredPermissions.filter((permission) => {
+	  return !botPermissions.includes(permission.flag);
+	})
+	.map(permission => permission[basicType]);
+  
 	const missingPermissionsList = missingPermissions.join(', ');
 	return missingPermissions.length ? missingPermissionsList : null;
-}
-
-function getBotPermissions(type, object) {
-	let botPermissions = type == 'server' ? object.members.me.permissions.serialize() : object.guild.members.me.permissionsIn(object.id).serialize();
-	let requiredPermissionsFlags = requiredPermissions.map((permission) => {
-		return permission['flag'];
-	});
-	let filteredBotPermissions = Object.keys(botPermissions)
-		.filter((permission) => requiredPermissionsFlags.includes(permission))
-		.reduce((obj, key) => {
-			obj[key] = botPermissions[key];
-			return obj;
-		}, {});
-	return filteredBotPermissions;
-}
+  }
+  

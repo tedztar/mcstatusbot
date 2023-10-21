@@ -97,7 +97,7 @@ export async function execute(interaction) {
 		try {
 			let channel = await interaction.guild.channels.create({
 				name: voiceChannel.name,
-				type: ChannelType.GuildVoice
+				type: ChannelType.GuildVoice,
 			});
 			server[voiceChannel.idType] = channel.id;
 			await channel.setParent(server.categoryId);
@@ -137,8 +137,8 @@ export async function execute(interaction) {
 	// Get the server status and update the channels
 	const serverStatus = await getServerStatus(server);
 	const channels = [
-		{ object: await interaction.guild.channels.cache.get(server.statusId), name: 'statusName' },
-		{ object: await interaction.guild.channels.cache.get(server.playersId), name: 'playersName' }
+		{ object: await interaction.guild.channels.cache.get(server.statusId), type: 'status' },
+		{ object: await interaction.guild.channels.cache.get(server.playersId), type: 'players' }
 	];
 	await renameChannels(channels, serverStatus);
 }

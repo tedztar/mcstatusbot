@@ -48,5 +48,5 @@ export async function execute(interaction) {
 		return;
 	}
 
-	await sendMessage(interaction, "The server has successfully been renamed. It might take a few seconds to show up due to Disrcord's API limitations.");
+	await sendMessage(interaction, "The server has successfully been renamed. It might take a few seconds to show up due to Discord's API limitations.");
 }
