@@ -9,11 +9,9 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 **Enjoying our bot?** Our bot is completely free to use, and will always remain so. A [donation](https://www.buymeacoffee.com/rahulrao) of any amount helps keep our server running!
 
-## June 2023 Update
+## October 2023 Update
 
-- **Bedrock support added!** See usage below
-- Added server latency to `/status` command
-- Performance improvements and optimizations
+- Major performance improvement for `/monitor`, `/unmonitor`, and `/nickname` commands
 
 ## Features
 
@@ -22,6 +20,9 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - Support for monitoring multiple Minecraft servers at once
 - Check the status of non-monitored servers
 - Slash command support with ephemeral responses to prevent channels from being cluttered with commands
+
+<img src="./assets/channels.png" height="200" />
+<img src="./assets/status.png" height="200" />
 
 ## Usage
 
@@ -51,4 +52,4 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 - [x] Minimize redundant channel updates
 - [ ] Fix channel permission query
 - [ ] Error logging rework
-- [ ] Update readme with screenshots
+- [x] Update readme with screenshots

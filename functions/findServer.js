@@ -4,16 +4,18 @@ import { getServers } from './databaseFunctions.js';
 export async function findServer(query, fields, guildId) {
 	const monitoredServers = await getServers(guildId);
 	let serverIndex = -1;
-	let server;
+	let matchingServer;
 
 	for (const field of fields) {
-		serverIndex = monitoredServers.findIndex((server) => server[field] == query);
+		serverIndex = monitoredServers.findIndex((server) => {
+			return server[field]?.toLowerCase() == query.toLowerCase();
+		});
 		if (serverIndex != -1) {
-			server = monitoredServers[serverIndex];
+			matchingServer = monitoredServers[serverIndex];
 			break;
 		}
 	}
-	return server;
+	return matchingServer;
 }
 
 export async function findDefaultServer(guildId) {
