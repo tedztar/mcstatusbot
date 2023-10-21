@@ -5,6 +5,11 @@ import { logError, logSharding } from './functions/consoleLogging.js';
 
 const shardsPerClusters = 5;
 
+if (process.env.NODE_ENV == 'production') {
+	logSuccess('Deploying commands');
+	deployCommands();
+}
+
 let manager = new ClusterManager('./bot.js', {
 	shardsPerClusters: shardsPerClusters,
 	token: process.env.TOKEN,

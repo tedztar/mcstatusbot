@@ -75,6 +75,6 @@ async function init() {
 	}
 
 	// Update Servers
-	await updateServers(client);
+	if (process.env.NODE_ENV != 'production') await updateServers(client);
 	setInterval(updateServers, 6 * 60 * 1000, client);
 }
