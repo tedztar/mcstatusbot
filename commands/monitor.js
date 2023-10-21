@@ -97,7 +97,7 @@ export async function execute(interaction) {
 		try {
 			let channel = await interaction.guild.channels.create({
 				name: voiceChannel.name,
-				type: ChannelType.GuildVoice
+				type: ChannelType.GuildVoice,
 			});
 			server[voiceChannel.idType] = channel.id;
 			await channel.setParent(server.categoryId);

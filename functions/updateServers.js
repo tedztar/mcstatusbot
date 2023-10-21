@@ -42,7 +42,7 @@ export async function updateServers(client) {
 						{ object: await guild.channels.cache.get(server.statusId), name: 'statusName' },
 						{ object: await guild.channels.cache.get(server.playersId), name: 'playersName' }
 					];
-					await renameChannels(channels, serverStatus);
+					await renameChannels(channels, serverStatus, 'low_priority');
 				})
 			);
 		})
