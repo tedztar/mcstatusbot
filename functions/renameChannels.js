@@ -15,9 +15,13 @@ export async function renameChannels(channels, serverStatus, priority = 'high_pr
 				await channel.object?.setName(channelNames[channel.type], priority);
 				if (channel.type == 'players') {
 					try {
-						await channel.object?.permissionOverwrites.edit(channel.object.guild.roles.everyone, {
-							ViewChannel: serverStatus.online
-						}, { reason: priority });
+						await channel.object?.permissionOverwrites.edit(
+							channel.object.guild.roles.everyone,
+							{
+								ViewChannel: serverStatus.online
+							},
+							{ reason: priority }
+						);
 					} catch (error) {
 						if (!error.name.includes('RateLimitError')) {
 							let permissions = getMissingPermissions('channel', channel.object);

@@ -12,26 +12,16 @@ import { sendMessage } from '../functions/sendMessage.js';
 export const data = new SlashCommandBuilder()
 	.setName('monitor')
 	.setDescription('Create 2 voice channels that display the status of a Minecraft server')
-	.addStringOption((option) => option
-		.setName('ip')
-		.setDescription('IP address')
-		.setRequired(true))
-	.addStringOption((option) => option
-		.setName('nickname')
-		.setDescription('Server nickname')
-		.setRequired(false))
-	.addBooleanOption((option) => option
-		.setName('default')
-		.setDescription('Set this server to be the default for all commands')
-		.setRequired(false))
-	.addStringOption((option) => option
-		.setName('platform')
-		.setDescription('Server platform')
-		.setRequired(false)
-		.setChoices(
-			{ name: 'Java', value: 'java' },
-			{ name: 'Bedrock', value: 'bedrock' }
-		))
+	.addStringOption((option) => option.setName('ip').setDescription('IP address').setRequired(true))
+	.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(false))
+	.addBooleanOption((option) => option.setName('default').setDescription('Set this server to be the default for all commands').setRequired(false))
+	.addStringOption((option) =>
+		option
+			.setName('platform')
+			.setDescription('Server platform')
+			.setRequired(false)
+			.setChoices({ name: 'Java', value: 'java' }, { name: 'Bedrock', value: 'bedrock' })
+	)
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	.setDMPermission(false);
 
@@ -97,7 +87,7 @@ export async function execute(interaction) {
 		try {
 			let channel = await interaction.guild.channels.create({
 				name: voiceChannel.name,
-				type: ChannelType.GuildVoice,
+				type: ChannelType.GuildVoice
 			});
 			server[voiceChannel.idType] = channel.id;
 			await channel.setParent(server.categoryId);

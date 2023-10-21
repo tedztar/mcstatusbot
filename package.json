@@ -8,6 +8,7 @@
 	"scripts": {
 		"start": "node index.js",
 		"postinstall": "npx patch-package",
+		"format": "prettier --write .",
 		"deployCommands": "npx run-func ./functions/deployCommands.js deployCommands"
 	},
 	"type": "module",
@@ -28,5 +29,8 @@
 		"type": "git",
 		"url": "https://github.com/RahulR100/mcstatusbot.git"
 	},
-	"license": "MIT"
+	"license": "MIT",
+	"devDependencies": {
+		"prettier": "^3.0.3"
+	}
 }

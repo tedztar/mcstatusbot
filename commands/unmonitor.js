@@ -70,16 +70,18 @@ export async function execute(interaction) {
 			await sendMessage(
 				interaction,
 				`There was an error while unmonitoring some of the servers!
-				${notUnmonitored.length
-					? `
+				${
+					notUnmonitored.length
+						? `
 				The following servers need the required category and/or channel permissions before you can unmonitor them:\n
 				${notUnmonitoredList}`
-					: ''
-				} ${notDeleted.length
-					? `
+						: ''
+				} ${
+					notDeleted.length
+						? `
 				The following servers were unmonitored, but the channels need to be removed manually:\n
 				${notDeletedList}`
-					: ''
+						: ''
 				}`
 			);
 		}
@@ -114,8 +116,7 @@ export async function execute(interaction) {
 	// Unmonitor the server
 	try {
 		await deleteServer(interaction.guildId, server);
-	}
-	catch {
+	} catch {
 		logWarning('Error removing server from database', {
 			'Guild ID': interaction.guildId,
 			'Server IP': server.ip,
@@ -124,7 +125,7 @@ export async function execute(interaction) {
 		await sendMessage(interaction, 'There was an error while unmonitoring the server. Please try again later!');
 		return;
 	}
-	
+
 	try {
 		await removeChannels(server, interaction.guild);
 	} catch (error) {

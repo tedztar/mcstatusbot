@@ -3,23 +3,26 @@
 
 # Minecraft Server Status - Discord Bot
 
-A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that displays the status of [Minecraft](https://minecraft.gamepedia.com) servers using the [mcstatus.io](https://mcstatus.io/) library.
+A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that displays the status of [Minecraft](https://minecraft.gamepedia.com) servers using the
+[mcstatus.io](https://mcstatus.io/) library.
 
-**To use:** Simply [invite](https://discord.com/api/oauth2/authorize?client_id=788083161296273517&permissions=268435472&scope=bot%20applications.commands) the bot to your server.
+**To use:** Simply [invite](https://discord.com/api/oauth2/authorize?client_id=788083161296273517&permissions=268435472&scope=bot%20applications.commands) the
+bot to your server.
 
-**Enjoying our bot?** Our bot is completely free to use, and will always remain so. A [donation](https://www.buymeacoffee.com/rahulrao) of any amount helps keep our server running!
+**Enjoying our bot?** Our bot is completely free to use, and will always remain so. A [donation](https://www.buymeacoffee.com/rahulrao) of any amount helps keep
+our server running!
 
 ## October 2023 Update
 
-- Major performance improvement for `/monitor`, `/unmonitor`, and `/nickname` commands
+-   Major performance improvement for `/monitor`, `/unmonitor`, and `/nickname` commands
 
 ## Features
 
-- Auto-updating voice channels to display the server's status and the number of players online
-- Support for both Java and Bedrock servers
-- Support for monitoring multiple Minecraft servers at once
-- Check the status of non-monitored servers
-- Slash command support with ephemeral responses to prevent channels from being cluttered with commands
+-   Auto-updating voice channels to display the server's status and the number of players online
+-   Support for both Java and Bedrock servers
+-   Support for monitoring multiple Minecraft servers at once
+-   Check the status of non-monitored servers
+-   Slash command support with ephemeral responses to prevent channels from being cluttered with commands
 
 <img src="./assets/channels.png" height="200" />
 <img src="./assets/status.png" height="200" />
@@ -40,16 +43,16 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ### Feature Updates
 
-- [ ] Rework status, nickname, and unmonitor commands to include dropdown menus
-- [ ] Rework monitor and nickname commands to include modal workflow
-- [ ] Add option to monitor server with message embed instead of voice channels
-- [ ] Link Discord usernames to Minecraft accounts for player list in status command (see [this](https://github.com/dommilosz/minecraft-auth) repository)
-- [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
+-   [ ] Rework status, nickname, and unmonitor commands to include dropdown menus
+-   [ ] Rework monitor and nickname commands to include modal workflow
+-   [ ] Add option to monitor server with message embed instead of voice channels
+-   [ ] Link Discord usernames to Minecraft accounts for player list in status command (see [this](https://github.com/dommilosz/minecraft-auth) repository)
+-   [ ] Add graph support (see [this](https://github.com/cappig/MC-status-bot) repository)
 
 ### Backend Updates
 
-- [x] Queue priority for non-update commands
-- [x] Minimize redundant channel updates
-- [ ] Fix channel permission query
-- [ ] Error logging rework
-- [x] Update readme with screenshots
+-   [x] Queue priority for non-update commands
+-   [x] Minimize redundant channel updates
+-   [ ] Fix channel permission query
+-   [ ] Error logging rework
+-   [x] Update readme with screenshots

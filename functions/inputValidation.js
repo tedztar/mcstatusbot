@@ -80,7 +80,10 @@ export async function isNicknameUsed(nickname, guildId, interaction) {
 export async function isServerUnspecified(server, guildId, interaction) {
 	if ((await multipleMonitoredServers(guildId)) && !server) {
 		interaction &&
-			(await sendMessage(interaction, 'There are multiple monitored servers, and no server was specified! Use `/unmonitor all` to unmonitor all servers.'));
+			(await sendMessage(
+				interaction,
+				'There are multiple monitored servers, and no server was specified! Use `/unmonitor all` to unmonitor all servers.'
+			));
 		return true;
 	}
 
