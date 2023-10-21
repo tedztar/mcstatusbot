@@ -47,8 +47,8 @@ A simple [Discord.js](https://www.npmjs.com/package/discord.js) bot that display
 
 ### Backend Updates
 
-- [ ] Queue priority for non-update commands
-- [ ] Minimize redundant channel updates
+- [x] Queue priority for non-update commands
+- [x] Minimize redundant channel updates
 - [ ] Fix channel permission query
 - [ ] Error logging rework
 - [ ] Update readme with screenshots

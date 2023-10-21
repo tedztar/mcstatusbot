@@ -39,8 +39,8 @@ export async function updateServers(client) {
 						});
 					}
 					const channels = [
-						{ object: await guild.channels.cache.get(server.statusId), name: 'statusName' },
-						{ object: await guild.channels.cache.get(server.playersId), name: 'playersName' }
+						{ object: await guild.channels.cache.get(server.statusId), type: 'status' },
+						{ object: await guild.channels.cache.get(server.playersId), type: 'players' }
 					];
 					await renameChannels(channels, serverStatus, 'low_priority');
 				})
