@@ -8,16 +8,18 @@ import { pathToFileURL } from 'node:url';
 import { logError, logWarning } from './functions/consoleLogging.js';
 import { updateServers } from './functions/updateServers.js';
 
-let client = new Client({
+let clientOptions = {
 	shards: getInfo().SHARD_LIST,
 	shardCount: getInfo().TOTAL_SHARDS,
 	intents: [GatewayIntentBits.Guilds],
-	presence: { activities: [{ name: '/help', type: ActivityType.Watching }] },
-});
+	presence: { activities: [{ name: '/help', type: ActivityType.Watching }] }
+};
 
 if (process.env.NODE_ENV == 'production') {
-	client.rest = { ...client.rest, api: `${process.env.PROXY_URL}/api`, globalRequestsPerSecond: Infinity, timeout: 5 * 60 * 1000, retries: 1 }
+	clientOptions.rest = { api: `${process.env.PROXY_URL}/api`, globalRequestsPerSecond: Infinity, timeout: 5 * 60 * 1000, retries: 1 };
 }
+
+let client = new Client(clientOptions);
 
 client.cluster = new ClusterClient(client);
 

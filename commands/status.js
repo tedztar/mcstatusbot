@@ -76,12 +76,12 @@ export async function execute(interaction) {
 			{ name: 'MOTD:', value: serverStatus.motd.clean },
 			{ name: 'Server version:', value: serverStatus.version.name || 'Not specified', inline: true },
 			{ name: 'Latency:', value: serverStatus.latency, inline: true }
-		)
+		);
 
 	// Set thumbnail to server icon
 	let files = [];
 	if (serverStatus.icon) {
-		let iconBuffer = new Buffer.from(serverStatus.icon.split(",")[1], "base64");
+		let iconBuffer = new Buffer.from(serverStatus.icon.split(',')[1], 'base64');
 		files.push(new AttachmentBuilder(iconBuffer, { name: 'icon.jpg' }));
 		responseEmbed.setThumbnail('attachment://icon.jpg');
 	}
