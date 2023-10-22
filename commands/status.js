@@ -67,8 +67,6 @@ export async function execute(interaction) {
 		if (playerList.length) message += `\n\n ${playerList.sort().join(', ')}`;
 	}
 
-	console.log(serverStatus);
-
 	const responseEmbed = new EmbedBuilder()
 		.setTitle(`Status for ${server.ip}:`)
 		.setColor(embedColor)
