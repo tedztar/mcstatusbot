@@ -8,7 +8,10 @@ import { sendMessage } from '../functions/sendMessage.js';
 export const data = new SlashCommandBuilder()
 	.setName('default')
 	.setDescription('Set a server to be the default for all commands')
-	.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false))
+	.addStringOption((option) => option
+		.setName('server')
+		.setDescription('Server IP address or nickname')
+		.setRequired(false))
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	.setDMPermission(false);
 

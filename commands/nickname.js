@@ -9,8 +9,14 @@ import { sendMessage } from '../functions/sendMessage.js';
 export const data = new SlashCommandBuilder()
 	.setName('nickname')
 	.setDescription('Change the nickname of a monitored Minecraft server')
-	.addStringOption((option) => option.setName('nickname').setDescription('Server nickname').setRequired(true))
-	.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false))
+	.addStringOption((option) => option
+		.setName('nickname')
+		.setDescription('Server nickname')
+		.setRequired(true))
+	.addStringOption((option) => option
+		.setName('server')
+		.setDescription('Server IP address or nickname')
+		.setRequired(false))
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	.setDMPermission(false);
 

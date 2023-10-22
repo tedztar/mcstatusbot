@@ -10,7 +10,10 @@ import { sendMessage } from '../functions/sendMessage.js';
 export const data = new SlashCommandBuilder()
 	.setName('unmonitor')
 	.setDescription('Unmonitor the specified server or all servers')
-	.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false))
+	.addStringOption((option) => option
+		.setName('server')
+		.setDescription('Server IP address or nickname')
+		.setRequired(false))
 	.setDefaultMemberPermissions(PermissionFlagsBits.ManageGuild)
 	.setDMPermission(false);
 
