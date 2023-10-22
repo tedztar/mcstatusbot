@@ -9,20 +9,21 @@ import { embedColor, sendMessage } from '../functions/sendMessage.js';
 export const data = new SlashCommandBuilder()
 	.setName('status')
 	.setDescription('Displays the current status and active players for any server')
-	.addStringOption((option) => option.setName('server').setDescription('Server IP address or nickname').setRequired(false))
-	.addStringOption((option) =>
-		option
-			.setName('platform')
-			.setDescription('Server platform')
-			.setRequired(false)
-			.setChoices({ name: 'Java', value: 'java' }, { name: 'Bedrock', value: 'bedrock' })
-	);
+	.addStringOption((option) => option
+		.setName('server')
+		.setDescription('Server IP address or nickname')
+		.setRequired(false))
+	.addStringOption((option) => option
+		.setName('platform')
+		.setDescription('Server platform')
+		.setRequired(false)
+		.setChoices({ name: 'Java', value: 'java' }, { name: 'Bedrock', value: 'bedrock' }));
 
 export async function execute(interaction) {
 	let server;
 
 	if (interaction.options.getString('server')) {
-		server = await findServer(interaction.options.getString('server'), ['nickname'], interaction.guildId);
+		server = await findServer(interaction.options.getString('server'), ['nickname', 'ip'], interaction.guildId);
 		if (!server) {
 			server = {
 				ip: interaction.options.getString('server'),
@@ -50,13 +51,11 @@ export async function execute(interaction) {
 		await sendMessage(interaction, 'The server could not be pinged!');
 		return;
 	}
-
 	// Message if server is offline
 	if (!serverStatus.online) {
 		await sendMessage(interaction, `*The server is offline!*`, `Status for ${server.ip}:`);
 		return;
 	}
-
 	// Message if server is online
 	let message;
 	if (!serverStatus.players.online) {
@@ -68,12 +67,14 @@ export async function execute(interaction) {
 		if (playerList.length) message += `\n\n ${playerList.sort().join(', ')}`;
 	}
 
+	console.log(serverStatus);
+
 	const responseEmbed = new EmbedBuilder()
 		.setTitle(`Status for ${server.ip}:`)
 		.setColor(embedColor)
 		.setDescription(message)
 		.addFields(
-			{ name: 'MOTD:', value: serverStatus.motd.clean },
+			{ name: 'MOTD:', value: serverStatus.motd.clean || 'None' },
 			{ name: 'Server version:', value: serverStatus.version.name || 'Not specified', inline: true },
 			{ name: 'Latency:', value: serverStatus.latency, inline: true }
 		);

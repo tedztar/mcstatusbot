@@ -2,7 +2,9 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { embedColor } from '../functions/sendMessage.js';
 
-export const data = new SlashCommandBuilder().setName('help').setDescription('List the other commands');
+export const data = new SlashCommandBuilder()
+	.setName('help')
+	.setDescription('List the other commands');
 
 export async function execute(interaction) {
 	const helpEmbed = new EmbedBuilder().setTitle('Commands:').setColor(embedColor).addFields(
