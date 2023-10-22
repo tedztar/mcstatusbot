@@ -51,11 +51,13 @@ export async function execute(interaction) {
 		await sendMessage(interaction, 'The server could not be pinged!');
 		return;
 	}
+	
 	// Message if server is offline
 	if (!serverStatus.online) {
 		await sendMessage(interaction, `*The server is offline!*`, `Status for ${server.ip}:`);
 		return;
 	}
+
 	// Message if server is online
 	let message;
 	if (!serverStatus.players.online) {
