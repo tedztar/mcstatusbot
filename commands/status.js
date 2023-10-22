@@ -6,6 +6,7 @@ import { getServerStatus } from '../functions/getServerStatus.js';
 import { isValidServer, noMonitoredServers } from '../functions/inputValidation.js';
 import { embedColor, sendMessage } from '../functions/sendMessage.js';
 
+// prettier-ignore
 export const data = new SlashCommandBuilder()
 	.setName('status')
 	.setDescription('Displays the current status and active players for any server')
@@ -51,7 +52,7 @@ export async function execute(interaction) {
 		await sendMessage(interaction, 'The server could not be pinged!');
 		return;
 	}
-	
+
 	// Message if server is offline
 	if (!serverStatus.online) {
 		await sendMessage(interaction, `*The server is offline!*`, `Status for ${server.ip}:`);

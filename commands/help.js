@@ -2,6 +2,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from 'discord.js';
 import { embedColor } from '../functions/sendMessage.js';
 
+// prettier-ignore
 export const data = new SlashCommandBuilder()
 	.setName('help')
 	.setDescription('List the other commands');

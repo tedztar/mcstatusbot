@@ -9,6 +9,7 @@ import { isMonitored, isNicknameUsed, isValidServer, noMonitoredServers } from '
 import { renameChannels } from '../functions/renameChannels.js';
 import { sendMessage } from '../functions/sendMessage.js';
 
+// prettier-ignore
 export const data = new SlashCommandBuilder()
 	.setName('monitor')
 	.setDescription('Create 2 voice channels that display the status of a Minecraft server')
