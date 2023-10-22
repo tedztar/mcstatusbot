@@ -7,6 +7,7 @@ import { findDefaultServer, findServer } from '../functions/findServer.js';
 import { isNotMonitored, isServerUnspecified, noMonitoredServers, removingDefaultServer } from '../functions/inputValidation.js';
 import { sendMessage } from '../functions/sendMessage.js';
 
+// prettier-ignore
 export const data = new SlashCommandBuilder()
 	.setName('unmonitor')
 	.setDescription('Unmonitor the specified server or all servers')

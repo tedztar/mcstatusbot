@@ -5,6 +5,7 @@ import { findDefaultServer, findServer, findServerIndex } from '../functions/fin
 import { isDefault, isNotMonitored, noMonitoredServers } from '../functions/inputValidation.js';
 import { sendMessage } from '../functions/sendMessage.js';
 
+// prettier-ignore
 export const data = new SlashCommandBuilder()
 	.setName('default')
 	.setDescription('Set a server to be the default for all commands')

@@ -6,6 +6,7 @@ import { findDefaultServer, findServer } from '../functions/findServer.js';
 import { isNicknameUsed, isNotMonitored, noMonitoredServers } from '../functions/inputValidation.js';
 import { sendMessage } from '../functions/sendMessage.js';
 
+// prettier-ignore
 export const data = new SlashCommandBuilder()
 	.setName('nickname')
 	.setDescription('Change the nickname of a monitored Minecraft server')

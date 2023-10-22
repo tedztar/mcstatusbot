@@ -2,6 +2,7 @@
 import { SlashCommandBuilder } from 'discord.js';
 import { sendMessage } from '../functions/sendMessage.js';
 
+// prettier-ignore
 export const data = new SlashCommandBuilder()
 	.setName('bug')
 	.setDescription('Send a bug report to maintainers');
