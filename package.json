@@ -7,7 +7,7 @@
 	},
 	"scripts": {
 		"start": "node index.js",
-		"postinstall": "npx patch-package",
+		"postinstall": "if test \"$NODE_ENV\" = \"production\"; then npx patch-package; fi;",
 		"format": "prettier --write .",
 		"deployCommands": "npx run-func ./functions/deployCommands.js deployCommands"
 	},
