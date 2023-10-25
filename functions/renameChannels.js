@@ -19,18 +19,17 @@ export async function renameChannels(channels, serverStatus, priority = 'high_pr
 						await channel.object.permissionOverwrites.edit(
 							channel.object.guild.roles.everyone,
 							{
-								ViewChannel: serverStatus.online
+								ViewChannel: serverStatus.online ? null : false
 							},
 							{ reason: priority }
 						);
 					} catch (error) {
 						if (!error.name.includes('RateLimitError')) {
 							let permissions = getMissingPermissions('channel', channel.object);
-							if (!permissions) {
+							if (!permissions && !error.message.includes('Missing Permissions')) {
 								logWarning('Error changing channel visibility while updating server status', {
 									'Channel ID': channel.object.id,
 									'Guild ID': channel.object.guildId,
-									'Missing Permissions': permissions || 'None',
 									Error: error
 								});
 							}
@@ -44,7 +43,6 @@ export async function renameChannels(channels, serverStatus, priority = 'high_pr
 						logWarning('Error renaming channels while updating server status', {
 							'Channel ID': channel.object.id,
 							'Guild ID': channel.object.guildId,
-							'Missing Permissions': permissions || 'None',
 							Error: error
 						});
 					}
