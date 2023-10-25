@@ -1,6 +1,15 @@
 'use strict';
-import { getMissingPermissions } from './botPermissions.js';
 import { logWarning } from './consoleLogging.js';
+
+function errorHandler(error, message) {
+	if (!error.name.includes('RateLimitError') && !error.message.includes('Missing Permissions')) {
+		logWarning(message, {
+			'Channel ID': channel.object.id,
+			'Guild ID': channel.object.guildId,
+			Error: error
+		});
+	}
+}
 
 export async function renameChannels(channels, serverStatus, priority = 'high_priority') {
 	const channelNames = {
@@ -24,29 +33,11 @@ export async function renameChannels(channels, serverStatus, priority = 'high_pr
 							{ reason: priority }
 						);
 					} catch (error) {
-						if (!error.name.includes('RateLimitError')) {
-							let permissions = getMissingPermissions('channel', channel.object);
-							if (!permissions && !error.message.includes('Missing Permissions')) {
-								logWarning('Error changing channel visibility while updating server status', {
-									'Channel ID': channel.object.id,
-									'Guild ID': channel.object.guildId,
-									Error: error
-								});
-							}
-						}
+						errorHandler(error, 'Error changing channel visibility while updating server status');
 					}
 				}
 			} catch (error) {
-				if (!error.name.includes('RateLimitError')) {
-					let permissions = getMissingPermissions('channel', channel.object);
-					if (!permissions) {
-						logWarning('Error renaming channels while updating server status', {
-							'Channel ID': channel.object.id,
-							'Guild ID': channel.object.guildId,
-							Error: error
-						});
-					}
-				}
+				errorHandler(error, 'Error renaming channels while updating server status');
 			}
 		})
 	);

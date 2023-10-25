@@ -17,6 +17,7 @@ our server running!
 
 -   Major performance improvement for `/monitor`, `/unmonitor`, and `/nickname` commands
 -   New website! https://mcstatusbot.com/
+-   Bot resorts to preset channel permissions instead of always overriding. It should play better with servers that require you to verify before viewing all channels
 
 ## Features
 
