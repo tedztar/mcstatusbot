@@ -1,5 +1,6 @@
 ![Discord Server Count](https://img.shields.io/endpoint?url=https%3A%2F%2Fmcstatusbot-delegate-production.up.railway.app%2Fcount%2FgetFormatted)
 [![Make A Donation](https://img.shields.io/static/v1?label=&message=Donate&color=d9b811&logo=buymeacoffee&logoColor=white)](https://www.buymeacoffee.com/rahulrao)
+[![Visit our website](https://img.shields.io/static/v1?label=&message=Website&color=purple)](https://mcstatusbot.com/)
 
 # Minecraft Server Status - Discord Bot
 
@@ -15,6 +16,7 @@ our server running!
 ## October 2023 Update
 
 -   Major performance improvement for `/monitor`, `/unmonitor`, and `/nickname` commands
+-   New website! https://mcstatusbot.com/
 
 ## Features
 
