@@ -1,7 +1,7 @@
 'use strict';
 import { ClusterManager, ReClusterManager, fetchRecommendedShards } from 'discord-hybrid-sharding';
 import 'dotenv/config';
-import { logError, logSharding, logSuccess } from './functions/consoleLogging.js';
+import { logError, logSharding } from './functions/consoleLogging.js';
 
 const shardsPerClusters = 5;
 
@@ -12,12 +12,6 @@ let manager = new ClusterManager('./bot.js', {
 });
 manager.extend(new ReClusterManager());
 manager.on('debug', logSharding);
-
-try {
-	spawnShards();
-} catch (error) {
-	logError('Error spawning shards', error);
-}
 
 async function spawnShards() {
 	await manager.spawn();
@@ -39,4 +33,10 @@ async function reclusterShards() {
 	} catch (error) {
 		logError('Error reclustering shards', error);
 	}
+}
+
+try {
+	spawnShards();
+} catch (error) {
+	logError('Error spawning shards', error);
 }
