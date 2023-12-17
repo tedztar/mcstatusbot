@@ -20,9 +20,10 @@ export async function renameChannels(channels, serverStatus, priority = 'high_pr
 	await Promise.allSettled(
 		channels.map(async (channel) => {
 			try {
-				if (!channel.object) return;
-				if (channelNames[channel.type] == channel.object.name) return;
+				if (!channel.object || channelNames[channel.type] == channel.object.name) return;
+
 				await channel.object.setName(channelNames[channel.type], priority);
+
 				if (channel.type == 'players') {
 					try {
 						await channel.object.permissionOverwrites.edit(

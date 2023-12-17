@@ -31,11 +31,7 @@ export function getMissingPermissions(type, object) {
 	const basicType = type == 'status channel' || type == 'players channel' ? 'channel' : type;
 
 	const botPermissions = type == 'server' ? object.members.me.permissions.toArray() : object.guild.members.me.permissionsIn(object.id).toArray();
-	const missingPermissions = requiredPermissions
-		.filter((permission) => {
-			return !botPermissions.includes(permission.flag);
-		})
-		.map((permission) => permission[basicType]);
+	const missingPermissions = requiredPermissions.filter((permission) => !botPermissions.includes(permission.flag)).map((permission) => permission[basicType]);
 
 	const missingPermissionsList = missingPermissions.join(', ');
 	return missingPermissions.length ? missingPermissionsList : null;

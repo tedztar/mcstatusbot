@@ -18,7 +18,7 @@
 		"discord.js": "^14.7.1",
 		"dotenv": "^16.0.3",
 		"mongoose": "^7.2.2",
-		"node-mcstatus": "1.0.2",
+		"node-mcstatus": "^1.0.2",
 		"patch-package": "^7.0.0",
 		"pino": "^8.14.1",
 		"pino-pretty": "^10.0.0",
