@@ -31,12 +31,14 @@ export async function updateServers(client) {
 					let serverStatus;
 					try {
 						serverStatus = await getServerStatus(server);
+						if (serverStatus.error) throw serverStatus.error;
 					} catch (error) {
 						logWarning('Error pinging Minecraft server while updating servers', {
 							'Server IP': server.ip,
 							'Guild ID': guild.id,
 							Error: serverStatus.error || error
 						});
+						return;
 					}
 					const channels = [
 						{ object: await guild.channels.cache.get(server.statusId), type: 'status' },

@@ -50,7 +50,7 @@ export async function addServer(key, server) {
 			if (!guild) {
 				createGuild(key, [server]);
 			} else {
-				guild?.servers ? guild.servers.push(server) : (guild.servers = [server]);
+				guild.servers ? guild.servers.push(server) : (guild.servers = [server]);
 				guild.save();
 			}
 		})
