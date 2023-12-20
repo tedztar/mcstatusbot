@@ -43,6 +43,7 @@ export async function execute(interaction) {
 	let serverStatus;
 	try {
 		serverStatus = await getServerStatus(server);
+		if (serverStatus.error) throw serverStatus.error;
 	} catch (error) {
 		logWarning('Error pinging Minecraft server while running status command', {
 			'Guild ID': interaction.guildId,
