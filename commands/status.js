@@ -49,7 +49,7 @@ export async function execute(interaction) {
 			'Server IP': server.ip,
 			Error: serverStatus.error || error
 		});
-		await sendMessage(interaction, 'There was an error pinging the server. Please try again in a few seconds!');
+		await sendMessage(interaction, 'There was an error pinging the server. Please verify the server address, and try again in a few seconds!');
 		return;
 	}
 

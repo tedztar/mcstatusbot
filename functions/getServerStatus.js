@@ -5,7 +5,7 @@ import { isValidServer } from './inputValidation.js';
 
 export async function getServerStatus(server) {
 	if (!isValidServer(server.ip)) {
-		return { online: false };
+		throw new Error('Invalid server IP');
 	}
 
 	let [ip, port] = server.ip.split(':');
@@ -15,6 +15,10 @@ export async function getServerStatus(server) {
 	let startTime = Date.now();
 	let response = server.platform == 'bedrock' ? await statusBedrock(ip, port) : await statusJava(ip, port);
 	let latency = Date.now() - startTime + ' ms';
-	response.version.name = response.version.name_clean || response.version.name;
+
+	if (response.version) {
+		response.version.name = response.version.name_clean || response.version.name;
+	}
+
 	return { ...response, latency };
 }
