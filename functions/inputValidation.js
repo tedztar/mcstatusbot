@@ -109,7 +109,8 @@ export async function multipleMonitoredServers(guildId) {
 
 export async function isValidServer(server, interaction) {
 	if (!validateHost(server)) {
-		interaction && (await sendMessage(interaction, 'This is not a valid IP address or domain name!'));
+		interaction &&
+			(await sendMessage(interaction, `This is not a valid IP address or domain name ${server.includes('_') && '(underscores are not allowed)'}!`));
 		return false;
 	}
 
