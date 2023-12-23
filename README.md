@@ -41,6 +41,7 @@ our server running!
 `/help` List the other commands
 
 **Note for Bedrock servers: to use the `/status` and `/monitor` commands, you must set the `type` option to "Bedrock" for the bot to function correctly.**
+**Note for Aternos/other hosting users: Underscores are not allowed in Domain names! Please change your server address to remove underscores.**
 
 ## Roadmap
 
