@@ -32,11 +32,12 @@ export async function updateServers(client) {
 					try {
 						serverStatus = await getServerStatus(server);
 					} catch (error) {
-						logWarning('Error pinging Minecraft server while updating servers', {
-							'Server IP': server.ip,
-							'Guild ID': guild.id,
-							Error: error
-						});
+						!server.ip.includes('_') &&
+							logWarning('Error pinging Minecraft server while updating servers', {
+								'Server IP': server.ip,
+								'Guild ID': guild.id,
+								Error: error
+							});
 						return;
 					}
 					const channels = [
