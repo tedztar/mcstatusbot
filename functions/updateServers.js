@@ -35,7 +35,7 @@ export async function updateServers(client) {
 						logWarning('Error pinging Minecraft server while updating servers', {
 							'Server IP': server.ip,
 							'Guild ID': guild.id,
-							Error: serverStatus.error || error
+							Error: error
 						});
 						return;
 					}

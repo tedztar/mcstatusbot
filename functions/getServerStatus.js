@@ -1,10 +1,10 @@
 'use strict';
 import { statusBedrock, statusJava } from 'node-mcstatus';
 import unidecode from 'unidecode';
-import { isValidServer } from './inputValidation.js';
+import { validateHost } from './validateHost.js';
 
 export async function getServerStatus(server) {
-	if (!isValidServer(server.ip)) {
+	if (!validateHost(server.ip)) {
 		throw new Error('Invalid server IP');
 	}
 
@@ -16,7 +16,13 @@ export async function getServerStatus(server) {
 	let response = server.platform == 'bedrock' ? await statusBedrock(ip, port) : await statusJava(ip, port);
 	let latency = Date.now() - startTime + ' ms';
 
-	if (response.version) {
+	// Final check for valid response, incase our validation missed something
+	if (typeof response != 'object') {
+		throw new Error('Invalid server response');
+	}
+
+	// Use the clean name where possible
+	if (response.online) {
 		response.version.name = response.version.name_clean || response.version.name;
 	}
 

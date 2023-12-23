@@ -18,7 +18,7 @@ function validateAddress(ip) {
 	return (
 		isIP(decoded) ||
 		isFQDN(decoded, {
-			allow_underscores: true,
+			allow_underscores: false,
 			allow_numeric_tld: true
 		})
 	);

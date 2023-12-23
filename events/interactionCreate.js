@@ -38,7 +38,8 @@ export async function execute(interaction) {
 		});
 
 		await interaction.editReply({
-			content: 'There was an error while executing this command!',
+			content:
+				'There was an error while executing this command! Please try again in a few minutes. If the problem persists, please open an issue on GitHub.',
 			ephemeral: true
 		});
 	}
