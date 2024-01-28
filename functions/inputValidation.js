@@ -78,7 +78,7 @@ export async function isNicknameUsed(nickname, guildId, interaction) {
 }
 
 export async function isServerUnspecified(server, guildId, interaction) {
-	if ((await multipleMonitoredServers(guildId)) && !server) {
+	if (!server && (await multipleMonitoredServers(guildId))) {
 		interaction &&
 			(await sendMessage(
 				interaction,
