@@ -150,7 +150,8 @@ async function removeChannels(server, guild) {
 	await Promise.allSettled(
 		channels.map(async (channel) => {
 			try {
-				await channel?.delete();
+				if (!channel) throw new Error('No channel specified');
+				await channel.delete();
 			} catch (error) {
 				logWarning('Error deleting channel while removing server from guild', {
 					'Channel ID': channel.id,
@@ -163,7 +164,7 @@ async function removeChannels(server, guild) {
 		})
 	).then((promises) => {
 		promises.forEach((promise) => {
-			if (promise.status == 'rejected') throw new Error();
+			if (promise.status == 'rejected') throw new Error('Error deleting channels');
 		});
 	});
 }
