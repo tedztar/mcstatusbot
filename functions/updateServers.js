@@ -34,7 +34,7 @@ export async function updateServers(client) {
 					try {
 						serverStatus = await getServerStatus(server);
 					} catch (error) {
-						if (server.ip.includes('_')) {
+						if (!server.ip.includes('_')) {
 							beaver.log(
 								'update-servers',
 								'Error pinging Minecraft server while updating servers',
@@ -44,7 +44,6 @@ export async function updateServers(client) {
 								}),
 								error
 							);
-							return;
 						}
 					}
 					const channels = [
