@@ -1,6 +1,6 @@
 'use strict';
 import mongoose from 'mongoose';
-import { logError } from './consoleLogging.js';
+import { beaver } from './consoleLogging.js';
 
 const server = mongoose.Schema({
 	ip: { type: String, required: true },
@@ -19,8 +19,8 @@ const guild = mongoose.Schema({
 
 const Guild = mongoose.model('Guild', guild);
 
-function databaseError(err) {
-	logError('Database error!', { Error: err });
+function databaseError(error) {
+	beaver.log('database', 'Database error!', error);
 }
 
 function createGuild(key, servers) {

@@ -1,13 +1,17 @@
 'use strict';
-import { logWarning } from './consoleLogging.js';
+import { beaver } from './consoleLogging.js';
 
 function errorHandler(error, message) {
 	if (!error.name.includes('RateLimitError') && !error.message.includes('Missing Permissions')) {
-		logWarning(message, {
-			'Channel ID': channel.object.id,
-			'Guild ID': channel.object.guildId,
-			Error: error
-		});
+		beaver.log(
+			'rename-channels',
+			message,
+			JSON.stringify({
+				'Channel ID': channel.object.id,
+				'Guild ID': channel.object.guildId
+			}),
+			error
+		);
 	}
 }
 

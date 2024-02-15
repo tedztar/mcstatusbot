@@ -1,6 +1,6 @@
 'use strict';
 import { Events } from 'discord.js';
-import { logWarning } from '../functions/consoleLogging.js';
+import { beaver } from '../functions/consoleLogging.js';
 import { getServers, setServers } from '../functions/databaseFunctions.js';
 import { findServer, findServerIndex } from '../functions/findServer.js';
 import { isNotMonitored } from '../functions/inputValidation.js';
@@ -23,10 +23,14 @@ export async function execute(_, newChannel) {
 		monitoredServers[serverIndex].nickname = newChannel.name;
 		await setServers(newChannel.guildId, monitoredServers);
 	} catch (error) {
-		logWarning('Error setting nickname during channel rename', {
-			'Channel ID': newChannel.id,
-			'Guild ID': newChannel.guildId,
-			Error: error
-		});
+		beaver.log(
+			'channel-update',
+			'Error setting nickname during channel rename',
+			JSON.stringify({
+				'Channel ID': newChannel.id,
+				'Guild ID': newChannel.guildId
+			}),
+			error
+		);
 	}
 }

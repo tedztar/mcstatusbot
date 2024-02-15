@@ -1,7 +1,7 @@
 'use strict';
 import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { isMissingPermissions } from '../functions/botPermissions.js';
-import { logWarning } from '../functions/consoleLogging.js';
+import { beaver } from '../functions/consoleLogging.js';
 import { findDefaultServer, findServer } from '../functions/findServer.js';
 import { isNicknameUsed, isNotMonitored, noMonitoredServers } from '../functions/inputValidation.js';
 import { sendMessage } from '../functions/sendMessage.js';
@@ -45,11 +45,15 @@ export async function execute(interaction) {
 		if (error.name.includes('RateLimitError')) {
 			await sendMessage(interaction, 'The rate limit for this channel has been reached, please try renaming this server in a few minutes!');
 		} else {
-			logWarning('Error renaming channel while setting nickname', {
-				'Channel ID': server.categoryId,
-				'Guild ID': interaction.guildId,
-				Error: error
-			});
+			beaver.log(
+				'nickname',
+				'Error renaming channel while setting nickname',
+				JSON.stringify({
+					'Channel ID': server.categoryId,
+					'Guild ID': interaction.guildId
+				}),
+				error
+			);
 			await sendMessage(interaction, 'There was an error while renaming the channel!');
 		}
 		return;

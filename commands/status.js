@@ -1,6 +1,6 @@
 'use strict';
 import { AttachmentBuilder, EmbedBuilder, SlashCommandBuilder } from 'discord.js';
-import { logWarning } from '../functions/consoleLogging.js';
+import { beaver } from '../functions/consoleLogging.js';
 import { findDefaultServer, findServer } from '../functions/findServer.js';
 import { getServerStatus } from '../functions/getServerStatus.js';
 import { isValidServer, noMonitoredServers } from '../functions/inputValidation.js';
@@ -44,11 +44,15 @@ export async function execute(interaction) {
 	try {
 		serverStatus = await getServerStatus(server);
 	} catch (error) {
-		logWarning('Error pinging Minecraft server while running status command', {
-			'Guild ID': interaction.guildId,
-			'Server IP': server.ip,
-			Error: error
-		});
+		beaver.log(
+			'status',
+			'Error pinging Minecraft server while running status command',
+			JSON.stringify({
+				'Guild ID': interaction.guildId,
+				'Server IP': server.ip
+			}),
+			error
+		);
 		await sendMessage(interaction, 'There was an error pinging the server. Please verify the server address, and try again in a few seconds!');
 		return;
 	}

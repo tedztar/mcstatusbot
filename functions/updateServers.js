@@ -1,5 +1,5 @@
 'use strict';
-import { logWarning } from '../functions/consoleLogging.js';
+import { beaver } from '../functions/consoleLogging.js';
 import { getServers } from '../functions/databaseFunctions.js';
 import { getServerStatus } from '../functions/getServerStatus.js';
 import { renameChannels } from '../functions/renameChannels.js';
@@ -19,7 +19,9 @@ export async function updateServers(client) {
 				body: JSON.stringify({ count: serverCount, token: process.env.DELEGATE_TOKEN })
 			});
 		} catch (error) {
-			if (error.name != 'Error [ShardingInProcess]') logWarning('Error setting server count', error);
+			if (error.name != 'Error [ShardingInProcess]') {
+				beaver.log('update-servers', 'Error updating server count badge on remote', error);
+			}
 		}
 	}
 
@@ -32,13 +34,18 @@ export async function updateServers(client) {
 					try {
 						serverStatus = await getServerStatus(server);
 					} catch (error) {
-						!server.ip.includes('_') &&
-							logWarning('Error pinging Minecraft server while updating servers', {
-								'Server IP': server.ip,
-								'Guild ID': guild.id,
-								Error: error
-							});
-						return;
+						if (server.ip.includes('_')) {
+							beaver.log(
+								'update-servers',
+								'Error pinging Minecraft server while updating servers',
+								JSON.stringify({
+									'Server IP': server.ip,
+									'Guild ID': guild.id
+								}),
+								error
+							);
+							return;
+						}
 					}
 					const channels = [
 						{ object: await guild.channels.cache.get(server.statusId), type: 'status' },
