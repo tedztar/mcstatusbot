@@ -1,7 +1,7 @@
 'use strict';
 import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { getMissingPermissions, isMissingPermissions } from '../functions/botPermissions.js';
-import { logWarning } from '../functions/consoleLogging.js';
+import { beaver } from '../functions/consoleLogging.js';
 import { deleteServer, deleteServers, getServers } from '../functions/databaseFunctions.js';
 import { findDefaultServer, findServer } from '../functions/findServer.js';
 import { isNotMonitored, isServerUnspecified, noMonitoredServers, removingDefaultServer } from '../functions/inputValidation.js';
@@ -121,11 +121,15 @@ export async function execute(interaction) {
 	try {
 		await deleteServer(interaction.guildId, server);
 	} catch {
-		logWarning('Error removing server from database', {
-			'Guild ID': interaction.guildId,
-			'Server IP': server.ip,
-			Error: error
-		});
+		beaver.log(
+			'unmonitor',
+			'Error removing server from database',
+			JSON.stringify({
+				'Guild ID': interaction.guildId,
+				'Server IP': server.ip
+			}),
+			error
+		);
 		await sendMessage(interaction, 'There was an error while unmonitoring the server. Please try again later!');
 		return;
 	}
@@ -153,12 +157,15 @@ async function removeChannels(server, guild) {
 				if (!channel) throw new Error('No channel specified');
 				await channel.delete();
 			} catch (error) {
-				logWarning('Error deleting channel while removing server from guild', {
-					'Channel ID': channel.id,
-					'Guild ID': guild.id,
-					'Server IP': server.ip,
-					Error: error
-				});
+				beaver.log(
+					'unmonitor',
+					JSON.stringify({
+						'Channel ID': channel.id,
+						'Guild ID': guild.id,
+						'Server IP': server.ip
+					}),
+					error
+				);
 				throw error;
 			}
 		})

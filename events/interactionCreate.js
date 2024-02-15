@@ -1,6 +1,6 @@
 'use strict';
 import { Events } from 'discord.js';
-import { logWarning } from '../functions/consoleLogging.js';
+import { beaver } from '../functions/consoleLogging.js';
 
 export const name = Events.InteractionCreate;
 export const once = false;
@@ -17,25 +17,32 @@ export async function execute(interaction) {
 		await interaction.deferReply({ ephemeral: true });
 		if (!interaction.deferred) throw new Error('Interaction was not deferred');
 	} catch (error) {
-		logWarning('Error deferring reply to command', {
-			'Guild ID': interaction.guildId,
-			'Command Name': interaction.commandName,
-			'Command Options': commandOptions || 'None',
-			Error: error
-		});
-
+		beaver.log(
+			'interaction-create',
+			'Error deferring reply to command',
+			JSON.stringify({
+				'Guild ID': interaction.guildId,
+				'Command Name': interaction.commandName,
+				'Command Options': commandOptions || 'None'
+			}),
+			error
+		);
 		return;
 	}
 
 	try {
 		await command.execute(interaction);
 	} catch (error) {
-		logWarning('Error executing command', {
-			'Guild ID': interaction.guildId,
-			'Command Name': interaction.commandName,
-			'Command Options': commandOptions || 'None',
-			Error: error
-		});
+		beaver.log(
+			'interaction-create',
+			'Error executing command',
+			JSON.stringify({
+				'Guild ID': interaction.guildId,
+				'Command Name': interaction.commandName,
+				'Command Options': commandOptions || 'None'
+			}),
+			error
+		);
 
 		await interaction.editReply({
 			content:

@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import { readdirSync } from 'node:fs';
 import path, { basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { logError, logWarning } from './functions/consoleLogging.js';
+import { beaver } from './functions/consoleLogging.js';
 import { updateServers } from './functions/updateServers.js';
 
 let clientOptions = {
@@ -36,8 +36,7 @@ client.once('ready', async () => {
 	if (clusterReady) init();
 });
 
-client.on('error', logWarning);
-
+client.on('error', (msg) => beaver.log('client', msg));
 client.login(process.env.TOKEN);
 
 async function init() {
@@ -47,7 +46,7 @@ async function init() {
 	try {
 		await mongoose.connect(process.env.DATABASE_URL, { dbName: process.env.DATABASE_NAME });
 	} catch (error) {
-		logError('Error connecting to database', error);
+		beaver.log('database', error);
 		return;
 	}
 
@@ -61,7 +60,7 @@ async function init() {
 		if ('data' in command && 'execute' in command) {
 			client.commands.set(command.data.name, command);
 		} else {
-			logError(`Error registering /${basename(file, '.js')} command: missing a required "data" or "execute" property.`);
+			beaver.log('command-registration', `Error registering /${basename(file, '.js')} command: missing a required "data" or "execute" property.`);
 		}
 	}
 

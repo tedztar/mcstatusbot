@@ -3,7 +3,7 @@ import 'dotenv/config';
 import path from 'node:path';
 import { REST, Routes } from 'discord.js';
 import { readdirSync } from 'node:fs';
-import { logSuccess, logError } from './consoleLogging.js';
+import { beaver } from './consoleLogging.js';
 import { pathToFileURL } from 'node:url';
 
 export async function deployCommands() {
@@ -21,8 +21,7 @@ export async function deployCommands() {
 
 	try {
 		await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands });
-		logSuccess('Commands deployed');
 	} catch (error) {
-		logError(error);
+		beaver.log('deploy-commands', error);
 	}
 }

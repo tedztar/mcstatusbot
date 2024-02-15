@@ -1,7 +1,7 @@
 'use strict';
 import { ChannelType, PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 import { isMissingPermissions } from '../functions/botPermissions.js';
-import { logWarning } from '../functions/consoleLogging.js';
+import { beaver } from '../functions/consoleLogging.js';
 import { addServer, getServers, setServers } from '../functions/databaseFunctions.js';
 import { findDefaultServer, findServerIndex } from '../functions/findServer.js';
 import { getServerStatus } from '../functions/getServerStatus.js';
@@ -79,10 +79,7 @@ export async function execute(interaction) {
 		});
 		server.categoryId = category.id;
 	} catch (error) {
-		logWarning('Error creating category channel', {
-			'Guild ID': interaction.guildId,
-			Error: error
-		});
+		beaver.log('monitor', `Error creating category channel in guild: ${interaction.guildId}`, error);
 		await sendMessage(interaction, 'There was an error while creating the channels!');
 		return;
 	}
@@ -107,19 +104,20 @@ export async function execute(interaction) {
 					try {
 						await interaction.guild.channels.cache.get(server[channelId])?.delete();
 					} catch (error) {
-						logWarning('Error deleting channel while aborting monitor command', {
-							'Channel ID': server[channelId],
-							'Guild ID': interaction.guildId,
-							'Server IP': server.ip,
-							Error: error
-						});
+						beaver.log(
+							'monitor',
+							'Error deleting channel while aborting monitor command',
+							JSON.stringify({
+								'Channel ID': server[channelId],
+								'Guild ID': interaction.guildId,
+								'Server IP': server.ip
+							}),
+							error
+						);
 					}
 				})
 			);
-			logWarning('Error creating voice channel', {
-				'Guild ID': interaction.guildId,
-				Error: error
-			});
+			beaver.log('monitor', `Error creating voice channel in guild: ${interaction.guildId}`, error);
 			await sendMessage(interaction, 'There was an error while creating the channels, please manually delete any channels that were created!');
 			return;
 		}
