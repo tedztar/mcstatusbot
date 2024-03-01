@@ -6,7 +6,7 @@ import { readdirSync } from 'node:fs';
 import path, { basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { beaver } from './functions/consoleLogging.js';
-import { updateServerHandler, updateServers } from './functions/updateServers.js';
+import { updateServers } from './functions/updateServers.js';
 import IORedis from 'ioredis';
 import { Queue, Worker } from 'bullmq';
 
@@ -64,7 +64,8 @@ queue.on('error', (msg) => beaver.log('queue', msg));
 const worker = new Worker(QUEUE_NAME, path.resolve(process.cwd(), './functions/updateServerWorker.js'), {
 	connection: redis,
 	autorun: false,
-	prefix: QUEUE_PREFIX
+	prefix: QUEUE_PREFIX,
+	useWorkerThreads: true
 });
 worker.on('error', (msg) => beaver.log('worker', msg));
 
