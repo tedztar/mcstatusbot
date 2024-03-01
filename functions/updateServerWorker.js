@@ -22,6 +22,8 @@ export default async (job) => {
 				error
 			);
 		}
+
+		return false;
 	}
 
 	const channels = [
@@ -30,4 +32,5 @@ export default async (job) => {
 	];
 
 	await renameChannels(channels, serverStatus, 'low_priority');
+	return true;
 };
