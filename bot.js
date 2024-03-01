@@ -64,8 +64,7 @@ queue.on('error', (msg) => beaver.log('queue', msg));
 const worker = new Worker(QUEUE_NAME, path.resolve(process.cwd(), './functions/updateServerWorker.js'), {
 	connection: redis,
 	autorun: false,
-	prefix: QUEUE_PREFIX,
-	useWorkerThreads: true
+	prefix: QUEUE_PREFIX
 });
 worker.on('error', (msg) => beaver.log('worker', msg));
 
