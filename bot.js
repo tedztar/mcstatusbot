@@ -7,6 +7,8 @@ import path, { basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { beaver } from './functions/consoleLogging.js';
 import { updateServers } from './functions/updateServers.js';
+import IORedis from 'ioredis';
+import { Queue, Worker } from 'bullmq';
 
 let clientOptions = {
 	shards: getInfo().SHARD_LIST,
@@ -37,6 +39,37 @@ client.once('ready', async () => {
 });
 
 client.on('error', (msg) => beaver.log('client', msg));
+
+// Connect to redis
+const redis = new IORedis(process.env.REDIS_URL, {
+	maxRetriesPerRequest: null,
+	connectTimeout: 30000
+}).on('error', (msg) => beaver.log('redis', msg));
+
+// Set up queue for server status updates
+const QUEUE_NAME = `updateServer${client.cluster.id}`;
+const QUEUE_PREFIX = '/mcs/updateServer/${client.cluster.id}/';
+
+export const queue = new Queue(QUEUE_NAME, {
+	connection: redis,
+	prefix: QUEUE_PREFIX,
+	defaultJobOptions: {
+		removeOnComplete: true,
+		removeOnFail: true
+	}
+});
+queue.on('error', (msg) => beaver.log('queue', msg));
+
+// Set up worker for server status updates
+const worker = new Worker(QUEUE_NAME, path.resolve(process.cwd(), './functions/updateServerWorker.js'), {
+	connection: redis,
+	autorun: false,
+	prefix: QUEUE_PREFIX,
+	useWorkerThreads: true
+});
+worker.on('error', (msg) => beaver.log('worker', msg));
+
+// Finally, login
 client.login(process.env.TOKEN);
 
 async function init() {
@@ -77,9 +110,11 @@ async function init() {
 		}
 	}
 
+	// Run the worker
+	worker.run();
+
 	// Update Servers
 	if (process.env.NODE_ENV != 'production') await updateServers(client);
-
 	// Delay the update based on cluster id
 	setTimeout(() => setInterval(updateServers, 6 * 60 * 1000, client), client.cluster.id * 30 * 1000);
 }

@@ -1,8 +1,7 @@
 'use strict';
-import { beaver } from '../functions/consoleLogging.js';
-import { getServers } from '../functions/databaseFunctions.js';
-import { getServerStatus } from '../functions/getServerStatus.js';
-import { renameChannels } from '../functions/renameChannels.js';
+import { queue } from '../bot.js';
+import { beaver } from './consoleLogging.js';
+import { getServers } from './databaseFunctions.js';
 
 export async function updateServers(client) {
 	// Update server count badge on remote
@@ -25,32 +24,20 @@ export async function updateServers(client) {
 		}
 	}
 
+	// Send all servers to queue to be updated by worker
 	await Promise.allSettled(
 		client.guilds.cache.map(async (guild) => {
-			let serverList = await getServers(guild.id);
+			const serverList = await getServers(guild.id);
 			await Promise.allSettled(
 				serverList.map(async (server) => {
-					let serverStatus;
-					try {
-						serverStatus = await getServerStatus(server);
-					} catch (error) {
-						if (!server.ip.includes('_')) {
-							beaver.log(
-								'update-servers',
-								'Error pinging Minecraft server while updating servers',
-								JSON.stringify({
-									'Server IP': server.ip,
-									'Guild ID': guild.id
-								}),
-								error
-							);
-						}
-					}
-					const channels = [
-						{ object: await guild.channels.cache.get(server.statusId), type: 'status' },
-						{ object: await guild.channels.cache.get(server.playersId), type: 'players' }
-					];
-					await renameChannels(channels, serverStatus, 'low_priority');
+					const statusChannel = await guild.channels.cache.get(server.statusId);
+					const playersChannel = await guild.channels.cache.get(server.playersId);
+
+					await queue.add('updateServer', {
+						statusChannel,
+						playersChannel,
+						server
+					});
 				})
 			);
 		})
