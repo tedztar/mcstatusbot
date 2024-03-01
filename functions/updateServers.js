@@ -1,5 +1,5 @@
 'use strict';
-import { queue } from '../bot.js';
+import { updateQueue } from '../bot.js';
 import { beaver } from './consoleLogging.js';
 import { getServers } from './databaseFunctions.js';
 
@@ -33,7 +33,7 @@ export async function updateServers(client) {
 					const statusChannel = await guild.channels.cache.get(server.statusId);
 					const playersChannel = await guild.channels.cache.get(server.playersId);
 
-					await queue.add('updateServer', {
+					await updateQueue.add('updateServer', {
 						statusChannel,
 						playersChannel,
 						server

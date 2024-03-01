@@ -1,6 +1,6 @@
-import { beaver } from './consoleLogging';
-import { getServerStatus } from './getServerStatus';
-import { renameChannels } from './renameChannels';
+import { beaver } from '../functions/consoleLogging';
+import { getServerStatus } from '../functions/getServerStatus';
+import { renameChannels } from '../functions/renameChannels';
 
 export default async (job) => {
 	const server = job.data.server;

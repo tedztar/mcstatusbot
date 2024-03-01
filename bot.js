@@ -47,26 +47,48 @@ const redis = new IORedis(process.env.REDIS_URL, {
 }).on('error', (msg) => beaver.log('redis', msg));
 
 // Set up queue for server status updates
-const QUEUE_NAME = `updateServer${client.cluster.id}`;
-const QUEUE_PREFIX = '/mcs/updateServer/${client.cluster.id}/';
+const UPDATE_QUEUE_NAME = `updateServer${client.cluster.id}`;
+const UPDATE_QUEUE_PREFIX = `/mcs/updateServer/${client.cluster.id}/`;
 
-export const queue = new Queue(QUEUE_NAME, {
+export const updateQueue = new Queue(UPDATE_QUEUE_NAME, {
 	connection: redis,
-	prefix: QUEUE_PREFIX,
+	prefix: UPDATE_QUEUE_PREFIX,
 	defaultJobOptions: {
 		removeOnComplete: true,
 		removeOnFail: true
 	}
 });
-queue.on('error', (msg) => beaver.log('queue', msg));
+updateQueue.on('error', (msg) => beaver.log('queue', msg));
 
 // Set up worker for server status updates
-const worker = new Worker(QUEUE_NAME, path.resolve(process.cwd(), './functions/updateServerWorker.js'), {
+const updateWorker = new Worker(UPDATE_QUEUE_NAME, path.resolve(process.cwd(), './workers/updateServerWorker.js'), {
 	connection: redis,
 	autorun: false,
-	prefix: QUEUE_PREFIX
+	prefix: UPDATE_QUEUE_PREFIX
 });
-worker.on('error', (msg) => beaver.log('worker', msg));
+updateWorker.on('error', (msg) => beaver.log('worker', msg));
+
+// Set up queue for interactions
+const INTERACTION_QUEUE_NAME = `interaction${client.cluster.id}`;
+const INTERACTION_QUEUE_PREFIX = `/mcs/interaction/${client.cluster.id}/`;
+
+export const interactionQueue = new Queue(INTERACTION_QUEUE_NAME, {
+	connection: redis,
+	prefix: INTERACTION_QUEUE_PREFIX,
+	defaultJobOptions: {
+		removeOnComplete: true,
+		removeOnFail: true
+	}
+});
+interactionQueue.on('error', (msg) => beaver.log('queue', msg));
+
+// Set up worker for interactions
+const interactionWorker = new Worker(INTERACTION_QUEUE_NAME, path.resolve(process.cwd(), './workers/interactionWorker.js'), {
+	connection: redis,
+	autorun: false,
+	prefix: INTERACTION_QUEUE_PREFIX
+});
+interactionWorker.on('error', (msg) => beaver.log('worker', msg));
 
 // Finally, login
 client.login(process.env.TOKEN);
@@ -110,7 +132,8 @@ async function init() {
 	}
 
 	// Run the worker
-	worker.run();
+	updateWorker.run();
+	interactionWorker.run();
 
 	// Update Servers
 	if (process.env.NODE_ENV != 'production') await updateServers(client);
