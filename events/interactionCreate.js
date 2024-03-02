@@ -1,7 +1,6 @@
 'use strict';
 import { Events } from 'discord.js';
 import { beaver } from '../functions/consoleLogging.js';
-import { interactionQueue } from '../bot.js';
 
 export const name = Events.InteractionCreate;
 export const once = false;
@@ -15,7 +14,6 @@ export async function execute(interaction) {
 
 	try {
 		await interaction.deferReply({ ephemeral: true });
-
 		if (!interaction.deferred) throw new Error('Interaction was not deferred');
 	} catch (error) {
 		const commandOptions = getCommandOptions(interaction);
@@ -34,22 +32,32 @@ export async function execute(interaction) {
 		return;
 	}
 
-	await interactionQueue.add('interaction', {
-		command,
-		interaction
-	});
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		const commandOptions = getCommandOptions(interaction);
+
+		beaver.log(
+			'interaction-create',
+			'Error executing command',
+			JSON.stringify({
+				'Guild ID': interaction.guildId,
+				'Command Name': interaction.commandName,
+				'Command Options': commandOptions || 'None'
+			}),
+			error
+		);
+
+		await interaction.editReply({
+			content:
+				'There was an error while executing this command! Please try again in a few minutes. If the problem persists, please open an issue on GitHub.',
+			ephemeral: true
+		});
+	}
 }
 
-export function getCommandOptions(interaction) {
-	let commandOptions = [];
-
-	interaction.options.data.forEach((option) => {
-		let filteredOption = {};
-		for (const key of ['name', 'value']) {
-			if (option[key]) filteredOption[key] = option[key];
-		}
-		commandOptions.push(filteredOption);
-	});
+function getCommandOptions(interaction) {
+	const commandOptions = interaction.options.data.map((option) => ({ name: option.name, value: option.value }));
 
 	return commandOptions.length ? commandOptions : null;
 }
