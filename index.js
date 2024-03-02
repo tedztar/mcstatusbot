@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { ClusterManager, ReClusterManager, fetchRecommendedShards } from 'discord-hybrid-sharding';
 import { beaver } from './functions/consoleLogging.js';
 
-const shardsPerClusters = process.env.SPC;
+const shardsPerClusters = parseInt(process.env.SPC);
 
 let manager = new ClusterManager('./bot.js', {
 	shardsPerClusters: shardsPerClusters,
