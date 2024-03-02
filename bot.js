@@ -8,6 +8,7 @@ import path, { basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { beaver } from './functions/consoleLogging.js';
 import { Worker } from 'node:worker_threads';
+import { updateServers } from './functions/updateServers.js';
 
 let clientOptions = {
 	shards: getInfo().SHARD_LIST,
@@ -40,7 +41,7 @@ client.once('ready', async () => {
 client.on('error', (msg) => beaver.log('client', msg));
 
 // Spawn a worker for updating servers
-const updateServerWorker = new Worker(pathToFileURL(path.resolve(process.cwd(), './workers/updateServerWorker.js')));
+const updateServerWorker = process.env.USE_WORKERS == 'true' ? new Worker(pathToFileURL(path.resolve(process.cwd(), './workers/updateServerWorker.js'))) : null;
 
 // Finally, login
 client.login(process.env.TOKEN);
@@ -83,8 +84,16 @@ async function init() {
 		}
 	}
 
-	// Update Servers
-	if (process.env.NODE_ENV != 'production') updateServerWorker.postMessage('update');
-	// Delay the update based on cluster id
-	setTimeout(() => setInterval(() => updateServerWorker.postMessage('update'), 6 * 60 * 1000), client.cluster.id * 15 * 1000);
+	// MIGRATION TO WORKER
+	if (process.env.USE_WORKERS == 'true') {
+		// Update Servers
+		if (process.env.NODE_ENV != 'production') updateServerWorker.postMessage('update');
+		// Delay the update based on cluster id
+		setTimeout(() => setInterval(() => updateServerWorker.postMessage('update'), 6 * 60 * 1000), client.cluster.id * 15 * 1000);
+	} else {
+		// Update Servers
+		if (process.env.NODE_ENV != 'production') await updateServers(client);
+		// Delay the update based on cluster id
+		setTimeout(() => setInterval(updateServers, 6 * 60 * 1000, client), client.cluster.id * 30 * 1000);
+	}
 }
