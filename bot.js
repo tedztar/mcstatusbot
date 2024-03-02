@@ -1,4 +1,5 @@
 'use strict';
+import 'dotenv/config';
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { ActivityType, Client, Collection, GatewayIntentBits } from 'discord.js';
 import mongoose from 'mongoose';
@@ -6,9 +7,7 @@ import { readdirSync } from 'node:fs';
 import path, { basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { beaver } from './functions/consoleLogging.js';
-import { updateServers } from './functions/updateServers.js';
-import IORedis from 'ioredis';
-import { Queue, Worker } from 'bullmq';
+import { Worker } from 'node:worker_threads';
 
 let clientOptions = {
 	shards: getInfo().SHARD_LIST,
@@ -21,7 +20,7 @@ if (process.env.NODE_ENV == 'production') {
 	clientOptions.rest = { api: `${process.env.PROXY_URL}/api`, globalRequestsPerSecond: Infinity, timeout: 5 * 60 * 1000, retries: 1 };
 }
 
-let client = new Client(clientOptions);
+export let client = new Client(clientOptions);
 
 client.cluster = new ClusterClient(client);
 
@@ -40,34 +39,8 @@ client.once('ready', async () => {
 
 client.on('error', (msg) => beaver.log('client', msg));
 
-// Connect to redis
-const redis = new IORedis(process.env.REDIS_URL, {
-	maxRetriesPerRequest: null,
-	connectTimeout: 30000
-}).on('error', (msg) => beaver.log('redis', msg));
-
-// Set up queue for server status updates
-const QUEUE_NAME = `updateServer${client.cluster.id}`;
-const QUEUE_PREFIX = '/mcs/updateServer/${client.cluster.id}/';
-
-export const queue = new Queue(QUEUE_NAME, {
-	connection: redis,
-	prefix: QUEUE_PREFIX,
-	defaultJobOptions: {
-		removeOnComplete: true,
-		removeOnFail: true
-	}
-});
-queue.on('error', (msg) => beaver.log('queue', msg));
-
-// Set up worker for server status updates
-const worker = new Worker(QUEUE_NAME, path.resolve(process.cwd(), './functions/updateServerWorker.js'), {
-	connection: redis,
-	autorun: false,
-	prefix: QUEUE_PREFIX,
-	useWorkerThreads: true
-});
-worker.on('error', (msg) => beaver.log('worker', msg));
+// Spawn a worker for updating servers
+const updateServerWorker = new Worker(pathToFileURL(path.resolve(process.cwd(), './workers/updateServerWorker.js')));
 
 // Finally, login
 client.login(process.env.TOKEN);
@@ -110,11 +83,8 @@ async function init() {
 		}
 	}
 
-	// Run the worker
-	worker.run();
-
 	// Update Servers
-	if (process.env.NODE_ENV != 'production') await updateServers(client);
+	if (process.env.NODE_ENV != 'production') updateServerWorker.postMessage('update');
 	// Delay the update based on cluster id
-	setTimeout(() => setInterval(updateServers, 6 * 60 * 1000, client), client.cluster.id * 30 * 1000);
+	setTimeout(() => setInterval(() => updateServerWorker.postMessage('update'), 6 * 60 * 1000), client.cluster.id * 15 * 1000);
 }
