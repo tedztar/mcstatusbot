@@ -1,4 +1,5 @@
 'use strict';
+import 'dotenv/config';
 import { ClusterClient, getInfo } from 'discord-hybrid-sharding';
 import { ActivityType, Client, Collection, GatewayIntentBits } from 'discord.js';
 import mongoose from 'mongoose';
@@ -131,7 +132,7 @@ async function init() {
 		}
 	}
 
-	// Run the worker
+	// Run the workers
 	updateWorker.run();
 	interactionWorker.run();
 
