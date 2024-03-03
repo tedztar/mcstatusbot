@@ -40,13 +40,14 @@ client.once('ready', async () => {
 
 client.on('error', (msg) => beaver.log('client', msg));
 
-// Spawn a worker for updating servers
-const updateServerWorker = process.env.USE_WORKERS == 'true' ? new Worker(pathToFileURL(path.resolve(process.cwd(), './workers/updateServerWorker.js'))) : null;
-
 // Finally, login
 client.login(process.env.TOKEN);
 
 async function init() {
+	// Spawn a worker for updating servers
+	const updateServerWorker =
+		process.env.USE_WORKERS == 'true' ? new Worker(pathToFileURL(path.resolve(process.cwd(), './workers/updateServerWorker.js'))) : null;
+
 	// Database Handler
 	mongoose.set('strictQuery', true);
 
