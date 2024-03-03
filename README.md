@@ -13,11 +13,13 @@ bot to your server.
 **Enjoying our bot?** Our bot is completely free to use, and will always remain so. A [donation](https://www.buymeacoffee.com/rahulrao) of any amount helps keep
 our server running!
 
-## October 2023 Update
+## February 2024 Update
 
--   Major performance improvement for `/monitor`, `/unmonitor`, and `/nickname` commands
--   New website! https://mcstatusbot.com/
--   Bot resorts to preset channel permissions instead of always overriding. It should play better with servers that require you to verify before viewing all channels
+-   New backend log service for better error handling on our end.
+-   Minor stability update for most commands.
+-   Core package upgrades.
+-   Implement transitory code to new backend framework.
+-   Various bugfixes.
 
 ## Features
 
