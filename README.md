@@ -61,5 +61,5 @@ our server running!
 -   [x] Queue priority for non-update commands
 -   [x] Minimize redundant channel updates
 -   [x] Fix channel permission query
--   [ ] Error logging rework
+-   [x] Error logging rework
 -   [x] Update readme with screenshots
