@@ -7,7 +7,6 @@ import { readdirSync } from 'node:fs';
 import path, { basename } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { beaver } from './functions/consoleLogging.js';
-import { Worker } from 'node:worker_threads';
 import { updateServers } from './functions/updateServers.js';
 
 let clientOptions = {
@@ -18,7 +17,7 @@ let clientOptions = {
 };
 
 if (process.env.NODE_ENV == 'production') {
-	clientOptions.rest = { api: `${process.env.PROXY_URL}/api`, globalRequestsPerSecond: Infinity, timeout: 5 * 60 * 1000, retries: 1 };
+	clientOptions.rest = { api: `${process.env.PROXY_URL}/api`, globalRequestsPerSecond: Infinity, timeout: 6 * 60 * 1000, retries: 1 };
 }
 
 export let client = new Client(clientOptions);
@@ -44,10 +43,6 @@ client.on('error', (msg) => beaver.log('client', msg));
 client.login(process.env.TOKEN);
 
 async function init() {
-	// Spawn a worker for updating servers
-	const updateServerWorker =
-		process.env.USE_WORKERS == 'true' ? new Worker(pathToFileURL(path.resolve(process.cwd(), './workers/updateServerWorker.js'))) : null;
-
 	// Database Handler
 	mongoose.set('strictQuery', true);
 
@@ -85,16 +80,8 @@ async function init() {
 		}
 	}
 
-	// MIGRATION TO WORKER
-	if (process.env.USE_WORKERS == 'true') {
-		// Update Servers
-		if (process.env.NODE_ENV != 'production') updateServerWorker.postMessage('update');
-		// Delay the update based on cluster id
-		setTimeout(() => setInterval(() => updateServerWorker.postMessage('update'), 6 * 60 * 1000), client.cluster.id * 15 * 1000);
-	} else {
-		// Update Servers
-		if (process.env.NODE_ENV != 'production') await updateServers(client);
-		// Delay the update based on cluster id
-		setTimeout(() => setInterval(updateServers, 6 * 60 * 1000, client), client.cluster.id * 15 * 1000);
-	}
+	// Update Servers
+	if (process.env.NODE_ENV != 'production') await updateServers(client);
+	// Delay the update based on cluster id
+	setTimeout(() => setInterval(updateServers, 6 * 60 * 1000, client), client.cluster.id * 15 * 1000);
 }
